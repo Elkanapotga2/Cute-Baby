@@ -1,0 +1,21 @@
+Make this baby move in a fluid, realistic, and very cute way.
+
+
+bonjour, je veux que tu creer une plateforme web professionnelle et WOW specialement pour les bebes et l'arriere plan de la page d'accueil de mon site dois etre ma video, le site s'appelle "Cute Baby"
+
+
+voici les onglet les onglet (alphabet, dessiner, musique, jeux, astuces pour mamans)
+astuces pour mamans(-pendant la grossese
+                  -pendant l'accouchement
+                  -pendant l'alletement
+                  -astuces
+                  -conseil)
+
+alphabet(-une interface s'affiche d'abord pour selectionner la langue
+         -les lettres de l'alphabet defilent et chaque lettre a sa couleur et une voix les prononces avec une petite melodies de bebe en arriere plan)
+
+dessiner(une interface noire s'affiche et sur cette interface, lorsque le bebe va toucher, ca va laisser des traits de couleur tres jolie et professionnel)
+
+musique(affiche la plays liste du Bebe avec plein de belle musique de bebe et la possibilite dans rechercher d'autre)
+
+jeux(quelque jeux de bebe et la possibilite dans rechercher d'autre)
