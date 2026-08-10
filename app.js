@@ -23,16 +23,15 @@ navBtns.forEach(btn => {
    on affiche un joli dégradé animé à la place. */
 const heroVideo = document.getElementById('heroVideo');
 const heroFallback = document.getElementById('heroFallback');
-heroFallback.style.display = 'none';
+// Le dégradé reste visible en dessous jusqu'à ce que la vidéo soit
+// vraiment prête à jouer — pas de délai arbitraire qui pourrait la
+// masquer à tort sur une connexion plus lente (ex: en production).
 heroVideo.addEventListener('error', () => {
     heroVideo.style.display = 'none';
     heroFallback.style.display = 'block';
 });
 heroVideo.addEventListener('loadeddata', () => { heroFallback.style.display = 'none'; });
-// Vérifie tout de suite si la source est valide
-setTimeout(() => {
-    if (heroVideo.readyState === 0) { heroVideo.style.display = 'none'; heroFallback.style.display = 'block'; }
-}, 900);
+heroVideo.addEventListener('canplay', () => { heroFallback.style.display = 'none'; });
 
 /* =========================================================
    AUDIO — petit synthétiseur pour mélodies douces (aucun
