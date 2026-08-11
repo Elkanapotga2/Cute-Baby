@@ -948,6 +948,117 @@
             color: var(--plum-soft);
             font-size: 0.85rem;
         }
+
+        /* ================= DESSINER ================= */
+        #dessiner {
+            background: #111;
+            color: var(--white);
+        }
+
+        .draw-wrap {
+            padding: 110px 20px 40px;
+            max-width: 1000px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .draw-wrap .section-title {
+            color: var(--white);
+        }
+
+        .draw-wrap .section-sub {
+            color: #c9c4d1;
+        }
+
+        canvas#drawCanvas {
+            width: 100%;
+            max-width: 900px;
+            aspect-ratio: 16/10;
+            background: #0a0a0a;
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            touch-action: none;
+            margin-top: 20px;
+            cursor: crosshair;
+            border: 2px solid #262230;
+        }
+
+        .draw-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-top: 22px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .brush-selector {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .tool-btn {
+            background: #201c29;
+            color: var(--white);
+            padding: 12px 22px;
+            border-radius: 16px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all .2s ease;
+            border: 2px solid transparent;
+        }
+
+        .tool-btn:hover {
+            background: #2c2636;
+            transform: translateY(-2px);
+        }
+
+        .tool-btn.active {
+            border-color: var(--sun);
+            background: #2c2636;
+            box-shadow: 0 0 20px rgba(255, 200, 87, 0.2);
+        }
+
+        .brush-dot {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .rainbow-dot {
+            background: conic-gradient(from 0deg, #FF1744, #FF6F00, #FFEA00, #00E676, #2979FF, #D500F9, #FF1744);
+            animation: spinRainbow 3s linear infinite;
+        }
+
+        @keyframes spinRainbow {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Effet de brillance pour les pinceaux */
+        .tool-btn .emoji-brush {
+            font-size: 1.3rem;
+        }
+
+        #clearCanvas {
+            background: #2c1a1a;
+            color: #ff6b6b;
+            border-color: #4a2a2a;
+        }
+
+        #clearCanvas:hover {
+            background: #3a2222;
+        }
     </style>
 </head>
 
@@ -1089,7 +1200,17 @@
             <canvas id="drawCanvas" width="900" height="560"></canvas>
             <div class="draw-toolbar">
                 <button class="tool-btn" id="clearCanvas">🧽 Effacer le tableau</button>
-                <div class="tool-btn"><span class="brush-dot"></span> Pinceau arc-en-ciel</div>
+                <div class="brush-selector">
+                    <button class="tool-btn brush-btn active" data-brush="rainbow">
+                        <span class="brush-dot rainbow-dot"></span> Arc-en-ciel
+                    </button>
+                    <button class="tool-btn brush-btn" data-brush="star">
+                        ⭐ Étoile
+                    </button>
+                    <button class="tool-btn brush-btn" data-brush="fire">
+                        🔥 Feu
+                    </button>
+                </div>
             </div>
         </div>
     </section>
