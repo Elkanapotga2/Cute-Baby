@@ -23,15 +23,16 @@ navBtns.forEach(btn => {
    on affiche un joli dégradé animé à la place. */
 const heroVideo = document.getElementById('heroVideo');
 const heroFallback = document.getElementById('heroFallback');
-// Le dégradé reste visible en dessous jusqu'à ce que la vidéo soit
-// vraiment prête à jouer — pas de délai arbitraire qui pourrait la
-// masquer à tort sur une connexion plus lente (ex: en production).
+heroFallback.style.display = 'none';
 heroVideo.addEventListener('error', () => {
     heroVideo.style.display = 'none';
     heroFallback.style.display = 'block';
 });
 heroVideo.addEventListener('loadeddata', () => { heroFallback.style.display = 'none'; });
-heroVideo.addEventListener('canplay', () => { heroFallback.style.display = 'none'; });
+// Vérifie tout de suite si la source est valide
+setTimeout(() => {
+    if (heroVideo.readyState === 0) { heroVideo.style.display = 'none'; heroFallback.style.display = 'block'; }
+}, 900);
 
 /* =========================================================
    AUDIO — petit synthétiseur pour mélodies douces (aucun
@@ -119,8 +120,81 @@ const ALPHABETS = {
             ['P', 'Panda'], ['Q', 'Queen'], ['R', 'Rainbow'], ['S', 'Sun'], ['T', 'Teddy bear'],
             ['U', 'Umbrella'], ['V', 'Violin'], ['W', 'Whale'], ['X', 'Xylophone'], ['Y', 'Yo-yo'], ['Z', 'Zebra']
         ]
+    },
+    // Le "pinyin" est la romanisation officielle du chinois : c'est justement
+    // cet alphabet de 26 lettres latines que les enfants chinois apprennent
+    // en premier à l'école. Quelques lettres rares en début de mot (I, U, V)
+    // utilisent un mot proche phonétiquement, faute de mot chinois naturel.
+    zh: {
+        voiceLang: 'zh-CN',
+        letters: [
+            ['A', '阿姨 (āyí)'], ['B', '菠萝 (bōluó)'], ['C', '草莓 (cǎoméi)'], ['D', '蛋糕 (dàngāo)'], ['E', '鹅 (é)'],
+            ['F', '飞机 (fēijī)'], ['G', '狗狗 (gǒugou)'], ['H', '花朵 (huāduǒ)'], ['I', '衣服 (yīfu)'], ['J', '橘子 (júzi)'],
+            ['K', '咖啡 (kāfēi)'], ['L', '蓝天 (lántiān)'], ['M', '猫咪 (māomī)'], ['N', '牛奶 (niúnǎi)'], ['O', '藕 (ǒu)'],
+            ['P', '苹果 (píngguǒ)'], ['Q', '汽车 (qìchē)'], ['R', '热狗 (règǒu)'], ['S', '狮子 (shīzi)'], ['T', '兔子 (tùzi)'],
+            ['U', '鱼 (yú)'], ['V', '维生素 (wéishēngsù)'], ['W', '娃娃 (wáwa)'], ['X', '西瓜 (xīguā)'], ['Y', '鸭子 (yāzi)'], ['Z', '枣 (zǎo)']
+        ]
+    },
+    // Alphabet hiragana (les 46 sons de base du japonais). Les caractères
+    // を et ん ne commencent jamais un mot japonais : on utilise un mot où
+    // le son apparaît, comme le veut l'usage pédagogique courant.
+    ja: {
+        voiceLang: 'ja-JP',
+        letters: [
+            ['あ', 'あひる'], ['い', 'いぬ'], ['う', 'うさぎ'], ['え', 'えんぴつ'], ['お', 'おにぎり'],
+            ['か', 'かえる'], ['き', 'きりん'], ['く', 'くつ'], ['け', 'けーき'], ['こ', 'こおり'],
+            ['さ', 'さかな'], ['し', 'しまうま'], ['す', 'すいか'], ['せ', 'せみ'], ['そ', 'そら'],
+            ['た', 'たまご'], ['ち', 'ちょうちょ'], ['つ', 'つき'], ['て', 'てぶくろ'], ['と', 'とけい'],
+            ['な', 'なす'], ['に', 'にじ'], ['ぬ', 'ぬいぐるみ'], ['ね', 'ねこ'], ['の', 'のり'],
+            ['は', 'はな'], ['ひ', 'ひまわり'], ['ふ', 'ふうせん'], ['へ', 'へび'], ['ほ', 'ほし'],
+            ['ま', 'まくら'], ['み', 'みかん'], ['む', 'むし'], ['め', 'めがね'], ['も', 'もも'],
+            ['や', 'やま'], ['ゆ', 'ゆき'], ['よ', 'よる'],
+            ['ら', 'らいおん'], ['り', 'りんご'], ['る', 'るすばん'], ['れ', 'れいぞうこ'], ['ろ', 'ろうそく'],
+            ['わ', 'わに'], ['を', 'きをつけて'], ['ん', 'ほん']
+        ]
+    },
+    ar: {
+        voiceLang: 'ar-SA',
+        letters: [
+            ['أ', 'أرنب'], ['ب', 'بطة'], ['ت', 'تفاح'], ['ث', 'ثعلب'], ['ج', 'جمل'],
+            ['ح', 'حصان'], ['خ', 'خروف'], ['د', 'دب'], ['ذ', 'ذئب'], ['ر', 'رمان'],
+            ['ز', 'زرافة'], ['س', 'سمكة'], ['ش', 'شمس'], ['ص', 'صقر'], ['ض', 'ضفدع'],
+            ['ط', 'طائرة'], ['ظ', 'ظبي'], ['ع', 'عصفور'], ['غ', 'غزال'], ['ف', 'فيل'],
+            ['ق', 'قطة'], ['ك', 'كتاب'], ['ل', 'ليمون'], ['م', 'موز'], ['ن', 'نجمة'],
+            ['ه', 'هلال'], ['و', 'وردة'], ['ي', 'يد']
+        ]
+    },
+    // Ъ, Ы et Ь ne commencent jamais un mot russe : on illustre avec un mot
+    // où la lettre apparaît, comme le font les abécédaires russes pour enfants.
+    ru: {
+        voiceLang: 'ru-RU',
+        letters: [
+            ['А', 'Арбуз'], ['Б', 'Банан'], ['В', 'Волк'], ['Г', 'Гриб'], ['Д', 'Дом'],
+            ['Е', 'Ель'], ['Ё', 'Ёжик'], ['Ж', 'Жираф'], ['З', 'Зайка'], ['И', 'Игрушка'],
+            ['Й', 'Йогурт'], ['К', 'Кот'], ['Л', 'Лев'], ['М', 'Мама'], ['Н', 'Нос'],
+            ['О', 'Облако'], ['П', 'Панда'], ['Р', 'Радуга'], ['С', 'Солнце'], ['Т', 'Тигр'],
+            ['У', 'Утка'], ['Ф', 'Фрукт'], ['Х', 'Хомяк'], ['Ц', 'Цветок'], ['Ч', 'Черепаха'],
+            ['Ш', 'Шар'], ['Щ', 'Щенок'], ['Ъ', 'Объект'], ['Ы', 'Мы'], ['Ь', 'Мать'],
+            ['Э', 'Экскаватор'], ['Ю', 'Юла'], ['Я', 'Яблоко']
+        ]
     }
 };
+
+// Construit la phrase "Lettre + mot" dans le bon ordre et avec le bon
+// connecteur pour chaque langue — utilisée à la fois pour l'affichage
+// ET pour la voix, afin qu'ils disent toujours exactement la même chose.
+const PHRASE_TEMPLATES = {
+    fr: (letter, word) => `${letter} comme ${word}`,
+    en: (letter, word) => `${letter} is for ${word}`,
+    zh: (letter, word) => `${letter} 就像 ${word}`,
+    ja: (letter, word) => `${letter} は ${word} の ${letter}`,
+    ar: (letter, word) => `${letter} مثل ${word}`,
+    ru: (letter, word) => `${letter} как ${word}`
+};
+function buildLetterPhrase(lang, letter, word) {
+    const template = PHRASE_TEMPLATES[lang] || PHRASE_TEMPLATES.en;
+    return template(letter, word);
+}
 const LETTER_COLORS = ['#FF8B6A', '#FFC857', '#8FD9A8', '#74C7E3', '#C6A8E0', '#F4653F', '#5FBF9F'];
 
 let currentLang = 'fr';
@@ -154,7 +228,7 @@ function renderLetter() {
     const [letter, word] = data.letters[currentLetterIndex];
     const color = LETTER_COLORS[currentLetterIndex % LETTER_COLORS.length];
     letterChar.textContent = letter;
-    letterWord.textContent = `${letter} ${currentLang === 'fr' ? 'comme' : 'for'} ${word}`;
+    letterWord.textContent = buildLetterPhrase(currentLang, letter, word);
     letterStage.style.background = color;
     speakLetter();
     if (melodyOn) {
@@ -166,7 +240,12 @@ function speakLetter() {
     window.speechSynthesis.cancel();
     const data = ALPHABETS[currentLang];
     const [letter, word] = data.letters[currentLetterIndex];
-    const utter = new SpeechSynthesisUtterance(`${letter}. ${word}`);
+    // Même phrase que celle affichée à l'écran (donc plus de décalage entre
+    // texte et audio) — sauf le pinyin entre parenthèses, qui reste utile à
+    // l'écran pour les parents mais ne doit pas être lu tel quel par la voix.
+    const spokenWord = word.replace(/\s*\([^)]*\)/g, '');
+    const phrase = buildLetterPhrase(currentLang, letter, spokenWord);
+    const utter = new SpeechSynthesisUtterance(phrase);
     utter.lang = data.voiceLang;
     utter.rate = 0.85;
     utter.pitch = 1.15;
