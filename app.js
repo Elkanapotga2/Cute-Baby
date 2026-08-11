@@ -1053,13 +1053,289 @@ document.getElementById('gameSearchBtn').addEventListener('click', () => {
 });
 
 /* =========================================================
-   ASTUCES POUR MAMANS — onglets
+   ASTUCES POUR MAMANS
    ========================================================= */
-document.querySelectorAll('.a-tab').forEach(tab => {
-    tab.addEventListener('click', () => {
-        document.querySelectorAll('.a-tab').forEach(t => t.classList.remove('active'));
-        document.querySelectorAll('.a-panel').forEach(p => p.classList.remove('active'));
-        tab.classList.add('active');
-        document.getElementById('panel-' + tab.dataset.tab).classList.add('active');
-    });
+
+/* ---------- 17. CARROUSEL DE CONSEILS ---------- */
+const carouselTrack = document.getElementById('carouselTrack');
+const carouselDots = document.querySelectorAll('.carousel-dot');
+const CAROUSEL_SLIDE_COUNT = carouselDots.length;
+let carouselIndex = 0;
+
+function updateCarousel() {
+    if (!carouselTrack) return;
+    carouselTrack.style.transform = `translateX(-${carouselIndex * 100}%)`;
+    carouselDots.forEach((dot, i) => dot.classList.toggle('active', i === carouselIndex));
+}
+function goToSlide(i) {
+    carouselIndex = (i + CAROUSEL_SLIDE_COUNT) % CAROUSEL_SLIDE_COUNT;
+    updateCarousel();
+}
+const carouselPrevBtn = document.getElementById('carouselPrev');
+const carouselNextBtn = document.getElementById('carouselNext');
+if (carouselPrevBtn) carouselPrevBtn.addEventListener('click', () => goToSlide(carouselIndex - 1));
+if (carouselNextBtn) carouselNextBtn.addEventListener('click', () => goToSlide(carouselIndex + 1));
+carouselDots.forEach(dot => {
+    dot.addEventListener('click', () => goToSlide(parseInt(dot.dataset.index, 10)));
 });
+// Glisser du doigt sur mobile pour changer de conseil
+(function initCarouselSwipe() {
+    const viewport = document.querySelector('.carousel-viewport');
+    if (!viewport) return;
+    let startX = 0;
+    let touching = false;
+    viewport.addEventListener('touchstart', e => { touching = true; startX = e.touches[0].clientX; }, { passive: true });
+    viewport.addEventListener('touchend', e => {
+        if (!touching) return;
+        touching = false;
+        const deltaX = e.changedTouches[0].clientX - startX;
+        if (Math.abs(deltaX) > 40) {
+            goToSlide(carouselIndex + (deltaX < 0 ? 1 : -1));
+        }
+    });
+})();
+
+/* ---------- 19. CHECKLIST DE MAMAN (persistée sur l'appareil) ---------- */
+const CHECKLIST_STORAGE_KEY = 'cutebaby_checklist_v1';
+const CHECKLIST_DATA = [
+    {
+        id: 'valise', title: '🎒 Valise de maternité', items: [
+            "Vêtements pour bébé (naissance à 1 mois)",
+            "Couches taille naissance",
+            "Vêtements confortables et amples pour toi",
+            "Nécessaire de toilette (le tien + celui de bébé)",
+            "Chargeur de téléphone et batterie externe",
+            "Coussin ou écharpe d'allaitement",
+            "Carnet de santé et dossier médical",
+            "Serviettes hygiéniques post-partum"
+        ]
+    },
+    {
+        id: 'rdv', title: '🩺 Rendez-vous & démarches', items: [
+            "Échographies planifiées",
+            "Cours de préparation à la naissance",
+            "Choix de la maternité",
+            "Déclaration de grossesse (CAF / Sécurité sociale)",
+            "Congé maternité déclaré à l'employeur",
+            "Choix du pédiatre ou médecin traitant"
+        ]
+    },
+    {
+        id: 'maison', title: "🏠 Avant l'arrivée à la maison", items: [
+            "Lit de bébé installé et testé",
+            "Siège auto vérifié et bien fixé",
+            "Stock de couches et lingettes",
+            "Chambre prête, aérée et à bonne température",
+            "Numéros utiles enregistrés (pédiatre, urgences)",
+            "Quelques repas préparés à l'avance"
+        ]
+    }
+];
+function loadChecklistState() {
+    try {
+        const raw = localStorage.getItem(CHECKLIST_STORAGE_KEY);
+        return raw ? JSON.parse(raw) : {};
+    } catch (e) {
+        return {};
+    }
+}
+function saveChecklistState(state) {
+    try { localStorage.setItem(CHECKLIST_STORAGE_KEY, JSON.stringify(state)); } catch (e) { /* stockage indisponible, tant pis */ }
+}
+let checklistState = loadChecklistState();
+
+function renderChecklists() {
+    const grid = document.getElementById('checklistGrid');
+    if (!grid) return;
+    grid.innerHTML = '';
+    CHECKLIST_DATA.forEach(card => {
+        const cardEl = document.createElement('div');
+        cardEl.className = 'checklist-card';
+
+        const checkedCount = card.items.filter((_, i) => checklistState[card.id + '-' + i]).length;
+        const percent = Math.round((checkedCount / card.items.length) * 100);
+
+        const itemsHtml = card.items.map((item, i) => {
+            const key = card.id + '-' + i;
+            const checked = !!checklistState[key];
+            return `<li class="checklist-item${checked ? ' checked' : ''}" data-key="${key}">
+                <input type="checkbox" ${checked ? 'checked' : ''} />
+                <span>${item}</span>
+            </li>`;
+        }).join('');
+
+        cardEl.innerHTML = `
+            <h4>${card.title}</h4>
+            <div class="checklist-progress-bar"><div class="checklist-progress-fill" style="width:${percent}%"></div></div>
+            <ul class="checklist-items">${itemsHtml}</ul>
+            <button class="checklist-reset-btn" data-reset="${card.id}">Réinitialiser cette liste</button>
+        `;
+        grid.appendChild(cardEl);
+    });
+
+    // Cocher / décocher un élément
+    grid.querySelectorAll('.checklist-item').forEach(li => {
+        li.addEventListener('click', (e) => {
+            if (e.target.tagName === 'INPUT') return; // le clic sur la case suit son cours normalement
+            toggleChecklistItem(li.dataset.key);
+        });
+        li.querySelector('input').addEventListener('change', () => toggleChecklistItem(li.dataset.key));
+    });
+    // Réinitialiser une liste
+    grid.querySelectorAll('.checklist-reset-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const cardId = btn.dataset.reset;
+            const card = CHECKLIST_DATA.find(c => c.id === cardId);
+            card.items.forEach((_, i) => { delete checklistState[cardId + '-' + i]; });
+            saveChecklistState(checklistState);
+            renderChecklists();
+        });
+    });
+}
+function toggleChecklistItem(key) {
+    checklistState[key] = !checklistState[key];
+    saveChecklistState(checklistState);
+    renderChecklists();
+    // Petite célébration si une liste vient d'être complétée à 100%
+    const [cardId] = key.split('-');
+    const card = CHECKLIST_DATA.find(c => c.id === cardId);
+    if (card) {
+        const allChecked = card.items.every((_, i) => checklistState[cardId + '-' + i]);
+        if (allChecked) celebrate(document.getElementById('checklistGrid'));
+    }
+}
+renderChecklists();
+
+/* ---------- 20. ARTICLES / BLOG ---------- */
+const ARTICLES = [
+    {
+        emoji: '😴',
+        title: 'Comprendre le sommeil de bébé (0-6 mois)',
+        excerpt: "Pourquoi bébé se réveille autant, et comment installer peu à peu des repères jour/nuit.",
+        content: [
+            "Les tout premiers mois, le sommeil de bébé n'a rien à voir avec le nôtre : ses cycles sont plus courts, souvent 45 à 60 minutes, et il passe beaucoup de temps en sommeil léger, ce qui explique les réveils fréquents.",
+            "Vers 6-8 semaines, tu peux commencer à l'aider à différencier le jour de la nuit : lumière et activité le jour, calme et pénombre la nuit, même pour les tétées ou changes nocturnes.",
+            "Un rituel court et répété avant le coucher (bain, câlin, berceuse) envoie un signal rassurant à son cerveau : c'est bientôt l'heure de dormir.",
+            "Chaque bébé a son rythme propre. Certains font des nuits plus longues tôt, d'autres beaucoup plus tard — ce n'est pas un signe de ta compétence en tant que maman."
+        ]
+    },
+    {
+        emoji: '🍼',
+        title: 'Allaitement : dépasser les débuts difficiles',
+        excerpt: "Crevasses, doutes sur la quantité, fatigue... des pistes concrètes pour tenir le cap si tu le souhaites.",
+        content: [
+            "Les premières semaines d'allaitement sont souvent les plus rudes : la mise en route peut être douloureuse, et le doute sur la quantité de lait est presque universel chez les jeunes mamans.",
+            "Une bonne prise du sein change tout : le nez de bébé au niveau du mamelon, la bouche grande ouverte, et une bonne partie de l'aréole dans sa bouche, pas seulement le bout du sein.",
+            "Les tétées fréquentes les premiers jours ne signifient pas que tu manques de lait — c'est ainsi que la production s'installe et se régule.",
+            "Si la douleur persiste au-delà des premières secondes de chaque tétée, ou si tu as de la fièvre, une consultante en lactation ou une sage-femme peut identifier rapidement ce qui coince."
+        ]
+    },
+    {
+        emoji: '🌧️',
+        title: 'Le baby blues, et après ?',
+        excerpt: "Faire la différence entre les larmes passagères du post-partum et un mal-être qui mérite d'être écouté.",
+        content: [
+            "Le baby blues touche une grande majorité de jeunes mamans autour du 3ᵉ-5ᵉ jour après l'accouchement : hypersensibilité, larmes soudaines, fatigue émotionnelle. C'est lié aux bouleversements hormonaux et passe en général en quelques jours.",
+            "Ce qui est différent d'une dépression du post-partum : le baby blues s'estompe naturellement, sans s'installer, et n'empêche pas de ressentir aussi de la joie et de l'attachement pour bébé.",
+            "Si la tristesse persiste au-delà de deux semaines, s'intensifie, ou s'accompagne d'un sentiment de vide, d'anxiété forte ou de pensées inquiétantes, il est important d'en parler vite à un professionnel de santé — sage-femme, médecin, psychologue.",
+            "Demander de l'aide à ce moment-là n'est ni un échec, ni une faiblesse : c'est un acte de soin, pour toi et pour ton bébé."
+        ]
+    },
+    {
+        emoji: '💼',
+        title: 'Préparer sereinement le retour au travail',
+        excerpt: "Anticiper le mode de garde, la séparation, et retrouver un équilibre sans culpabiliser.",
+        content: [
+            "Anticiper le mode de garde plusieurs semaines à l'avance (crèche, assistante maternelle, famille) permet d'aborder la reprise avec moins de stress logistique.",
+            "Une période d'adaptation progressive avec le mode de garde, même de quelques jours, aide bébé — et toi — à vivre la séparation plus en douceur.",
+            "Il est normal de ressentir un mélange d'émotions : hâte de retrouver une part de sa vie d'avant, et tristesse à l'idée de la séparation. Les deux peuvent coexister sans contradiction.",
+            "Mettre en place quelques repères stables (photo de toi dans son sac, doudou familier, rituel de départ toujours identique) aide bébé à se sentir en sécurité même en ton absence."
+        ]
+    }
+];
+function renderArticles() {
+    const grid = document.getElementById('articlesGrid');
+    if (!grid) return;
+    grid.innerHTML = '';
+    ARTICLES.forEach((article, index) => {
+        const card = document.createElement('div');
+        card.className = 'article-card';
+        const paragraphs = article.content.map(p => `<p>${p}</p>`).join('');
+        card.innerHTML = `
+            <span class="article-emoji">${article.emoji}</span>
+            <h4>${article.title}</h4>
+            <p class="article-excerpt">${article.excerpt}</p>
+            <button class="article-read-btn" data-index="${index}">Lire l'article →</button>
+            <div class="article-full">${paragraphs}</div>
+        `;
+        grid.appendChild(card);
+    });
+    grid.querySelectorAll('.article-read-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const card = btn.closest('.article-card');
+            const expanding = !card.classList.contains('expanded');
+            card.classList.toggle('expanded');
+            btn.textContent = expanding ? 'Réduire ↑' : "Lire l'article →";
+        });
+    });
+}
+renderArticles();
+
+/* ---------- 18. TÉMOIGNAGES / MUR DE LA COMMUNAUTÉ ---------- */
+const TESTIMONIAL_STORAGE_KEY = 'cutebaby_testimonials_v1';
+// Témoignages de base, écrits pour donner le ton chaleureux et varié du mur
+const CURATED_TESTIMONIALS = [
+    { author: 'Une maman de jumeaux', text: "Les six premiers mois, j'ai vécu en pilote automatique. Et puis un matin, ils ont ri en même temps, et j'ai compris que ça allait aller. 💛" },
+    { author: 'Maman pour la 1ère fois', text: "Personne ne m'avait dit qu'on pouvait pleurer de fatigue ET rire aux éclats dans la même heure. Bienvenue dans le grand n'importe quoi de la maternité !" },
+    { author: 'Une maman qui recommence à zéro chaque jour', text: "Mon astuce n°1 : le café se boit froid, et c'est très bien comme ça." },
+    { author: 'Maman allaitante convertie au biberon', text: "J'ai culpabilisé pendant des semaines avant de passer au biberon. Bébé va très bien, et moi aussi. Fais ce qui marche pour vous deux." },
+    { author: 'Une maman qui a survécu au 4ᵉ trimestre', text: "Le rangement peut attendre. Les câlins, beaucoup moins longtemps." },
+    { author: 'Maman solo et fière de l’être', text: "On me demande souvent comment j'y arrive. La vérité : un jour à la fois, et beaucoup d'indulgence envers moi-même." }
+];
+function loadCommunityTestimonials() {
+    try {
+        const raw = localStorage.getItem(TESTIMONIAL_STORAGE_KEY);
+        return raw ? JSON.parse(raw) : [];
+    } catch (e) {
+        return [];
+    }
+}
+function saveCommunityTestimonials(list) {
+    try { localStorage.setItem(TESTIMONIAL_STORAGE_KEY, JSON.stringify(list)); } catch (e) { /* stockage indisponible */ }
+}
+function renderTestimonials() {
+    const wall = document.getElementById('testimonialWall');
+    if (!wall) return;
+    const community = loadCommunityTestimonials();
+    const all = [...community, ...CURATED_TESTIMONIALS];
+    wall.innerHTML = all.map(t => `
+        <div class="testimonial-card">
+            <div class="t-quote">${escapeHtml(t.text)}</div>
+            <div class="t-author">💬 ${escapeHtml(t.author || 'Une maman anonyme')}</div>
+        </div>
+    `).join('');
+}
+function escapeHtml(str) {
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+}
+renderTestimonials();
+
+const testimonialSubmitBtn = document.getElementById('testimonialSubmit');
+if (testimonialSubmitBtn) {
+    testimonialSubmitBtn.addEventListener('click', () => {
+        const textEl = document.getElementById('testimonialText');
+        const authorEl = document.getElementById('testimonialAuthor');
+        const text = textEl.value.trim();
+        if (!text) { textEl.focus(); return; }
+        const author = authorEl.value.trim() || 'Une maman anonyme';
+        const community = loadCommunityTestimonials();
+        community.unshift({ author, text });
+        saveCommunityTestimonials(community);
+        textEl.value = '';
+        authorEl.value = '';
+        renderTestimonials();
+        celebrate(document.getElementById('testimonialWall'));
+    });
+}
