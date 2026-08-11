@@ -25,6 +25,74 @@
             --radius-lg: 32px;
             --radius-md: 20px;
             --shadow: 0 12px 30px rgba(69, 59, 82, 0.14);
+
+            /* Couleurs de surface, redéfinies en mode nuit ci-dessous */
+            --surface: var(--white);
+            --page-bg: var(--cream);
+        }
+
+        /* ---------- MODE NUIT ----------
+           On assombrit les fonds et cartes tout en gardant les couleurs
+           d'accent (corail, soleil, ciel...) pour rester tendre et lisible,
+           avec un contraste doux adapté à une utilisation en soirée. */
+        html[data-theme="dark"] {
+            --cream: #1b1720;
+            --plum: #f3eef8;
+            --plum-soft: #cdc3da;
+            --white: #2a2433;
+            --surface: #2a2433;
+            --page-bg: #1b1720;
+        }
+
+        html[data-theme="dark"] body {
+            background: var(--cream);
+        }
+
+        html[data-theme="dark"] .home-card,
+        html[data-theme="dark"] .lang-card,
+        html[data-theme="dark"] .track,
+        html[data-theme="dark"] .search-more,
+        html[data-theme="dark"] .game-card,
+        html[data-theme="dark"] .a-panel,
+        html[data-theme="dark"] .a-tab,
+        html[data-theme="dark"] .round-btn,
+        html[data-theme="dark"] .memory-card,
+        html[data-theme="dark"] .shape-card {
+            background: var(--surface);
+            color: var(--plum);
+        }
+
+        html[data-theme="dark"] .game-stage {
+            background: #241f2c;
+            border-color: #382f45;
+        }
+
+        html[data-theme="dark"] .bubbles-area {
+            background: linear-gradient(180deg, #1e3a44, #14262d);
+        }
+
+        html[data-theme="dark"] .search-more input {
+            background: #241f2c;
+            color: var(--plum);
+            border-color: #3a3245;
+        }
+
+        html[data-theme="dark"] .letter-word {
+            color: var(--plum);
+        }
+
+        html[data-theme="dark"] .a-note {
+            background: #33291a;
+            color: #f2cf8f;
+        }
+
+        html[data-theme="dark"] .memory-card {
+            background: #4a3f5c;
+        }
+
+        html[data-theme="dark"] .memory-card.flipped,
+        html[data-theme="dark"] .memory-card.matched {
+            background: var(--surface);
         }
 
         * {
@@ -41,6 +109,7 @@
             background: var(--cream);
             color: var(--plum);
             overflow-x: hidden;
+            transition: background .4s ease, color .4s ease;
         }
 
         h1,
@@ -64,6 +133,55 @@
                 animation-iteration-count: 1 !important;
                 transition-duration: 0.01ms !important;
             }
+        }
+
+        /* ---------- EFFET DE HOVER GLOBAL ----------
+           Tous les éléments cliquables grandissent légèrement au survol,
+           pour guider visuellement le geste de l'enfant (ou du parent). */
+        a,
+        button,
+        .home-card,
+        .lang-card,
+        .track,
+        .game-card,
+        .a-tab,
+        .color-dot,
+        .memory-card,
+        .shape-card,
+        .tool-btn,
+        .bubble-btn,
+        .round-btn {
+            transition: transform .22s ease, box-shadow .22s ease, background .22s ease, color .22s ease, border-color .22s ease;
+        }
+
+        a:hover,
+        button:hover:not(:disabled) {
+            transform: translateY(-2px) scale(1.035);
+        }
+
+        .home-card:hover,
+        .game-card:hover,
+        .track:hover,
+        .a-tab:hover,
+        .memory-card:hover,
+        .shape-card:hover,
+        .tool-btn:hover,
+        .lang-card:hover {
+            transform: translateY(-5px) scale(1.045);
+            box-shadow: 0 16px 34px rgba(69, 59, 82, 0.2);
+        }
+
+        .color-dot:hover {
+            transform: scale(1.15);
+        }
+
+        .round-btn:hover {
+            transform: scale(1.12);
+        }
+
+        button:active:not(:disabled),
+        a:active {
+            transform: scale(0.97);
         }
 
         /* ---------- NAV ---------- */
@@ -90,8 +208,35 @@
             letter-spacing: 0.5px;
         }
 
+        html[data-theme="dark"] .logo {
+            color: #fff;
+        }
+
         .logo span {
             color: var(--sun);
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            pointer-events: auto;
+        }
+
+        .theme-toggle-btn {
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.22);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            color: var(--white);
         }
 
         .bubble-nav {
@@ -252,6 +397,10 @@
             padding: 0 20px;
         }
 
+        html[data-theme="dark"] .hero-content {
+            color: #fff;
+        }
+
         .hero-eyebrow {
             display: inline-block;
             background: rgba(255, 255, 255, 0.22);
@@ -328,12 +477,7 @@
             padding: 30px 26px;
             box-shadow: var(--shadow);
             cursor: pointer;
-            transition: transform .3s ease;
             border: 3px solid transparent;
-        }
-
-        .home-card:hover {
-            transform: translateY(-8px) rotate(-1deg);
         }
 
         .home-card .icon-badge {
@@ -398,6 +542,10 @@
             background: linear-gradient(180deg, #FFF3E4, var(--cream));
         }
 
+        html[data-theme="dark"] #alphabet {
+            background: linear-gradient(180deg, #241a12, var(--cream));
+        }
+
         .lang-select-screen {
             display: flex;
             flex-direction: column;
@@ -424,12 +572,10 @@
             flex-direction: column;
             align-items: center;
             gap: 12px;
-            transition: transform .25s ease;
             border: 3px solid transparent;
         }
 
         .lang-card:hover {
-            transform: translateY(-6px) scale(1.04);
             border-color: var(--sun);
         }
 
@@ -500,11 +646,6 @@
             justify-content: center;
             font-size: 1.4rem;
             color: var(--plum);
-            transition: transform .2s ease;
-        }
-
-        .round-btn:hover {
-            transform: scale(1.08);
         }
 
         .round-btn.big {
@@ -560,6 +701,7 @@
             display: flex;
             align-items: center;
             gap: 6px;
+            background: transparent;
         }
 
         /* ================= DESSINER ================= */
@@ -602,6 +744,14 @@
             gap: 16px;
             margin-top: 22px;
             flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .brush-selector {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
         }
 
         .tool-btn {
@@ -613,23 +763,59 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            transition: background .2s ease;
+            border: 2px solid transparent;
+            font-size: 0.95rem;
         }
 
         .tool-btn:hover {
             background: #2c2636;
         }
 
+        .tool-btn.active {
+            border-color: var(--sun);
+            background: #2c2636;
+            box-shadow: 0 0 20px rgba(255, 200, 87, 0.15);
+        }
+
         .brush-dot {
-            width: 14px;
-            height: 14px;
+            width: 20px;
+            height: 20px;
             border-radius: 50%;
-            background: conic-gradient(from 0deg, #FF8B6A, #FFC857, #8FD9A8, #74C7E3, #C6A8E0, #FF8B6A);
+            flex-shrink: 0;
+        }
+
+        .rainbow-dot {
+            background: conic-gradient(from 0deg, #FF1744, #FF6D00, #FFEA00, #00E676, #2979FF, #D500F9, #FF1744);
+            animation: spinRainbow 4s linear infinite;
+        }
+
+        @keyframes spinRainbow {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        #clearCanvas {
+            background: #2c1a1a;
+            color: #ff6b6b;
+            border-color: #4a2a2a;
+        }
+
+        #clearCanvas:hover {
+            background: #3a2222;
         }
 
         /* ================= MUSIQUE ================= */
         #musique {
             background: linear-gradient(180deg, #EAF6F5, var(--cream));
+        }
+
+        html[data-theme="dark"] #musique {
+            background: linear-gradient(180deg, #142522, var(--cream));
         }
 
         .playlist {
@@ -648,11 +834,6 @@
             border-radius: 20px;
             padding: 16px 20px;
             box-shadow: var(--shadow);
-            transition: transform .2s ease;
-        }
-
-        .track:hover {
-            transform: translateX(4px);
         }
 
         .track .play-icon {
@@ -728,6 +909,10 @@
         /* ================= JEUX ================= */
         #jeux {
             background: linear-gradient(180deg, #FFF0F5, var(--cream));
+        }
+
+        html[data-theme="dark"] #jeux {
+            background: linear-gradient(180deg, #241723, var(--cream));
         }
 
         .games-grid {
@@ -817,11 +1002,6 @@
             height: 64px;
             border-radius: 50%;
             box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
-            transition: transform .15s ease;
-        }
-
-        .color-dot:hover {
-            transform: scale(1.1);
         }
 
         .color-prompt {
@@ -848,7 +1028,6 @@
             justify-content: center;
             font-size: 1.8rem;
             cursor: pointer;
-            transition: transform .2s ease;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
 
@@ -861,9 +1040,93 @@
             margin-top: 30px;
         }
 
+        /* ================= JEU DES FORMES ================= */
+        .shape-prompt {
+            text-align: center;
+            font-family: 'Baloo 2';
+            font-size: 1.4rem;
+            margin-bottom: 16px;
+            color: var(--plum);
+        }
+
+        #shapeTarget {
+            display: inline-block;
+            background: #f0f0f0;
+            padding: 4px 16px;
+            border-radius: 12px;
+            font-size: 1.6rem;
+        }
+
+        html[data-theme="dark"] #shapeTarget {
+            background: #382f45;
+        }
+
+        .shape-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .shape-card {
+            background: var(--white);
+            border-radius: 18px;
+            padding: 16px 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(69, 59, 82, 0.08);
+            border: 3px solid transparent;
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 600;
+        }
+
+        .shape-card .shape-emoji {
+            font-size: 3rem;
+            line-height: 1;
+        }
+
+        .shape-card .shape-name {
+            font-size: 0.9rem;
+            color: var(--plum-soft);
+            font-weight: 600;
+        }
+
+        .shape-card:active {
+            transform: scale(0.95);
+        }
+
+        /* Animation de victoire */
+        @keyframes shapeWin {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.15);
+                background: #e8f5e9;
+                border-color: #6FC08A;
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .shape-card.win {
+            animation: shapeWin 0.4s ease;
+        }
+
         /* ================= ASTUCES MAMANS ================= */
         #astuces {
             background: linear-gradient(180deg, #F4EEFB, var(--cream));
+        }
+
+        html[data-theme="dark"] #astuces {
+            background: linear-gradient(180deg, #201a2b, var(--cream));
         }
 
         .astuces-tabs {
@@ -881,7 +1144,6 @@
             font-weight: 700;
             color: var(--plum-soft);
             box-shadow: 0 4px 12px rgba(69, 59, 82, 0.08);
-            transition: all .25s ease;
             font-size: 0.92rem;
         }
 
@@ -949,194 +1211,51 @@
             font-size: 0.85rem;
         }
 
-        /* ================= DESSINER ================= */
-        /* ================= DESSINER ================= */
-        #dessiner {
-            background: #111;
-            color: var(--white);
+        /* =========================================================
+           PARTICULES — confettis / étoiles de célébration
+           ========================================================= */
+        .particle-layer {
+            position: fixed;
+            inset: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 9999;
+            overflow: hidden;
         }
 
-        .draw-wrap {
-            padding: 110px 20px 40px;
-            max-width: 1000px;
-            margin: 0 auto;
-            text-align: center;
+        .confetti-piece {
+            position: absolute;
+            top: 0;
+            left: 0;
+            will-change: transform, opacity;
+            animation-name: confettiFall;
+            animation-timing-function: cubic-bezier(.2, .7, .3, 1);
+            animation-fill-mode: forwards;
+            opacity: 0.95;
         }
 
-        .draw-wrap .section-title {
-            color: var(--white);
-        }
-
-        .draw-wrap .section-sub {
-            color: #c9c4d1;
-        }
-
-        canvas#drawCanvas {
-            width: 100%;
-            max-width: 900px;
-            aspect-ratio: 16/10;
-            background: #0a0a0a;
-            border-radius: 30px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-            touch-action: none;
-            margin-top: 20px;
-            cursor: crosshair;
-            border: 2px solid #262230;
-        }
-
-        .draw-toolbar {
-            display: flex;
-            justify-content: center;
-            gap: 16px;
-            margin-top: 22px;
-            flex-wrap: wrap;
-            align-items: center;
-        }
-
-        .brush-selector {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        .tool-btn {
-            background: #201c29;
-            color: var(--white);
-            padding: 12px 22px;
-            border-radius: 16px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: all .2s ease;
-            border: 2px solid transparent;
-            font-size: 0.95rem;
-        }
-
-        .tool-btn:hover {
-            background: #2c2636;
-            transform: translateY(-2px);
-        }
-
-        .tool-btn.active {
-            border-color: var(--sun);
-            background: #2c2636;
-            box-shadow: 0 0 20px rgba(255, 200, 87, 0.15);
-        }
-
-        .brush-dot {
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            flex-shrink: 0;
-        }
-
-        .rainbow-dot {
-            background: conic-gradient(from 0deg, #FF1744, #FF6D00, #FFEA00, #00E676, #2979FF, #D500F9, #FF1744);
-            animation: spinRainbow 4s linear infinite;
-        }
-
-        @keyframes spinRainbow {
-            from {
-                transform: rotate(0deg);
-            }
-
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        #clearCanvas {
-            background: #2c1a1a;
-            color: #ff6b6b;
-            border-color: #4a2a2a;
-        }
-
-        #clearCanvas:hover {
-            background: #3a2222;
-        }
-
-        /* ================= JEU DES FORMES ================= */
-        .shape-prompt {
-            text-align: center;
-            font-family: 'Baloo 2';
-            font-size: 1.4rem;
-            margin-bottom: 16px;
-            color: var(--plum);
-        }
-
-        #shapeTarget {
-            display: inline-block;
-            background: #f0f0f0;
-            padding: 4px 16px;
-            border-radius: 12px;
-            font-size: 1.6rem;
-        }
-
-        .shape-options {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            max-width: 400px;
-            margin: 0 auto;
-        }
-
-        .shape-card {
-            background: var(--white);
-            border-radius: 18px;
-            padding: 16px 12px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 6px;
-            cursor: pointer;
-            transition: all .25s ease;
-            box-shadow: 0 4px 12px rgba(69, 59, 82, 0.08);
-            border: 3px solid transparent;
-            font-family: 'Quicksand', sans-serif;
-            font-weight: 600;
-        }
-
-        .shape-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 20px rgba(69, 59, 82, 0.15);
-        }
-
-        .shape-card .shape-emoji {
-            font-size: 3rem;
-            line-height: 1;
-        }
-
-        .shape-card .shape-name {
-            font-size: 0.9rem;
-            color: var(--plum-soft);
-            font-weight: 600;
-        }
-
-        .shape-card:active {
-            transform: scale(0.95);
-        }
-
-        /* Animation de victoire */
-        @keyframes shapeWin {
+        @keyframes confettiFall {
             0% {
-                transform: scale(1);
+                transform: translate(var(--dx0, 0px), 0px) rotate(0deg) scale(0.6);
+                opacity: 0;
             }
 
-            50% {
-                transform: scale(1.15);
-                background: #e8f5e9;
-                border-color: #6FC08A;
+            12% {
+                opacity: 1;
+                transform: translate(var(--dx1), var(--dy1)) rotate(calc(var(--rot) * 0.3)) scale(1);
             }
 
             100% {
-                transform: scale(1);
+                transform: translate(var(--dx2), var(--dy2)) rotate(var(--rot)) scale(0.9);
+                opacity: 0;
             }
         }
 
-        .shape-card.win {
-            animation: shapeWin 0.4s ease;
+        @media (prefers-reduced-motion: reduce) {
+            .particle-layer {
+                display: none;
+            }
         }
     </style>
 </head>
@@ -1146,20 +1265,23 @@
     <!-- ===================== NAV ===================== -->
     <div class="nav-wrap">
         <div class="logo">Cute<span>Baby</span></div>
-        <nav class="bubble-nav" id="bubbleNav">
-            <button class="bubble-btn active" data-page="home"><span class="emoji">🏠</span><span
-                    class="label">Accueil</span></button>
-            <button class="bubble-btn" data-page="alphabet"><span class="emoji">🔤</span><span
-                    class="label">Alphabet</span></button>
-            <button class="bubble-btn" data-page="dessiner"><span class="emoji">🎨</span><span
-                    class="label">Dessiner</span></button>
-            <button class="bubble-btn" data-page="musique"><span class="emoji">🎵</span><span
-                    class="label">Musique</span></button>
-            <button class="bubble-btn" data-page="jeux"><span class="emoji">🧩</span><span
-                    class="label">Jeux</span></button>
-            <button class="bubble-btn" data-page="astuces"><span class="emoji">💛</span><span class="label">Astuces
-                    mamans</span></button>
-        </nav>
+        <div class="nav-right">
+            <nav class="bubble-nav" id="bubbleNav">
+                <button class="bubble-btn active" data-page="home"><span class="emoji">🏠</span><span
+                        class="label">Accueil</span></button>
+                <button class="bubble-btn" data-page="alphabet"><span class="emoji">🔤</span><span
+                        class="label">Alphabet</span></button>
+                <button class="bubble-btn" data-page="dessiner"><span class="emoji">🎨</span><span
+                        class="label">Dessiner</span></button>
+                <button class="bubble-btn" data-page="musique"><span class="emoji">🎵</span><span
+                        class="label">Musique</span></button>
+                <button class="bubble-btn" data-page="jeux"><span class="emoji">🧩</span><span
+                        class="label">Jeux</span></button>
+                <button class="bubble-btn" data-page="astuces"><span class="emoji">💛</span><span
+                        class="label">Astuces mamans</span></button>
+            </nav>
+            <button class="theme-toggle-btn" id="themeToggle" aria-label="Passer en mode nuit">🌙</button>
+        </div>
     </div>
 
     <!-- ===================== HOME ===================== -->
