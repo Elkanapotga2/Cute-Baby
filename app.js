@@ -272,10 +272,11 @@ document.getElementById('melodySwitch').addEventListener('click', function () {
 /* =========================================================
    DESSINER — tableau noir magique avec 3 pinceaux
    ========================================================= */
+/* =========================================================
+   DESSINER — tableau noir magique
+   ========================================================= */
 let canvasReady = false;
-let currentBrush = 'rainbow'; // 'rainbow', 'star', 'fire'
-let particles = [];
-let animationId = null;
+let currentBrush = 'rainbow'; // 'rainbow' ou 'star'
 
 function setupCanvas() {
     const canvas = document.getElementById('drawCanvas');
@@ -295,7 +296,6 @@ function setupCanvas() {
     let drawing = false;
     let hue = 0;
     let last = { x: 0, y: 0 };
-    let points = [];
 
     function pos(e) {
         const rect = canvas.getBoundingClientRect();
@@ -306,177 +306,104 @@ function setupCanvas() {
     }
 
     // --- Pinceau Arc-en-ciel amélioré ---
-    function drawRainbowBrush(ctx, x, y, size = 22) {
-        const colors = [
-            '#FF1744', '#FF6F00', '#FFEA00', '#00E676', '#2979FF', '#D500F9'
-        ];
-        const steps = 12;
-        for (let i = 0; i < steps; i++) {
-            const angle = (i / steps) * Math.PI * 2 + hue * 0.05;
-            const radius = size * (0.3 + 0.7 * (i / steps));
-            const cx = x + Math.cos(angle) * radius * 0.3;
-            const cy = y + Math.sin(angle) * radius * 0.3;
-            const grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, radius * 0.8);
-            grad.addColorStop(0, colors[i % colors.length]);
-            grad.addColorStop(0.5, colors[(i + 3) % colors.length]);
-            grad.addColorStop(1, colors[(i + 5) % colors.length] + '33');
-            ctx.fillStyle = grad;
-            ctx.beginPath();
-            ctx.arc(cx, cy, radius * 0.5 + 4, 0, Math.PI * 2);
-            ctx.fill();
-        }
-        // Noyau brillant
-        const glow = ctx.createRadialGradient(x, y, 0, x, y, size * 0.6);
-        glow.addColorStop(0, '#ffffff');
-        glow.addColorStop(0.3, `hsl(${hue % 360}, 100%, 70%)`);
-        glow.addColorStop(1, 'transparent');
+    function drawRainbowBrush(ctx, x, y, size = 24) {
+        // Cercle principal avec dégradé de couleurs vives
+        const grad = ctx.createRadialGradient(x, y, 0, x, y, size);
+
+        // Couleurs plus saturées et plus foncées
+        const hue1 = hue % 360;
+        const hue2 = (hue + 60) % 360;
+        const hue3 = (hue + 120) % 360;
+        const hue4 = (hue + 180) % 360;
+        const hue5 = (hue + 240) % 360;
+        const hue6 = (hue + 300) % 360;
+
+        grad.addColorStop(0, `hsl(${hue1}, 100%, 75%)`);
+        grad.addColorStop(0.2, `hsl(${hue2}, 100%, 70%)`);
+        grad.addColorStop(0.4, `hsl(${hue3}, 100%, 65%)`);
+        grad.addColorStop(0.6, `hsl(${hue4}, 100%, 60%)`);
+        grad.addColorStop(0.8, `hsl(${hue5}, 100%, 55%)`);
+        grad.addColorStop(1, `hsl(${hue6}, 100%, 50%)`);
+
+        ctx.shadowColor = `hsl(${hue1}, 100%, 60%)`;
+        ctx.shadowBlur = 25;
+        ctx.fillStyle = grad;
+        ctx.beginPath();
+        ctx.arc(x, y, size, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.shadowBlur = 0;
+
+        // Noyau brillant pour plus de beauté
+        const glow = ctx.createRadialGradient(x - size * 0.2, y - size * 0.2, 0, x, y, size * 0.5);
+        glow.addColorStop(0, `hsla(0, 0%, 100%, 0.6)`);
+        glow.addColorStop(1, `hsla(0, 0%, 100%, 0)`);
         ctx.fillStyle = glow;
         ctx.beginPath();
-        ctx.arc(x, y, size * 0.6, 0, Math.PI * 2);
+        ctx.arc(x, y, size * 0.5, 0, Math.PI * 2);
         ctx.fill();
     }
 
-    // --- Pinceau Étoile ---
-    function drawStarBrush(ctx, x, y, size = 28) {
-        const numStars = 5 + Math.floor(Math.random() * 4);
-        for (let s = 0; s < numStars; s++) {
-            const angle = Math.random() * Math.PI * 2;
-            const dist = Math.random() * size * 0.8;
+    // --- Pinceau Étoile (une étoile par clic) ---
+    function drawStar(ctx, x, y) {
+        const starSize = 20 + Math.random() * 20;
+        const rotation = Math.random() * Math.PI * 2;
+        const color = `hsl(${hue % 360}, 100%, 65%)`;
+
+        // Ombre pour faire briller l'étoile
+        ctx.shadowColor = color;
+        ctx.shadowBlur = 30;
+
+        // Dessiner une étoile à 5 branches
+        ctx.fillStyle = color;
+        ctx.beginPath();
+        const spikes = 5;
+        const outerRadius = starSize;
+        const innerRadius = starSize * 0.4;
+
+        for (let i = 0; i < spikes * 2; i++) {
+            const radius = i % 2 === 0 ? outerRadius : innerRadius;
+            const angle = (i / (spikes * 2)) * Math.PI * 2 - Math.PI / 2 + rotation;
+            const px = x + Math.cos(angle) * radius;
+            const py = y + Math.sin(angle) * radius;
+            i === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py);
+        }
+        ctx.closePath();
+        ctx.fill();
+        ctx.shadowBlur = 0;
+
+        // Petit cœur brillant au centre
+        const glow = ctx.createRadialGradient(x, y, 0, x, y, starSize * 0.2);
+        glow.addColorStop(0, `hsla(0, 0%, 100%, 0.8)`);
+        glow.addColorStop(1, `hsla(0, 0%, 100%, 0)`);
+        ctx.fillStyle = glow;
+        ctx.beginPath();
+        ctx.arc(x, y, starSize * 0.2, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Petites étincelles autour
+        for (let i = 0; i < 6; i++) {
+            const angle = (i / 6) * Math.PI * 2 + rotation;
+            const dist = starSize * (0.6 + Math.random() * 0.4);
             const sx = x + Math.cos(angle) * dist;
             const sy = y + Math.sin(angle) * dist;
-            const starSize = 6 + Math.random() * 14;
-            const brightness = 60 + Math.random() * 40;
-            const color = `hsl(${40 + Math.random() * 30}, 100%, ${brightness}%)`;
-
-            // Étoile à 5 branches
-            ctx.fillStyle = color;
-            ctx.shadowColor = color;
-            ctx.shadowBlur = 20;
+            const sparkleSize = 2 + Math.random() * 3;
+            ctx.fillStyle = `hsla(50, 100%, 90%, ${0.4 + Math.random() * 0.4})`;
             ctx.beginPath();
-            const spikes = 5;
-            const outerRadius = starSize;
-            const innerRadius = starSize * 0.4;
-            for (let i = 0; i < spikes * 2; i++) {
-                const radius = i % 2 === 0 ? outerRadius : innerRadius;
-                const a = (i / (spikes * 2)) * Math.PI * 2 - Math.PI / 2;
-                const px = sx + Math.cos(a) * radius;
-                const py = sy + Math.sin(a) * radius;
-                i === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py);
-            }
-            ctx.closePath();
-            ctx.fill();
-            ctx.shadowBlur = 0;
-        }
-        // Poussière d'étoile
-        for (let s = 0; s < 8; s++) {
-            const a = Math.random() * Math.PI * 2;
-            const d = Math.random() * size;
-            const sx = x + Math.cos(a) * d;
-            const sy = y + Math.sin(a) * d;
-            ctx.fillStyle = `rgba(255, 255, 200, ${0.3 + Math.random() * 0.4})`;
-            ctx.beginPath();
-            ctx.arc(sx, sy, 1 + Math.random() * 2, 0, Math.PI * 2);
+            ctx.arc(sx, sy, sparkleSize, 0, Math.PI * 2);
             ctx.fill();
         }
-    }
-
-    // --- Pinceau Feu ---
-    let fireParticles = [];
-
-    function drawFireBrush(ctx, x, y, size = 30) {
-        // Ajouter des particules de feu
-        for (let i = 0; i < 6; i++) {
-            const angle = (Math.random() - 0.5) * Math.PI * 1.2 - Math.PI / 2;
-            const speed = 0.5 + Math.random() * 1.5;
-            const dist = Math.random() * size * 0.5;
-            fireParticles.push({
-                x: x + (Math.random() - 0.5) * size * 0.4,
-                y: y + (Math.random() - 0.5) * size * 0.4,
-                vx: Math.cos(angle) * speed * 0.5 + (Math.random() - 0.5) * 0.3,
-                vy: Math.sin(angle) * speed * 1.5 - 0.5 + Math.random() * 0.3,
-                life: 0.5 + Math.random() * 0.8,
-                maxLife: 0.5 + Math.random() * 0.8,
-                size: 4 + Math.random() * 16,
-                hue: 15 + Math.random() * 35
-            });
-        }
-
-        // Limiter le nombre de particules
-        if (fireParticles.length > 200) {
-            fireParticles.splice(0, fireParticles.length - 200);
-        }
-
-        // Mettre à jour et dessiner les particules
-        for (let i = fireParticles.length - 1; i >= 0; i--) {
-            const p = fireParticles[i];
-            p.x += p.vx;
-            p.y += p.vy;
-            p.vy -= 0.02;
-            p.life -= 0.01;
-            p.size *= 0.998;
-
-            if (p.life <= 0 || p.size < 0.5) {
-                fireParticles.splice(i, 1);
-                continue;
-            }
-
-            const alpha = Math.min(1, p.life / p.maxLife * 1.5);
-            const brightness = 60 + p.life / p.maxLife * 40;
-            const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size);
-            grad.addColorStop(0, `hsla(${p.hue}, 100%, ${brightness + 30}%, ${alpha})`);
-            grad.addColorStop(0.4, `hsla(${p.hue + 10}, 100%, ${brightness}%, ${alpha * 0.9})`);
-            grad.addColorStop(0.7, `hsla(${p.hue + 20}, 90%, ${brightness - 20}%, ${alpha * 0.5})`);
-            grad.addColorStop(1, `hsla(${p.hue + 30}, 80%, ${brightness - 40}%, 0)`);
-            ctx.fillStyle = grad;
-            ctx.beginPath();
-            ctx.arc(p.x, p.y, p.size * 0.8, 0, Math.PI * 2);
-            ctx.fill();
-
-            // Lueur
-            const glow = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size * 2);
-            glow.addColorStop(0, `hsla(${p.hue}, 100%, 80%, ${alpha * 0.15})`);
-            glow.addColorStop(1, 'transparent');
-            ctx.fillStyle = glow;
-            ctx.beginPath();
-            ctx.arc(p.x, p.y, p.size * 2, 0, Math.PI * 2);
-            ctx.fill();
-        }
-
-        // Noyau de feu
-        const coreGrad = ctx.createRadialGradient(x, y, 0, x, y, size * 0.3);
-        coreGrad.addColorStop(0, 'rgba(255, 255, 200, 0.9)');
-        coreGrad.addColorStop(0.3, 'rgba(255, 200, 50, 0.7)');
-        coreGrad.addColorStop(0.7, 'rgba(255, 100, 20, 0.4)');
-        coreGrad.addColorStop(1, 'transparent');
-        ctx.fillStyle = coreGrad;
-        ctx.beginPath();
-        ctx.arc(x, y, size * 0.3, 0, Math.PI * 2);
-        ctx.fill();
     }
 
     function start(e) {
         drawing = true;
         const p = pos(e);
         last = p;
-        points = [p];
         e.preventDefault();
 
-        // Ajouter des particules initiales pour le feu
-        if (currentBrush === 'fire') {
-            for (let i = 0; i < 15; i++) {
-                const angle = (Math.random() - 0.5) * Math.PI * 1.2 - Math.PI / 2;
-                const speed = 0.5 + Math.random() * 2;
-                fireParticles.push({
-                    x: p.x + (Math.random() - 0.5) * 20,
-                    y: p.y + (Math.random() - 0.5) * 20,
-                    vx: Math.cos(angle) * speed * 0.5 + (Math.random() - 0.5) * 0.3,
-                    vy: Math.sin(angle) * speed * 1.5 - 0.5 + Math.random() * 0.3,
-                    life: 0.5 + Math.random() * 1,
-                    maxLife: 0.5 + Math.random() * 1,
-                    size: 4 + Math.random() * 20,
-                    hue: 15 + Math.random() * 35
-                });
-            }
+        // Si c'est le pinceau étoile, on dessine une étoile à chaque clic
+        if (currentBrush === 'star') {
+            drawStar(ctx, p.x, p.y);
+            hue = (hue + 15) % 360; // Changement progressif de couleur
         }
     }
 
@@ -485,75 +412,30 @@ function setupCanvas() {
         const p = pos(e);
         const dist = Math.hypot(p.x - last.x, p.y - last.y);
 
-        // Dessiner selon le pinceau sélectionné
-        const steps = Math.max(1, Math.floor(dist / 3));
-        for (let i = 0; i <= steps; i++) {
-            const t = i / steps;
-            const cx = last.x + (p.x - last.x) * t;
-            const cy = last.y + (p.y - last.y) * t;
-
-            hue = (hue + 0.5) % 360;
-
-            switch (currentBrush) {
-                case 'rainbow':
-                    drawRainbowBrush(ctx, cx, cy, 18 + Math.sin(hue * 0.05) * 6);
-                    break;
-                case 'star':
-                    drawStarBrush(ctx, cx, cy, 22 + Math.sin(hue * 0.08) * 8);
-                    break;
-                case 'fire':
-                    drawFireBrush(ctx, cx, cy, 25);
-                    break;
+        if (currentBrush === 'rainbow') {
+            // Arc-en-ciel : dessin continu
+            const steps = Math.max(1, Math.floor(dist / 2));
+            for (let i = 0; i <= steps; i++) {
+                const t = i / steps;
+                const cx = last.x + (p.x - last.x) * t;
+                const cy = last.y + (p.y - last.y) * t;
+                hue = (hue + 0.8) % 360;
+                const size = 18 + Math.sin(hue * 0.05) * 6;
+                drawRainbowBrush(ctx, cx, cy, size);
+            }
+        } else if (currentBrush === 'star') {
+            // Pour le pinceau étoile, on crée une traînée d'étoiles espacées
+            if (dist > 15) {
+                drawStar(ctx, p.x, p.y);
+                hue = (hue + 12) % 360;
+                last = p;
             }
         }
 
-        last = p;
         e.preventDefault();
-
-        // Animation continue pour le feu
-        if (currentBrush === 'fire' && !animationId) {
-            animateFire();
-        }
     }
 
-    function animateFire() {
-        if (currentBrush !== 'fire' || fireParticles.length === 0) {
-            animationId = null;
-            return;
-        }
-
-        // Redessiner une partie des particules
-        const canvas = document.getElementById('drawCanvas');
-        const ctx2 = canvas.getContext('2d');
-
-        // On ne redessine que si on dessine
-        if (drawing) {
-            // Mettre à jour les particules
-            for (let i = fireParticles.length - 1; i >= 0; i--) {
-                const p = fireParticles[i];
-                p.x += p.vx;
-                p.y += p.vy;
-                p.vy -= 0.015;
-                p.life -= 0.008;
-                p.size *= 0.998;
-                if (p.life <= 0 || p.size < 0.5) {
-                    fireParticles.splice(i, 1);
-                }
-            }
-        }
-
-        animationId = requestAnimationFrame(animateFire);
-    }
-
-    function end() {
-        drawing = false;
-        if (currentBrush !== 'fire') {
-            if (animationId) {
-                cancelAnimationFrame(animationId);
-                animationId = null;
-            }
-        }
-    }
+    function end() { drawing = false; }
 
     canvas.addEventListener('mousedown', start);
     canvas.addEventListener('mousemove', move);
@@ -564,11 +446,6 @@ function setupCanvas() {
 
     document.getElementById('clearCanvas').onclick = () => {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        fireParticles = [];
-        if (animationId) {
-            cancelAnimationFrame(animationId);
-            animationId = null;
-        }
     };
 
     // Sélection du pinceau
@@ -577,19 +454,11 @@ function setupCanvas() {
             document.querySelectorAll('.brush-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
             currentBrush = btn.dataset.brush;
-            if (currentBrush !== 'fire') {
-                fireParticles = [];
-                if (animationId) {
-                    cancelAnimationFrame(animationId);
-                    animationId = null;
-                }
-            }
         });
     });
 
     canvasReady = true;
 }
-
 /* =========================================================
    MUSIQUE — playlist de berceuses (synthétisées, sans fichiers externes)
    ========================================================= */
