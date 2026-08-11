@@ -35,6 +35,32 @@ setTimeout(() => {
 }, 900);
 
 /* =========================================================
+   THÈME — mode jour / nuit
+   ========================================================= */
+const THEME_KEY_ATTR = 'data-theme';
+function applyTheme(theme) {
+    document.documentElement.setAttribute(THEME_KEY_ATTR, theme);
+    const btn = document.getElementById('themeToggle');
+    if (btn) {
+        btn.textContent = theme === 'dark' ? '☀️' : '🌙';
+        btn.setAttribute('aria-label', theme === 'dark' ? 'Passer en mode jour' : 'Passer en mode nuit');
+    }
+}
+function initTheme() {
+    // Pas de stockage persistant requis : on démarre en mode jour à chaque
+    // visite, et on respecte simplement le choix de l'utilisateur pendant
+    // la session en cours.
+    applyTheme('light');
+}
+function toggleTheme() {
+    const current = document.documentElement.getAttribute(THEME_KEY_ATTR) || 'light';
+    applyTheme(current === 'light' ? 'dark' : 'light');
+}
+document.addEventListener('DOMContentLoaded', initTheme);
+const themeToggleBtn = document.getElementById('themeToggle');
+if (themeToggleBtn) themeToggleBtn.addEventListener('click', toggleTheme);
+
+/* =========================================================
    AUDIO — petit synthétiseur pour mélodies douces (aucun
    fichier externe nécessaire, tout est généré en direct)
    ========================================================= */
@@ -95,6 +121,90 @@ function playMelody(key, loop = false, soft = false) {
 }
 function stopMelody() {
     if (melodyLoopHandle) { clearInterval(melodyLoopHandle); melodyLoopHandle = null; }
+}
+
+/* =========================================================
+   FÉLICITATIONS — voix "Bravo !" / "Super !" + petit motif
+   sonore, générés en direct (aucun fichier audio externe)
+   ========================================================= */
+const PRAISE_WORDS_FR = ['Bravo !', 'Super !', 'Génial !', 'Bien joué !', 'Youpi !'];
+function speakPraise() {
+    if (!window.speechSynthesis) return;
+    const word = PRAISE_WORDS_FR[Math.floor(Math.random() * PRAISE_WORDS_FR.length)];
+    const utter = new SpeechSynthesisUtterance(word);
+    utter.lang = 'fr-FR';
+    utter.rate = 1.05;
+    utter.pitch = 1.35;
+    utter.volume = 0.9;
+    window.speechSynthesis.speak(utter);
+}
+function playApplauseChime() {
+    // Petit arpège joyeux façon "clochettes" pour accompagner la voix,
+    // qui fonctionne même sur les navigateurs sans synthèse vocale.
+    const ctx = getCtx();
+    const t0 = ctx.currentTime;
+    const notes = [NOTE.C5, NOTE.E4 * 2, NOTE.G4 * 2, NOTE.C5 * 1.5];
+    notes.forEach((f, i) => playTone(f, t0 + i * 0.09, 0.35, 0.07, 'sine'));
+}
+function celebrate(targetEl) {
+    speakPraise();
+    playApplauseChime();
+    spawnParticles(targetEl);
+}
+
+/* =========================================================
+   PARTICULES — confettis / étoiles qui tombent lors d'une
+   réussite (bonne réponse, lettre terminée, etc.)
+   ========================================================= */
+let particleLayer = null;
+function getParticleLayer() {
+    if (!particleLayer) {
+        particleLayer = document.createElement('div');
+        particleLayer.className = 'particle-layer';
+        document.body.appendChild(particleLayer);
+    }
+    return particleLayer;
+}
+const PARTICLE_EMOJIS = ['✨', '⭐', '🎉', '💛', '🌟'];
+const PARTICLE_COLORS = ['#FF8B6A', '#FFC857', '#8FD9A8', '#74C7E3', '#C6A8E0'];
+function spawnParticles(anchorEl, count = 22) {
+    const layer = getParticleLayer();
+    let originX = window.innerWidth / 2;
+    let originY = window.innerHeight / 2;
+    if (anchorEl && anchorEl.getBoundingClientRect) {
+        const rect = anchorEl.getBoundingClientRect();
+        originX = rect.left + rect.width / 2;
+        originY = rect.top + rect.height / 2;
+    }
+    for (let i = 0; i < count; i++) {
+        const p = document.createElement('span');
+        const useEmoji = Math.random() > 0.45;
+        p.className = 'confetti-piece';
+        if (useEmoji) {
+            p.textContent = PARTICLE_EMOJIS[Math.floor(Math.random() * PARTICLE_EMOJIS.length)];
+            p.style.fontSize = (14 + Math.random() * 16) + 'px';
+        } else {
+            p.style.background = PARTICLE_COLORS[Math.floor(Math.random() * PARTICLE_COLORS.length)];
+            p.style.width = p.style.height = (6 + Math.random() * 8) + 'px';
+            p.style.borderRadius = Math.random() > 0.5 ? '50%' : '3px';
+        }
+        const spreadX = (Math.random() - 0.5) * 260;
+        const fallY = 220 + Math.random() * 220;
+        const rotate = (Math.random() - 0.5) * 720;
+        const drift = (Math.random() - 0.5) * 120;
+        const duration = 1100 + Math.random() * 900;
+        p.style.left = originX + 'px';
+        p.style.top = originY + 'px';
+        p.style.setProperty('--dx0', (Math.random() - 0.5) * 40 + 'px');
+        p.style.setProperty('--dy1', -Math.abs(spreadX) * 0.15 - 20 + 'px');
+        p.style.setProperty('--dx1', spreadX + 'px');
+        p.style.setProperty('--dy2', fallY + 'px');
+        p.style.setProperty('--dx2', (spreadX + drift) + 'px');
+        p.style.setProperty('--rot', rotate + 'deg');
+        p.style.animationDuration = duration + 'ms';
+        layer.appendChild(p);
+        setTimeout(() => p.remove(), duration + 60);
+    }
 }
 
 /* =========================================================
@@ -253,6 +363,8 @@ function speakLetter() {
 }
 document.getElementById('nextLetter').addEventListener('click', () => {
     const data = ALPHABETS[currentLang];
+    // On célèbre la lettre qu'on vient de terminer avant de passer à la suivante.
+    celebrate(letterStage);
     currentLetterIndex = (currentLetterIndex + 1) % data.letters.length;
     renderLetter();
 });
@@ -509,6 +621,7 @@ function startBubbles() {
             bubbleScore++;
             document.getElementById('bubbleScore').textContent = bubbleScore;
             playTone(500 + Math.random() * 300, getCtx().currentTime, 0.25, 0.08, 'sine');
+            spawnParticles(b, 8);
             b.remove();
         });
     }, 700);
@@ -585,6 +698,7 @@ function nextShapeRound() {
                 shapeScore++;
                 document.getElementById('shapeScore').textContent = shapeScore;
                 playTone(660, getCtx().currentTime, 0.3, 0.09, 'sine');
+                spawnParticles(card, 14);
                 // Animation de réussite
                 card.style.transform = 'scale(1.2)';
                 card.style.borderColor = '#6FC08A';
@@ -626,6 +740,7 @@ function nextColorRound() {
                 colorScore++;
                 document.getElementById('colorScore').textContent = colorScore;
                 playTone(660, getCtx().currentTime, 0.3, 0.09, 'sine');
+                spawnParticles(dot, 14);
                 nextColorRound();
             } else {
                 playTone(180, getCtx().currentTime, 0.3, 0.08, 'sawtooth');
@@ -672,6 +787,8 @@ function flipMemoryCard(card) {
             flippedCards = [];
             lockBoard = false;
             playTone(700, getCtx().currentTime, 0.25, 0.08, 'sine');
+            spawnParticles(b, 12);
+            if (memoryScore === ANIMALS.length) celebrate(document.getElementById('memoryGrid'));
         } else {
             setTimeout(() => {
                 a.classList.remove('flipped'); a.textContent = '❔';
