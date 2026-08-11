@@ -270,13 +270,10 @@ document.getElementById('melodySwitch').addEventListener('click', function () {
 
 
 /* =========================================================
-   DESSINER — tableau noir magique avec 3 pinceaux
-   ========================================================= */
-/* =========================================================
    DESSINER — tableau noir magique
    ========================================================= */
 let canvasReady = false;
-let currentBrush = 'rainbow'; // 'rainbow' ou 'star'
+let currentBrush = 'rainbow';
 
 function setupCanvas() {
     const canvas = document.getElementById('drawCanvas');
@@ -294,7 +291,7 @@ function setupCanvas() {
     window.addEventListener('resize', resize);
 
     let drawing = false;
-    let hue = 0;
+    let hue = 20;
     let last = { x: 0, y: 0 };
 
     function pos(e) {
@@ -305,56 +302,31 @@ function setupCanvas() {
         return { x: (point.clientX - rect.left) * scaleX, y: (point.clientY - rect.top) * scaleY };
     }
 
-    // --- Pinceau Arc-en-ciel amélioré ---
-    function drawRainbowBrush(ctx, x, y, size = 24) {
-        // Cercle principal avec dégradé de couleurs vives
-        const grad = ctx.createRadialGradient(x, y, 0, x, y, size);
-
-        // Couleurs plus saturées et plus foncées
-        const hue1 = hue % 360;
-        const hue2 = (hue + 60) % 360;
-        const hue3 = (hue + 120) % 360;
-        const hue4 = (hue + 180) % 360;
-        const hue5 = (hue + 240) % 360;
-        const hue6 = (hue + 300) % 360;
-
-        grad.addColorStop(0, `hsl(${hue1}, 100%, 75%)`);
-        grad.addColorStop(0.2, `hsl(${hue2}, 100%, 70%)`);
-        grad.addColorStop(0.4, `hsl(${hue3}, 100%, 65%)`);
-        grad.addColorStop(0.6, `hsl(${hue4}, 100%, 60%)`);
-        grad.addColorStop(0.8, `hsl(${hue5}, 100%, 55%)`);
-        grad.addColorStop(1, `hsl(${hue6}, 100%, 50%)`);
-
-        ctx.shadowColor = `hsl(${hue1}, 100%, 60%)`;
-        ctx.shadowBlur = 25;
-        ctx.fillStyle = grad;
+    // --- Pinceau Arc-en-ciel (ton code original) ---
+    function drawRainbow(x, y) {
+        hue = (hue + 2) % 360;
+        ctx.strokeStyle = `hsl(${hue},85%,65%)`;
+        ctx.lineWidth = 14;
+        ctx.shadowBlur = 18;
+        ctx.shadowColor = `hsl(${hue},85%,65%)`;
         ctx.beginPath();
-        ctx.arc(x, y, size, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.shadowBlur = 0;
-
-        // Noyau brillant pour plus de beauté
-        const glow = ctx.createRadialGradient(x - size * 0.2, y - size * 0.2, 0, x, y, size * 0.5);
-        glow.addColorStop(0, `hsla(0, 0%, 100%, 0.6)`);
-        glow.addColorStop(1, `hsla(0, 0%, 100%, 0)`);
-        ctx.fillStyle = glow;
-        ctx.beginPath();
-        ctx.arc(x, y, size * 0.5, 0, Math.PI * 2);
-        ctx.fill();
+        ctx.moveTo(last.x, last.y);
+        ctx.lineTo(x, y);
+        ctx.stroke();
     }
 
-    // --- Pinceau Étoile (une étoile par clic) ---
-    function drawStar(ctx, x, y) {
-        const starSize = 20 + Math.random() * 20;
+    // --- Pinceau Étoile ---
+    function drawStar(x, y) {
+        const starSize = 25 + Math.random() * 15;
         const rotation = Math.random() * Math.PI * 2;
-        const color = `hsl(${hue % 360}, 100%, 65%)`;
+        const colorHue = (hue + Math.random() * 40) % 360;
 
-        // Ombre pour faire briller l'étoile
-        ctx.shadowColor = color;
-        ctx.shadowBlur = 30;
+        // Une couleur par étoile, qui change progressivement
+        ctx.shadowColor = `hsl(${colorHue}, 100%, 70%)`;
+        ctx.shadowBlur = 35;
+        ctx.fillStyle = `hsl(${colorHue}, 100%, 65%)`;
 
         // Dessiner une étoile à 5 branches
-        ctx.fillStyle = color;
         ctx.beginPath();
         const spikes = 5;
         const outerRadius = starSize;
@@ -371,27 +343,30 @@ function setupCanvas() {
         ctx.fill();
         ctx.shadowBlur = 0;
 
-        // Petit cœur brillant au centre
+        // Noyau brillant
         const glow = ctx.createRadialGradient(x, y, 0, x, y, starSize * 0.2);
-        glow.addColorStop(0, `hsla(0, 0%, 100%, 0.8)`);
+        glow.addColorStop(0, `hsla(0, 0%, 100%, 0.7)`);
         glow.addColorStop(1, `hsla(0, 0%, 100%, 0)`);
         ctx.fillStyle = glow;
         ctx.beginPath();
         ctx.arc(x, y, starSize * 0.2, 0, Math.PI * 2);
         ctx.fill();
 
-        // Petites étincelles autour
-        for (let i = 0; i < 6; i++) {
-            const angle = (i / 6) * Math.PI * 2 + rotation;
-            const dist = starSize * (0.6 + Math.random() * 0.4);
+        // Petites étincelles
+        for (let i = 0; i < 5; i++) {
+            const angle = (i / 5) * Math.PI * 2 + rotation;
+            const dist = starSize * (0.5 + Math.random() * 0.5);
             const sx = x + Math.cos(angle) * dist;
             const sy = y + Math.sin(angle) * dist;
             const sparkleSize = 2 + Math.random() * 3;
-            ctx.fillStyle = `hsla(50, 100%, 90%, ${0.4 + Math.random() * 0.4})`;
+            ctx.fillStyle = `hsla(50, 100%, 95%, ${0.3 + Math.random() * 0.5})`;
             ctx.beginPath();
             ctx.arc(sx, sy, sparkleSize, 0, Math.PI * 2);
             ctx.fill();
         }
+
+        // Faire évoluer la couleur pour la prochaine étoile
+        hue = (hue + 12) % 360;
     }
 
     function start(e) {
@@ -400,38 +375,29 @@ function setupCanvas() {
         last = p;
         e.preventDefault();
 
-        // Si c'est le pinceau étoile, on dessine une étoile à chaque clic
+        // Si pinceau étoile : dessiner une étoile au clic
         if (currentBrush === 'star') {
-            drawStar(ctx, p.x, p.y);
-            hue = (hue + 15) % 360; // Changement progressif de couleur
+            drawStar(p.x, p.y);
         }
     }
 
     function move(e) {
         if (!drawing) return;
         const p = pos(e);
-        const dist = Math.hypot(p.x - last.x, p.y - last.y);
 
         if (currentBrush === 'rainbow') {
-            // Arc-en-ciel : dessin continu
-            const steps = Math.max(1, Math.floor(dist / 2));
-            for (let i = 0; i <= steps; i++) {
-                const t = i / steps;
-                const cx = last.x + (p.x - last.x) * t;
-                const cy = last.y + (p.y - last.y) * t;
-                hue = (hue + 0.8) % 360;
-                const size = 18 + Math.sin(hue * 0.05) * 6;
-                drawRainbowBrush(ctx, cx, cy, size);
-            }
+            // Arc-en-ciel : tracé continu
+            drawRainbow(p.x, p.y);
         } else if (currentBrush === 'star') {
-            // Pour le pinceau étoile, on crée une traînée d'étoiles espacées
-            if (dist > 15) {
-                drawStar(ctx, p.x, p.y);
-                hue = (hue + 12) % 360;
+            // Étoile : une étoile tous les 20px
+            const dist = Math.hypot(p.x - last.x, p.y - last.y);
+            if (dist > 20) {
+                drawStar(p.x, p.y);
                 last = p;
             }
         }
 
+        last = p;
         e.preventDefault();
     }
 
@@ -446,6 +412,7 @@ function setupCanvas() {
 
     document.getElementById('clearCanvas').onclick = () => {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
+        hue = 20; // Réinitialiser la couleur
     };
 
     // Sélection du pinceau
