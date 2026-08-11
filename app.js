@@ -476,6 +476,7 @@ document.querySelectorAll('.play-cta').forEach(btn => {
         if (game === 'bubbles') startBubbles();
         if (game === 'colors') startColorGame();
         if (game === 'memory') startMemory();
+        if (game === 'shapes') startShapeGame(); // Ajoutez cette ligne
     });
 });
 
@@ -523,6 +524,92 @@ function startColorGame() {
     colorScore = 0;
     document.getElementById('colorScore').textContent = colorScore;
     nextColorRound();
+}
+
+/* --- Jeu 4 : Trouve la forme géométrique --- */
+const SHAPES = [
+    { name: 'Carré', emoji: '🟦', color: '#4FA9D6' },
+    { name: 'Cercle', emoji: '🔴', color: '#E8543F' },
+    { name: 'Triangle', emoji: '🔺', color: '#FFC857' },
+    { name: 'Étoile', emoji: '⭐', color: '#FF9B54' },
+    { name: 'Coeur', emoji: '❤️', color: '#E8543F' },
+    { name: 'Losange', emoji: '♦️', color: '#6FC08A' },
+    { name: 'Hexagone', emoji: '⬡', color: '#B48BD9' },
+    { name: 'Croissant', emoji: '🌙', color: '#FFC857' }
+];
+
+let shapeScore = 0;
+
+function startShapeGame() {
+    shapeScore = 0;
+    document.getElementById('shapeScore').textContent = shapeScore;
+    nextShapeRound();
+}
+
+function nextShapeRound() {
+    // Mélanger et choisir 4 formes aléatoires
+    const shuffled = [...SHAPES].sort(() => Math.random() - 0.5);
+    const options = shuffled.slice(0, 4);
+    const target = options[Math.floor(Math.random() * options.length)];
+
+    document.getElementById('shapeTarget').textContent = target.emoji + ' ' + target.name;
+
+    const optionsEl = document.getElementById('shapeOptions');
+    optionsEl.innerHTML = '';
+
+    // Mélanger les options pour qu'elles ne soient pas toujours dans le même ordre
+    const shuffledOptions = [...options].sort(() => Math.random() - 0.5);
+
+    shuffledOptions.forEach(shape => {
+        const card = document.createElement('div');
+        card.className = 'shape-card';
+        card.dataset.name = shape.name;
+
+        // Conteneur pour l'emoji et le nom
+        const emojiSpan = document.createElement('span');
+        emojiSpan.className = 'shape-emoji';
+        emojiSpan.textContent = shape.emoji;
+
+        const nameSpan = document.createElement('span');
+        nameSpan.className = 'shape-name';
+        nameSpan.textContent = shape.name;
+
+        card.appendChild(emojiSpan);
+        card.appendChild(nameSpan);
+
+        // Ajouter une couleur de fond subtile
+        card.style.setProperty('--shape-color', shape.color);
+
+        card.addEventListener('click', () => {
+            if (shape.name === target.name) {
+                shapeScore++;
+                document.getElementById('shapeScore').textContent = shapeScore;
+                playTone(660, getCtx().currentTime, 0.3, 0.09, 'sine');
+                // Animation de réussite
+                card.style.transform = 'scale(1.2)';
+                card.style.borderColor = '#6FC08A';
+                card.style.background = '#e8f5e9';
+                setTimeout(() => {
+                    card.style.transform = 'scale(1)';
+                    card.style.borderColor = 'transparent';
+                    card.style.background = '';
+                    nextShapeRound();
+                }, 400);
+            } else {
+                playTone(180, getCtx().currentTime, 0.3, 0.08, 'sawtooth');
+                // Animation d'erreur
+                card.style.transform = 'scale(0.9)';
+                card.style.borderColor = '#E8543F';
+                card.style.background = '#ffebee';
+                setTimeout(() => {
+                    card.style.transform = 'scale(1)';
+                    card.style.borderColor = 'transparent';
+                    card.style.background = '';
+                }, 300);
+            }
+        });
+        optionsEl.appendChild(card);
+    });
 }
 function nextColorRound() {
     const shuffled = [...COLOR_BANK].sort(() => Math.random() - 0.5).slice(0, 4);
