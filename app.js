@@ -7,6 +7,11 @@ const pages = document.querySelectorAll('.page');
 const navBtns = document.querySelectorAll('.bubble-btn, [data-page]');
 
 function goToPage(id) {
+    if (id !== 'alphabet') {
+        if (typeof stopAutoplay === 'function') stopAutoplay();
+        if (typeof stopSong === 'function') stopSong();
+        window.speechSynthesis && window.speechSynthesis.cancel();
+    }
     pages.forEach(p => p.classList.toggle('active', p.id === id));
     document.querySelectorAll('.bubble-btn').forEach(b => b.classList.toggle('active', b.dataset.page === id));
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -290,6 +295,31 @@ const ALPHABETS = {
     }
 };
 
+// Petites illustrations (emoji) pour chaque mot, alignées index par index
+// avec ALPHABETS[lang].letters — utilisées pour l'animation "qui danse"
+// à côté de chaque lettre.
+const ILLUSTRATIONS = {
+    fr: ['🍍', '🎈', '🐱', '🐬', '⭐', '🌸', '🦒', '🦉', '🏝️', '🧸', '🐨', '🌙', '👩', '☁️', '🐦',
+        '🦋', '4️⃣', '🦊', '☀️', '🐢', '🌌', '🐄', '🚃', '🎵', '🥣', '🦓'],
+    en: ['🍎', '⚽', '🐱', '🦆', '🐘', '🌸', '🦒', '🎩', '🍦', '🧃', '🪁', '🦁', '🌙', '🪺', '🦉',
+        '🐼', '👑', '🌈', '☀️', '🧸', '☂️', '🎻', '🐳', '🎵', '🪀', '🦓'],
+    zh: ['👩', '🍍', '🍓', '🎂', '🦢', '✈️', '🐶', '🌸', '👕', '🍊', '☕', '🌤️', '🐱', '🥛', '🪷',
+        '🍎', '🚗', '🌭', '🦁', '🐰', '🐟', '💊', '🪆', '🍉', '🦆', '🍒'],
+    ja: ['🦆', '🐶', '🐰', '✏️', '🍙', '🐸', '🦒', '👟', '🎂', '🧊', '🐟', '🦓', '🍉', '🦗', '🌌',
+        '🥚', '🦋', '🌙', '🧤', '🕐', '🍆', '🌈', '🧸', '🐱', '🌿', '🌸', '🌻', '🎈', '🐍', '⭐',
+        '🛏️', '🍊', '🐛', '👓', '🍑', '⛰️', '❄️', '🌙', '🦁', '🍎', '🏠', '🧊', '🕯️', '🐊', '⚠️', '📖'],
+    ar: ['🐰', '🦆', '🍎', '🦊', '🐫', '🐴', '🐑', '🐻', '🐺', '🍎', '🦒', '🐟', '☀️', '🦅', '🐸',
+        '✈️', '🦌', '🐦', '🦌', '🐘', '🐱', '📖', '🍋', '🍌', '⭐', '🌙', '🌹', '✋'],
+    ru: ['🍉', '🍌', '🐺', '🍄', '🏠', '🌲', '🦔', '🦒', '🐰', '🧸', '🥣', '🐱', '🦁', '👩', '👃',
+        '☁️', '🐼', '🌈', '☀️', '🐯', '🐥', '🍏', '🐹', '🌸', '🐢', '🎈', '🐶', '📦', '🙌', '👩',
+        '🚜', '🌀', '🍎']
+};
+function getIllustration(lang, index) {
+    const arr = ILLUSTRATIONS[lang];
+    if (!arr || !arr[index]) return '✨';
+    return arr[index];
+}
+
 // Construit la phrase "Lettre + mot" dans le bon ordre et avec le bon
 // connecteur pour chaque langue — utilisée à la fois pour l'affichage
 // ET pour la voix, afin qu'ils disent toujours exactement la même chose.
@@ -316,9 +346,13 @@ const alphabetPlayer = document.getElementById('alphabetPlayer');
 const letterStage = document.getElementById('letterStage');
 const letterChar = document.getElementById('letterChar');
 const letterWord = document.getElementById('letterWord');
+const letterIllustration = document.getElementById('letterIllustration');
 
 document.querySelectorAll('.lang-card').forEach(card => {
     card.addEventListener('click', () => {
+        stopAutoplay();
+        stopSong();
+        if (traceModeOn) toggleTraceMode();
         currentLang = card.dataset.lang;
         currentLetterIndex = 0;
         langScreen.style.display = 'none';
@@ -327,19 +361,37 @@ document.querySelectorAll('.lang-card').forEach(card => {
     });
 });
 document.getElementById('alphaBack').addEventListener('click', () => {
+    stopAutoplay();
+    stopSong();
+    if (traceModeOn) toggleTraceMode();
     stopMelody();
     window.speechSynthesis && window.speechSynthesis.cancel();
     alphabetPlayer.classList.remove('active');
     langScreen.style.display = 'flex';
 });
 
-function renderLetter() {
+// Met à jour uniquement l'affichage (lettre, mot, couleur, illustration,
+// guide de tracé) sans déclencher la voix ni la mélodie — réutilisé par
+// la lecture auto et la chanson de l'alphabet, qui gèrent leur propre audio.
+function updateLetterVisual(index) {
     const data = ALPHABETS[currentLang];
-    const [letter, word] = data.letters[currentLetterIndex];
-    const color = LETTER_COLORS[currentLetterIndex % LETTER_COLORS.length];
+    const [letter, word] = data.letters[index];
+    const color = LETTER_COLORS[index % LETTER_COLORS.length];
     letterChar.textContent = letter;
     letterWord.textContent = buildLetterPhrase(currentLang, letter, word);
     letterStage.style.background = color;
+    if (letterIllustration) {
+        letterIllustration.textContent = getIllustration(currentLang, index);
+        // On relance l'animation "qui danse" à chaque nouvelle lettre
+        letterIllustration.classList.remove('bounce');
+        void letterIllustration.offsetWidth;
+        letterIllustration.classList.add('bounce');
+    }
+    if (traceModeOn) drawTraceGuide();
+}
+
+function renderLetter() {
+    updateLetterVisual(currentLetterIndex);
     speakLetter();
     if (melodyOn) {
         playMelody(['twinkle', 'frere_jacques', 'clair_lune'][currentLetterIndex % 3], false, true);
@@ -362,6 +414,8 @@ function speakLetter() {
     window.speechSynthesis.speak(utter);
 }
 document.getElementById('nextLetter').addEventListener('click', () => {
+    stopAutoplay();
+    stopSong();
     const data = ALPHABETS[currentLang];
     // On célèbre la lettre qu'on vient de terminer avant de passer à la suivante.
     celebrate(letterStage);
@@ -369,11 +423,205 @@ document.getElementById('nextLetter').addEventListener('click', () => {
     renderLetter();
 });
 document.getElementById('prevLetter').addEventListener('click', () => {
+    stopAutoplay();
+    stopSong();
     const data = ALPHABETS[currentLang];
     currentLetterIndex = (currentLetterIndex - 1 + data.letters.length) % data.letters.length;
     renderLetter();
 });
 document.getElementById('sayLetter').addEventListener('click', speakLetter);
+
+/* =========================================================
+   LECTURE AUTO — défile les lettres toute seule, comme une
+   petite vidéo éducative (son + mélodie inclus)
+   ========================================================= */
+let autoplayOn = false;
+let autoplayTimer = null;
+const AUTOPLAY_DELAY_MS = 3400;
+
+function stopAutoplay() {
+    autoplayOn = false;
+    if (autoplayTimer) { clearTimeout(autoplayTimer); autoplayTimer = null; }
+    const btn = document.getElementById('autoplayToggle');
+    if (btn) btn.classList.remove('active');
+}
+function autoplayStep() {
+    if (!autoplayOn) return;
+    renderLetter();
+    autoplayTimer = setTimeout(() => {
+        if (!autoplayOn) return;
+        const data = ALPHABETS[currentLang];
+        currentLetterIndex = (currentLetterIndex + 1) % data.letters.length;
+        if (currentLetterIndex === 0) celebrate(letterStage); // un tour complet !
+        autoplayStep();
+    }, AUTOPLAY_DELAY_MS);
+}
+document.getElementById('autoplayToggle').addEventListener('click', function () {
+    if (autoplayOn) { stopAutoplay(); return; }
+    stopSong();
+    if (traceModeOn) toggleTraceMode();
+    autoplayOn = true;
+    this.classList.add('active');
+    autoplayStep();
+});
+
+/* =========================================================
+   CHANSON DE L'ALPHABET — chante toutes les lettres à la
+   suite, dans la langue sélectionnée
+   ========================================================= */
+let isSinging = false;
+function stopSong() {
+    isSinging = false;
+    if (window.speechSynthesis) window.speechSynthesis.cancel();
+    const btn = document.getElementById('songBtn');
+    if (btn) btn.classList.remove('active');
+}
+function singStep() {
+    if (!isSinging) return;
+    const data = ALPHABETS[currentLang];
+    if (currentLetterIndex >= data.letters.length) {
+        // Chanson terminée : petite célébration puis retour à la 1ère lettre.
+        stopSong();
+        celebrate(letterStage);
+        currentLetterIndex = 0;
+        updateLetterVisual(currentLetterIndex);
+        return;
+    }
+    updateLetterVisual(currentLetterIndex);
+    if (!window.speechSynthesis) {
+        // Navigateur sans synthèse vocale : on avance quand même, en rythme.
+        setTimeout(() => {
+            if (!isSinging) return;
+            currentLetterIndex++;
+            singStep();
+        }, 800);
+        return;
+    }
+    const [letter, word] = data.letters[currentLetterIndex];
+    const spokenWord = word.replace(/\s*\([^)]*\)/g, '');
+    const phrase = buildLetterPhrase(currentLang, letter, spokenWord);
+    const utter = new SpeechSynthesisUtterance(phrase);
+    utter.lang = data.voiceLang;
+    utter.rate = 1.0;
+    utter.pitch = 1.2;
+    utter.onend = () => {
+        if (!isSinging) return;
+        currentLetterIndex++;
+        singStep();
+    };
+    window.speechSynthesis.cancel();
+    window.speechSynthesis.speak(utter);
+}
+document.getElementById('songBtn').addEventListener('click', function () {
+    if (isSinging) { stopSong(); return; }
+    stopAutoplay();
+    if (traceModeOn) toggleTraceMode();
+    stopMelody();
+    isSinging = true;
+    this.classList.add('active');
+    currentLetterIndex = 0;
+    singStep();
+});
+
+/* =========================================================
+   ÉCRITURE DES LETTRES — tracer la lettre du doigt sur un
+   calque semi-transparent, par-dessus la lettre en cours
+   ========================================================= */
+let traceModeOn = false;
+let traceCtx = null;
+let tracing = false;
+let traceLast = { x: 0, y: 0 };
+
+function traceCanvasEl() { return document.getElementById('traceCanvas'); }
+
+function setupTraceCanvas() {
+    const canvas = traceCanvasEl();
+    if (!canvas || !letterStage) return;
+    const rect = letterStage.getBoundingClientRect();
+    canvas.width = rect.width * 2;
+    canvas.height = rect.height * 2;
+    traceCtx = canvas.getContext('2d');
+    traceCtx.lineJoin = 'round';
+    traceCtx.lineCap = 'round';
+    drawTraceGuide();
+}
+function drawTraceGuide() {
+    if (!traceCtx) return;
+    const canvas = traceCanvasEl();
+    traceCtx.clearRect(0, 0, canvas.width, canvas.height);
+    const data = ALPHABETS[currentLang];
+    const [letter] = data.letters[currentLetterIndex];
+    traceCtx.save();
+    traceCtx.globalAlpha = 0.4;
+    traceCtx.fillStyle = '#ffffff';
+    traceCtx.font = `800 ${canvas.height * 0.62}px 'Baloo 2', sans-serif`;
+    traceCtx.textAlign = 'center';
+    traceCtx.textBaseline = 'middle';
+    traceCtx.fillText(letter, canvas.width / 2, canvas.height / 2 + canvas.height * 0.03);
+    traceCtx.restore();
+}
+function tracePointerPos(e) {
+    const canvas = traceCanvasEl();
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+    const point = e.touches ? e.touches[0] : e;
+    return { x: (point.clientX - rect.left) * scaleX, y: (point.clientY - rect.top) * scaleY };
+}
+function traceStart(e) {
+    if (!traceModeOn || !traceCtx) return;
+    tracing = true;
+    traceLast = tracePointerPos(e);
+    e.preventDefault();
+}
+function traceMove(e) {
+    if (!tracing || !traceCtx) return;
+    const p = tracePointerPos(e);
+    const canvas = traceCanvasEl();
+    traceCtx.strokeStyle = '#FFC857';
+    traceCtx.lineWidth = canvas.width * 0.028;
+    traceCtx.shadowBlur = 12;
+    traceCtx.shadowColor = '#FFC857';
+    traceCtx.beginPath();
+    traceCtx.moveTo(traceLast.x, traceLast.y);
+    traceCtx.lineTo(p.x, p.y);
+    traceCtx.stroke();
+    traceLast = p;
+    e.preventDefault();
+}
+function traceEnd() { tracing = false; }
+
+(function initTraceListeners() {
+    const canvas = traceCanvasEl();
+    if (!canvas) return;
+    canvas.addEventListener('mousedown', traceStart);
+    canvas.addEventListener('mousemove', traceMove);
+    window.addEventListener('mouseup', traceEnd);
+    canvas.addEventListener('touchstart', traceStart, { passive: false });
+    canvas.addEventListener('touchmove', traceMove, { passive: false });
+    canvas.addEventListener('touchend', traceEnd);
+    window.addEventListener('resize', () => { if (traceModeOn) setupTraceCanvas(); });
+})();
+
+function toggleTraceMode() {
+    traceModeOn = !traceModeOn;
+    const btn = document.getElementById('traceToggle');
+    const tools = document.getElementById('traceTools');
+    if (btn) btn.classList.toggle('active', traceModeOn);
+    if (tools) tools.classList.toggle('active', traceModeOn);
+    letterStage.classList.toggle('tracing', traceModeOn);
+    if (traceModeOn) {
+        stopAutoplay();
+        stopSong();
+        setTimeout(setupTraceCanvas, 50);
+    }
+}
+document.getElementById('traceToggle').addEventListener('click', toggleTraceMode);
+document.getElementById('traceClear').addEventListener('click', drawTraceGuide);
+document.getElementById('traceDone').addEventListener('click', () => {
+    drawTraceGuide();
+    celebrate(letterStage);
+});
 document.getElementById('melodySwitch').addEventListener('click', function () {
     melodyOn = !melodyOn;
     this.classList.toggle('on', melodyOn);
