@@ -1056,6 +1056,88 @@
         #clearCanvas:hover {
             background: #3a2222;
         }
+
+        /* ================= JEU DES FORMES ================= */
+        .shape-prompt {
+            text-align: center;
+            font-family: 'Baloo 2';
+            font-size: 1.4rem;
+            margin-bottom: 16px;
+            color: var(--plum);
+        }
+
+        #shapeTarget {
+            display: inline-block;
+            background: #f0f0f0;
+            padding: 4px 16px;
+            border-radius: 12px;
+            font-size: 1.6rem;
+        }
+
+        .shape-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .shape-card {
+            background: var(--white);
+            border-radius: 18px;
+            padding: 16px 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            transition: all .25s ease;
+            box-shadow: 0 4px 12px rgba(69, 59, 82, 0.08);
+            border: 3px solid transparent;
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 600;
+        }
+
+        .shape-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(69, 59, 82, 0.15);
+        }
+
+        .shape-card .shape-emoji {
+            font-size: 3rem;
+            line-height: 1;
+        }
+
+        .shape-card .shape-name {
+            font-size: 0.9rem;
+            color: var(--plum-soft);
+            font-weight: 600;
+        }
+
+        .shape-card:active {
+            transform: scale(0.95);
+        }
+
+        /* Animation de victoire */
+        @keyframes shapeWin {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.15);
+                background: #e8f5e9;
+                border-color: #6FC08A;
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .shape-card.win {
+            animation: shapeWin 0.4s ease;
+        }
     </style>
 </head>
 
@@ -1252,6 +1334,16 @@
                         <div class="color-prompt">Trouve : <span id="colorTarget">Rouge</span></div>
                         <div class="color-options" id="colorOptions"></div>
                         <div class="score-line">Bonnes réponses : <span id="colorScore">0</span></div>
+                    </div>
+                </div>
+                <div class="game-card">
+                    <h3>🔺 Trouve la forme</h3>
+                    <p>Une forme géométrique s'affiche : touche la bonne figure pour gagner un point.</p>
+                    <button class="play-cta" data-game="shapes">Jouer</button>
+                    <div class="game-stage" id="stage-shapes">
+                        <div class="shape-prompt">Trouve : <span id="shapeTarget">Carré</span></div>
+                        <div class="shape-options" id="shapeOptions"></div>
+                        <div class="score-line">Bonnes réponses : <span id="shapeScore">0</span></div>
                     </div>
                 </div>
                 <div class="game-card">
