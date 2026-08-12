@@ -1137,6 +1137,102 @@
             margin-top: 30px;
         }
 
+        /* ================= JEU PUZZLE (TAQUIN) ================= */
+        .puzzle-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            max-width: 260px;
+            margin: 0 auto;
+        }
+
+        .puzzle-tile {
+            aspect-ratio: 1;
+            border-radius: 14px;
+            background: var(--coral);
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Baloo 2';
+            font-weight: 800;
+            font-size: 1.6rem;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        .puzzle-tile.empty {
+            background: transparent;
+            box-shadow: none;
+            cursor: default;
+        }
+
+        .puzzle-new-btn {
+            display: block;
+            margin: 14px auto 0;
+            background: var(--sky);
+            color: var(--white);
+            font-weight: 700;
+            padding: 9px 20px;
+            border-radius: 14px;
+            font-size: 0.85rem;
+        }
+
+        /* ================= JEU DE CORRESPONDANCE ================= */
+        .match-prompt {
+            text-align: center;
+            font-family: 'Baloo 2';
+            font-size: 1.1rem;
+            margin-bottom: 14px;
+            color: var(--plum);
+        }
+
+        .match-columns {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .match-column {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            flex: 1;
+            max-width: 150px;
+        }
+
+        .match-item {
+            background: var(--white);
+            padding: 12px 14px;
+            border-radius: 14px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+            cursor: pointer;
+            font-weight: 700;
+            text-align: center;
+            font-size: 1.05rem;
+            border: 3px solid transparent;
+        }
+
+        .match-item.match-sound {
+            font-size: 0.85rem;
+            font-family: 'Quicksand', sans-serif;
+        }
+
+        .match-item.selected {
+            border-color: var(--sky);
+        }
+
+        .match-item.matched {
+            background: #e8f5e9;
+            color: #4caf50;
+            cursor: default;
+        }
+
+        .match-item.wrong {
+            background: #ffebee;
+            color: #e53935;
+        }
+
         /* ================= JEU DES FORMES ================= */
         .shape-prompt {
             text-align: center;
@@ -1975,6 +2071,29 @@
                     <div class="game-stage" id="stage-memory">
                         <div class="memory-grid" id="memoryGrid"></div>
                         <div class="score-line">Paires trouvées : <span id="memoryScore">0</span> / 8</div>
+                    </div>
+                </div>
+                <div class="game-card">
+                    <h3>🧩 Puzzle numéroté</h3>
+                    <p>Fais glisser les cases pour remettre les chiffres de 1 à 8 dans l'ordre.</p>
+                    <button class="play-cta" data-game="puzzle">Jouer</button>
+                    <div class="game-stage" id="stage-puzzle">
+                        <div class="puzzle-grid" id="puzzleGrid"></div>
+                        <button class="puzzle-new-btn" id="puzzleNew">🔀 Nouveau puzzle</button>
+                        <div class="score-line">Coups joués : <span id="puzzleMoves">0</span></div>
+                    </div>
+                </div>
+                <div class="game-card">
+                    <h3>🔊 Qui fait quel bruit ?</h3>
+                    <p>Associe chaque animal au cri qu'il fait, en touchant les deux cartes qui vont ensemble.</p>
+                    <button class="play-cta" data-game="matchsound">Jouer</button>
+                    <div class="game-stage" id="stage-matchsound">
+                        <div class="match-prompt">Relie l'animal à son cri !</div>
+                        <div class="match-columns">
+                            <div class="match-column" id="matchLeft"></div>
+                            <div class="match-column" id="matchRight"></div>
+                        </div>
+                        <div class="score-line">Bonnes paires : <span id="matchScore">0</span> / 6</div>
                     </div>
                 </div>
             </div>
