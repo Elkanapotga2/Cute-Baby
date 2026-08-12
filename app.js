@@ -1454,6 +1454,49 @@ function escapeHtml(str) {
 }
 renderTestimonials();
 
+/* =========================================================
+   PARAMÈTRES / ABONNEMENT — modale ouverte par le bouton engrenage
+   ========================================================= */
+(function () {
+    const toggleBtn = document.getElementById('settingsToggle');
+    const modal = document.getElementById('settingsModal');
+    const modalInner = document.getElementById('settingsModalInner');
+    const closeBtn = document.getElementById('settingsClose');
+    const subscribeBtn = document.getElementById('subscribeBtn');
+    const successPanel = document.getElementById('subscribeSuccess');
+    if (!toggleBtn || !modal) return;
+
+    function openSettingsModal() {
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+    function closeSettingsModal() {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
+    toggleBtn.addEventListener('click', openSettingsModal);
+    if (closeBtn) closeBtn.addEventListener('click', closeSettingsModal);
+    // Clic en dehors de la carte = fermeture
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeSettingsModal();
+    });
+    // Touche Échap = fermeture
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal.classList.contains('active')) closeSettingsModal();
+    });
+
+    if (subscribeBtn) {
+        subscribeBtn.addEventListener('click', () => {
+            // Démonstration : aucun paiement réel n'est effectué ici.
+            // Une vraie intégration relierait ce bouton à un prestataire
+            // de paiement (ex. Stripe) côté serveur.
+            if (modalInner) modalInner.classList.add('confirmed');
+            if (successPanel) successPanel.classList.add('active');
+        });
+    }
+})();
+
 const testimonialSubmitBtn = document.getElementById('testimonialSubmit');
 if (testimonialSubmitBtn) {
     testimonialSubmitBtn.addEventListener('click', () => {
