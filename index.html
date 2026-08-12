@@ -224,7 +224,8 @@
             pointer-events: auto;
         }
 
-        .theme-toggle-btn {
+        .theme-toggle-btn,
+        .settings-toggle-btn {
             width: 46px;
             height: 46px;
             border-radius: 50%;
@@ -1313,6 +1314,132 @@
             animation: shapeWin 0.4s ease;
         }
 
+        /* ================= STORYTIME ================= */
+        #storytime {
+            background: linear-gradient(180deg, #FFF6E5, var(--cream));
+        }
+
+        html[data-theme="dark"] #storytime {
+            background: linear-gradient(180deg, #241f14, var(--cream));
+        }
+
+        .story-library {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 20px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .story-card {
+            background: var(--white);
+            border-radius: 26px;
+            padding: 26px;
+            box-shadow: var(--shadow);
+            border: 3px solid transparent;
+            text-align: left;
+        }
+
+        .story-card .story-emoji {
+            font-size: 2.4rem;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .story-card h3 {
+            font-size: 1.1rem;
+            margin-bottom: 6px;
+        }
+
+        .story-card p {
+            color: var(--plum-soft);
+            font-size: 0.88rem;
+            margin: 0 0 16px;
+            line-height: 1.5;
+        }
+
+        .story-card .story-play-cta {
+            background: var(--sun);
+            color: var(--plum);
+            font-weight: 700;
+            padding: 10px 20px;
+            border-radius: 14px;
+            font-size: 0.9rem;
+        }
+
+        .story-player {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            gap: 26px;
+            max-width: 640px;
+            margin: 40px auto 0;
+        }
+
+        .story-player.active {
+            display: flex;
+        }
+
+        .story-stage {
+            width: 100%;
+            min-height: 320px;
+            border-radius: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 40px 34px;
+            box-shadow: 0 20px 50px rgba(69, 59, 82, 0.2);
+            transition: background .6s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .story-stage .story-illustration {
+            font-size: clamp(3.4rem, 12vw, 5rem);
+            margin-bottom: 18px;
+            filter: drop-shadow(0 8px 14px rgba(0, 0, 0, 0.18));
+            animation: illustrationDance 2.4s ease-in-out infinite;
+        }
+
+        .story-stage .story-text {
+            font-family: 'Baloo 2';
+            font-weight: 600;
+            font-size: clamp(1.1rem, 3vw, 1.5rem);
+            color: var(--white);
+            text-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+            line-height: 1.5;
+        }
+
+        .story-progress-dots {
+            display: flex;
+            gap: 8px;
+        }
+
+        .story-progress-dots span {
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            background: #e3ddec;
+            transition: background .3s ease, transform .3s ease;
+        }
+
+        html[data-theme="dark"] .story-progress-dots span {
+            background: #4a3f5c;
+        }
+
+        .story-progress-dots span.on {
+            background: var(--coral);
+            transform: scale(1.3);
+        }
+
+        .story-controls {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+
         /* ================= ASTUCES MAMANS ================= */
         #astuces {
             background: linear-gradient(180deg, #F4EEFB, var(--cream));
@@ -1797,50 +1924,142 @@
         }
 
         /* =========================================================
-           PARTICULES — confettis / étoiles de célébration
+           PARAMÈTRES / ABONNEMENT — fenêtre modale
            ========================================================= */
-        .particle-layer {
+        .modal-overlay {
             position: fixed;
             inset: 0;
-            width: 100vw;
-            height: 100vh;
-            pointer-events: none;
-            z-index: 9999;
-            overflow: hidden;
+            background: rgba(27, 23, 32, 0.55);
+            backdrop-filter: blur(6px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 20px;
         }
 
-        .confetti-piece {
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .settings-modal {
+            background: var(--white);
+            border-radius: 32px;
+            max-width: 420px;
+            width: 100%;
+            padding: 36px 32px 30px;
+            box-shadow: 0 30px 70px rgba(0, 0, 0, 0.35);
+            position: relative;
+            text-align: center;
+        }
+
+        .modal-close-btn {
             position: absolute;
-            top: 0;
-            left: 0;
-            will-change: transform, opacity;
-            animation-name: confettiFall;
-            animation-timing-function: cubic-bezier(.2, .7, .3, 1);
-            animation-fill-mode: forwards;
-            opacity: 0.95;
+            top: 18px;
+            right: 18px;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--cream);
+            color: var(--plum-soft);
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        @keyframes confettiFall {
-            0% {
-                transform: translate(var(--dx0, 0px), 0px) rotate(0deg) scale(0.6);
-                opacity: 0;
-            }
-
-            12% {
-                opacity: 1;
-                transform: translate(var(--dx1), var(--dy1)) rotate(calc(var(--rot) * 0.3)) scale(1);
-            }
-
-            100% {
-                transform: translate(var(--dx2), var(--dy2)) rotate(var(--rot)) scale(0.9);
-                opacity: 0;
-            }
+        .premium-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: linear-gradient(135deg, var(--sun), var(--coral));
+            color: var(--white);
+            font-weight: 700;
+            font-size: 0.82rem;
+            padding: 7px 16px;
+            border-radius: 30px;
+            margin-bottom: 16px;
         }
 
-        @media (prefers-reduced-motion: reduce) {
-            .particle-layer {
-                display: none;
-            }
+        .settings-modal h3 {
+            font-size: 1.5rem;
+            margin-bottom: 6px;
+        }
+
+        .price-tag {
+            font-family: 'Baloo 2';
+            font-weight: 800;
+            font-size: 2.6rem;
+            color: var(--coral-deep);
+            margin: 14px 0 4px;
+        }
+
+        .price-tag span {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--plum-soft);
+        }
+
+        .premium-perks {
+            list-style: none;
+            padding: 0;
+            margin: 22px 0 26px;
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .premium-perks li {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            font-size: 0.94rem;
+            color: var(--plum);
+            line-height: 1.4;
+        }
+
+        .premium-perks li::before {
+            content: '💛';
+            flex-shrink: 0;
+        }
+
+        .subscribe-btn {
+            width: 100%;
+            background: var(--coral);
+            color: var(--white);
+            font-weight: 700;
+            font-size: 1.05rem;
+            padding: 15px;
+            border-radius: 18px;
+            box-shadow: var(--shadow);
+        }
+
+        .subscribe-note {
+            font-size: 0.78rem;
+            color: var(--plum-soft);
+            margin-top: 14px;
+            line-height: 1.5;
+        }
+
+        .subscribe-success {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 0 6px;
+        }
+
+        .subscribe-success.active {
+            display: flex;
+        }
+
+        .subscribe-success .success-emoji {
+            font-size: 2.6rem;
+        }
+
+        .settings-modal.confirmed .settings-modal-default {
+            display: none;
         }
     </style>
 </head>
@@ -1862,9 +2081,12 @@
                         class="label">Musique</span></button>
                 <button class="bubble-btn" data-page="jeux"><span class="emoji">🧩</span><span
                         class="label">Jeux</span></button>
+                <button class="bubble-btn" data-page="storytime"><span class="emoji">📖</span><span
+                        class="label">Storytime</span></button>
                 <button class="bubble-btn" data-page="astuces"><span class="emoji">💛</span><span
                         class="label">Astuces mamans</span></button>
             </nav>
+            <button class="settings-toggle-btn" id="settingsToggle" aria-label="Paramètres et abonnement">⚙️</button>
             <button class="theme-toggle-btn" id="themeToggle" aria-label="Passer en mode nuit">🌙</button>
         </div>
     </div>
@@ -1902,7 +2124,7 @@
     <div class="section-inner" style="padding-top:70px;">
         <div class="section-header">
             <span class="section-kicker" style="background:#FFE9DC;color:var(--coral-deep);">À explorer</span>
-            <h2 class="section-title">Cinq univers pour grandir en douceur</h2>
+            <h2 class="section-title">Six univers pour grandir en douceur</h2>
         </div>
         <div class="home-grid">
             <div class="home-card" data-page="alphabet">
@@ -1924,6 +2146,11 @@
                 <div class="icon-badge" style="background:#FBE3EE;">🧩</div>
                 <h3>Jeux</h3>
                 <p>Des petits jeux pensés pour les tout-petits, à découvrir en famille.</p>
+            </div>
+            <div class="home-card" data-page="storytime">
+                <div class="icon-badge" style="background:#FFF3D6;">📖</div>
+                <h3>Storytime</h3>
+                <p>De petites histoires animées et racontées à voix haute, à écouter blotti contre bébé.</p>
             </div>
             <div class="home-card" data-page="astuces">
                 <div class="icon-badge" style="background:#F0E7FA;">💛</div>
@@ -2105,6 +2332,33 @@
         </div>
     </section>
 
+    <!-- ===================== STORYTIME ===================== -->
+    <section id="storytime" class="page">
+        <div class="section-inner">
+            <div class="section-header">
+                <span class="section-kicker" style="background:#FFF3D6;color:#a3720f;">Storytime</span>
+                <h2 class="section-title">De petites histoires à écouter</h2>
+                <p class="section-sub">Choisis une histoire : elle est racontée à voix haute, page après page,
+                    avec une jolie illustration à chaque fois.</p>
+            </div>
+            <div class="story-library" id="storyLibrary"></div>
+
+            <div class="story-player" id="storyPlayer">
+                <button class="back-link" id="storyBack">← Retour aux histoires</button>
+                <div class="story-stage" id="storyStage">
+                    <span class="story-illustration" id="storyIllustration">📖</span>
+                    <p class="story-text" id="storyText">Il était une fois...</p>
+                </div>
+                <div class="story-progress-dots" id="storyDots"></div>
+                <div class="story-controls">
+                    <button class="round-btn" id="storyPrev">◀</button>
+                    <button class="round-btn big" id="storyPlayPause">🔊</button>
+                    <button class="round-btn" id="storyNext">▶</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- ===================== ASTUCES MAMANS ===================== -->
     <section id="astuces" class="page">
         <div class="section-inner">
@@ -2273,6 +2527,32 @@
     </section>
 
     <footer>Cute Baby — un cocon numérique tout doux, pensé pour bébé et pour toi. 💛</footer>
+
+    <!-- ===================== MODALE PARAMÈTRES / ABONNEMENT ===================== -->
+    <div class="modal-overlay" id="settingsModal">
+        <div class="settings-modal" id="settingsModalInner">
+            <button class="modal-close-btn" id="settingsClose">✕</button>
+            <div class="settings-modal-default">
+                <span class="premium-badge">✨ Cute Baby Premium</span>
+                <h3>Débloque tout le contenu</h3>
+                <div class="price-tag">2€<span>/mois</span></div>
+                <ul class="premium-perks">
+                    <li>Toutes les histoires Storytime, sans limite</li>
+                    <li>Nouvelles comptines et berceuses chaque mois</li>
+                    <li>Nouveaux jeux ajoutés régulièrement</li>
+                    <li>Zéro publicité, une expérience toute douce</li>
+                    <li>Résiliable à tout moment, en un clic</li>
+                </ul>
+                <button class="subscribe-btn" id="subscribeBtn">💛 S'abonner pour 2€/mois</button>
+                <p class="subscribe-note">Aperçu de démonstration — aucun paiement réel n'est effectué ici.</p>
+            </div>
+            <div class="subscribe-success" id="subscribeSuccess">
+                <span class="success-emoji">🎉</span>
+                <h3>Merci !</h3>
+                <p class="subscribe-note" style="margin-top:0;">Ton abonnement Cute Baby Premium est activé (démonstration). Une vraie plateforme connectée à un moyen de paiement sécurisé prendrait le relais ici.</p>
+            </div>
+        </div>
+    </div>
 
     <script src="app.js"></script>
 </body>
