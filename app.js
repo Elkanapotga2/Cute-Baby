@@ -1455,6 +1455,199 @@ function escapeHtml(str) {
 renderTestimonials();
 
 /* =========================================================
+   STORYTIME — bibliothèque d'histoires + lecteur narré
+   ========================================================= */
+const STORIES = [
+    {
+        id: 'nuage-curieux',
+        emoji: '☁️',
+        title: 'Le petit nuage curieux',
+        desc: "Un tout petit nuage part à la découverte du grand ciel bleu.",
+        stageBg: 'linear-gradient(135deg, #74C7E3, #453B52)',
+        pages: [
+            { illu: '☁️', text: "Il était une fois un tout petit nuage, tout rond et tout doux, qui vivait haut dans le ciel." },
+            { illu: '🌤️', text: "Un matin, il regarda le grand ciel bleu et se dit : je voudrais voir ce qu'il y a de l'autre côté des montagnes." },
+            { illu: '🏔️', text: "Alors il se laissa porter par le vent, tout doucement, en dansant au-dessus des sommets enneigés." },
+            { illu: '🌈', text: "En chemin, il croisa un arc-en-ciel qui lui offrit toutes ses couleurs pour la route." },
+            { illu: '🌙', text: "Le soir venu, fatigué mais heureux, le petit nuage se blottit près de la lune et s'endormit paisiblement." }
+        ]
+    },
+    {
+        id: 'lapin-doudou',
+        emoji: '🐰',
+        title: 'Le lapin et son doudou',
+        desc: "Un petit lapin cherche partout son doudou avant l'heure du dodo.",
+        stageBg: 'linear-gradient(135deg, #C6A8E0, #453B52)',
+        pages: [
+            { illu: '🐰', text: "Ce soir, le petit lapin Câlin ne trouve plus son doudou préféré. Où a-t-il bien pu passer ?" },
+            { illu: '🛋️', text: "Il regarde sous le canapé... rien. Il regarde derrière les coussins... toujours rien." },
+            { illu: '🧸', text: "Il demande à son ami l'ourson en peluche, qui secoue gentiment la tête." },
+            { illu: '🛏️', text: "Puis, en refaisant son lit, il aperçoit une petite oreille qui dépasse sous la couverture." },
+            { illu: '💤', text: "Le doudou était caché là depuis le début ! Le petit lapin le serre fort et s'endort tout content." }
+        ]
+    },
+    {
+        id: 'graine-magique',
+        emoji: '🌱',
+        title: 'La petite graine magique',
+        desc: "Une graine minuscule rêve de devenir la plus belle fleur du jardin.",
+        stageBg: 'linear-gradient(135deg, #8FD9A8, #453B52)',
+        pages: [
+            { illu: '🌱', text: "Au fond du jardin, une toute petite graine dormait sous la terre bien chaude." },
+            { illu: '💧', text: "Chaque matin, une goutte de pluie venait lui chanter une berceuse pour l'aider à grandir." },
+            { illu: '☀️', text: "Le soleil, lui, lui envoyait de la lumière et de la chaleur, tout doucement, jour après jour." },
+            { illu: '🌿', text: "Petit à petit, une tige verte pointa hors de la terre, curieuse de découvrir le monde." },
+            { illu: '🌸', text: "Et un beau matin, elle devint la plus jolie fleur du jardin, fière d'avoir grandi avec patience." }
+        ]
+    },
+    {
+        id: 'etoile-filante',
+        emoji: '⭐',
+        title: "L'étoile qui n'osait pas briller",
+        desc: "Une petite étoile timide apprend à laisser sa lumière briller.",
+        stageBg: 'linear-gradient(135deg, #FFC857, #453B52)',
+        pages: [
+            { illu: '✨', text: "Tout en haut du ciel nocturne, une petite étoile n'osait pas briller trop fort, de peur de déranger ses voisines." },
+            { illu: '🌌', text: "Elle regardait les autres étoiles scintiller et se trouvait bien pâle à côté d'elles." },
+            { illu: '🌠', text: "Une nuit, la lune lui murmura : chaque étoile brille à sa façon, et c'est ce qui rend le ciel si beau." },
+            { illu: '💫', text: "Rassurée, la petite étoile ferma les yeux et laissa sa lumière sortir, toute douce et toute unique." },
+            { illu: '🌙', text: "Depuis ce jour-là, un enfant en bas, en la regardant, fait toujours un vœu avant de s'endormir." }
+        ]
+    }
+];
+
+let currentStory = null;
+let currentPageIndex = 0;
+let storyIsPlaying = false;
+
+function renderStoryLibrary() {
+    const library = document.getElementById('storyLibrary');
+    if (!library) return;
+    library.innerHTML = STORIES.map(story => `
+        <button class="story-card" data-story="${story.id}" type="button">
+            <span class="story-emoji">${story.emoji}</span>
+            <h3>${story.title}</h3>
+            <p>${story.desc}</p>
+            <span class="story-play-cta">▶ Écouter</span>
+        </button>
+    `).join('');
+    library.querySelectorAll('.story-card').forEach(card => {
+        card.addEventListener('click', () => openStory(card.dataset.story));
+    });
+}
+
+function openStory(storyId) {
+    const story = STORIES.find(s => s.id === storyId);
+    if (!story) return;
+    currentStory = story;
+    currentPageIndex = 0;
+
+    const library = document.getElementById('storyLibrary');
+    const player = document.getElementById('storyPlayer');
+    if (library) library.style.display = 'none';
+    if (player) player.classList.add('active');
+
+    renderStoryDots();
+    showStoryPage(0, true);
+}
+
+function closeStory() {
+    stopStoryNarration();
+    currentStory = null;
+    const library = document.getElementById('storyLibrary');
+    const player = document.getElementById('storyPlayer');
+    if (player) player.classList.remove('active');
+    if (library) library.style.display = '';
+}
+
+function renderStoryDots() {
+    const dotsWrap = document.getElementById('storyDots');
+    if (!dotsWrap || !currentStory) return;
+    dotsWrap.innerHTML = currentStory.pages.map((_, i) =>
+        `<span class="${i === currentPageIndex ? 'on' : ''}"></span>`
+    ).join('');
+}
+
+function showStoryPage(index, autoplay) {
+    if (!currentStory) return;
+    currentPageIndex = Math.max(0, Math.min(index, currentStory.pages.length - 1));
+    const page = currentStory.pages[currentPageIndex];
+
+    const stage = document.getElementById('storyStage');
+    const illu = document.getElementById('storyIllustration');
+    const text = document.getElementById('storyText');
+    if (stage) stage.style.background = currentStory.stageBg;
+    if (illu) illu.textContent = page.illu;
+    if (text) text.textContent = page.text;
+
+    renderStoryDots();
+
+    if (autoplay !== false) {
+        speakStoryPage();
+    } else {
+        stopStoryNarration();
+    }
+}
+
+function speakStoryPage() {
+    if (!window.speechSynthesis || !currentStory) return;
+    window.speechSynthesis.cancel();
+    const page = currentStory.pages[currentPageIndex];
+    const utter = new SpeechSynthesisUtterance(page.text);
+    utter.lang = 'fr-FR';
+    utter.rate = 0.92;
+    utter.pitch = 1.05;
+    storyIsPlaying = true;
+    updatePlayPauseBtn();
+    utter.onend = () => {
+        storyIsPlaying = false;
+        updatePlayPauseBtn();
+    };
+    window.speechSynthesis.speak(utter);
+}
+
+function stopStoryNarration() {
+    if (window.speechSynthesis) window.speechSynthesis.cancel();
+    storyIsPlaying = false;
+    updatePlayPauseBtn();
+}
+
+function updatePlayPauseBtn() {
+    const btn = document.getElementById('storyPlayPause');
+    if (btn) btn.textContent = storyIsPlaying ? '⏸️' : '🔊';
+}
+
+function toggleStoryPlayPause() {
+    if (storyIsPlaying) {
+        stopStoryNarration();
+    } else {
+        speakStoryPage();
+    }
+}
+
+function goToStoryPage(delta) {
+    if (!currentStory) return;
+    const nextIndex = currentPageIndex + delta;
+    if (nextIndex < 0 || nextIndex >= currentStory.pages.length) return;
+    showStoryPage(nextIndex, true);
+}
+
+renderStoryLibrary();
+
+const storyBackBtn = document.getElementById('storyBack');
+if (storyBackBtn) storyBackBtn.addEventListener('click', closeStory);
+
+const storyPrevBtn = document.getElementById('storyPrev');
+if (storyPrevBtn) storyPrevBtn.addEventListener('click', () => goToStoryPage(-1));
+
+const storyNextBtn = document.getElementById('storyNext');
+if (storyNextBtn) storyNextBtn.addEventListener('click', () => goToStoryPage(1));
+
+const storyPlayPauseBtn = document.getElementById('storyPlayPause');
+if (storyPlayPauseBtn) storyPlayPauseBtn.addEventListener('click', toggleStoryPlayPause);
+
+
+/* =========================================================
    PARAMÈTRES / ABONNEMENT — modale ouverte par le bouton engrenage
    ========================================================= */
 (function () {
