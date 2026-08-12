@@ -837,6 +837,8 @@ document.querySelectorAll('.play-cta').forEach(btn => {
         if (game === 'colors') startColorGame();
         if (game === 'memory') startMemory();
         if (game === 'shapes') startShapeGame(); // Ajoutez cette ligne
+        if (game === 'puzzle') startPuzzle();
+        if (game === 'matchsound') startMatchSound();
     });
 });
 
@@ -1051,6 +1053,136 @@ document.getElementById('gameSearchBtn').addEventListener('click', () => {
     const q = document.getElementById('gameSearch').value.trim() || 'jeux pour bébé';
     window.open(`https://www.google.com/search?q=${encodeURIComponent(q)}`, '_blank');
 });
+
+/* --- Jeu 5 : Puzzle numéroté (taquin 3x3) --- */
+let puzzleTiles = [];
+let puzzleMoves = 0;
+function getPuzzleNeighbors(index) {
+    const row = Math.floor(index / 3), col = index % 3;
+    const neighbors = [];
+    if (row > 0) neighbors.push(index - 3);
+    if (row < 2) neighbors.push(index + 3);
+    if (col > 0) neighbors.push(index - 1);
+    if (col < 2) neighbors.push(index + 1);
+    return neighbors;
+}
+function shufflePuzzle() {
+    // On part de l'état résolu et on fait de nombreux déplacements valides
+    // au hasard : le puzzle reste ainsi toujours solvable.
+    let emptyIndex = 8;
+    for (let i = 0; i < 150; i++) {
+        const neighbors = getPuzzleNeighbors(emptyIndex);
+        const swapIndex = neighbors[Math.floor(Math.random() * neighbors.length)];
+        [puzzleTiles[emptyIndex], puzzleTiles[swapIndex]] = [puzzleTiles[swapIndex], puzzleTiles[emptyIndex]];
+        emptyIndex = swapIndex;
+    }
+}
+function renderPuzzle() {
+    const grid = document.getElementById('puzzleGrid');
+    grid.innerHTML = '';
+    puzzleTiles.forEach((val, idx) => {
+        const tile = document.createElement('div');
+        tile.className = 'puzzle-tile' + (val === 0 ? ' empty' : '');
+        tile.textContent = val === 0 ? '' : val;
+        tile.addEventListener('click', () => tryMovePuzzle(idx));
+        grid.appendChild(tile);
+    });
+}
+function tryMovePuzzle(idx) {
+    const emptyIndex = puzzleTiles.indexOf(0);
+    const neighbors = getPuzzleNeighbors(emptyIndex);
+    if (!neighbors.includes(idx)) return; // on ne peut glisser que les cases voisines de la case vide
+    [puzzleTiles[emptyIndex], puzzleTiles[idx]] = [puzzleTiles[idx], puzzleTiles[emptyIndex]];
+    puzzleMoves++;
+    document.getElementById('puzzleMoves').textContent = puzzleMoves;
+    playTone(440, getCtx().currentTime, 0.15, 0.06, 'sine');
+    renderPuzzle();
+    if (isPuzzleSolved()) {
+        celebrate(document.getElementById('puzzleGrid'));
+    }
+}
+function isPuzzleSolved() {
+    for (let i = 0; i < 8; i++) { if (puzzleTiles[i] !== i + 1) return false; }
+    return puzzleTiles[8] === 0;
+}
+function startPuzzle() {
+    puzzleMoves = 0;
+    document.getElementById('puzzleMoves').textContent = puzzleMoves;
+    puzzleTiles = [1, 2, 3, 4, 5, 6, 7, 8, 0];
+    shufflePuzzle();
+    renderPuzzle();
+}
+document.getElementById('puzzleNew').addEventListener('click', startPuzzle);
+
+/* --- Jeu 6 : Correspondance — qui fait quel bruit ? --- */
+const ANIMAL_SOUNDS = [
+    { emoji: '🐄', sound: 'Meuh' },
+    { emoji: '🐱', sound: 'Miaou' },
+    { emoji: '🐶', sound: 'Wouaf' },
+    { emoji: '🐑', sound: 'Bêê' },
+    { emoji: '🐸', sound: 'Coâ' },
+    { emoji: '🐔', sound: 'Cot cot' }
+];
+let matchSelectedLeft = null;
+let matchScore = 0;
+function startMatchSound() {
+    matchScore = 0;
+    matchSelectedLeft = null;
+    document.getElementById('matchScore').textContent = matchScore;
+    const leftCol = document.getElementById('matchLeft');
+    const rightCol = document.getElementById('matchRight');
+    leftCol.innerHTML = '';
+    rightCol.innerHTML = '';
+    const leftItems = [...ANIMAL_SOUNDS].sort(() => Math.random() - 0.5);
+    const rightItems = [...ANIMAL_SOUNDS].sort(() => Math.random() - 0.5);
+    leftItems.forEach(item => {
+        const el = document.createElement('div');
+        el.className = 'match-item';
+        el.textContent = item.emoji;
+        el.dataset.sound = item.sound;
+        el.addEventListener('click', () => selectMatchLeft(el));
+        leftCol.appendChild(el);
+    });
+    rightItems.forEach(item => {
+        const el = document.createElement('div');
+        el.className = 'match-item match-sound';
+        el.textContent = item.sound;
+        el.dataset.sound = item.sound;
+        el.addEventListener('click', () => selectMatchRight(el));
+        rightCol.appendChild(el);
+    });
+}
+function selectMatchLeft(el) {
+    if (el.classList.contains('matched')) return;
+    document.querySelectorAll('#matchLeft .match-item').forEach(i => i.classList.remove('selected'));
+    el.classList.add('selected');
+    matchSelectedLeft = el;
+}
+function selectMatchRight(el) {
+    if (el.classList.contains('matched') || !matchSelectedLeft) return;
+    if (matchSelectedLeft.dataset.sound === el.dataset.sound) {
+        matchSelectedLeft.classList.add('matched');
+        matchSelectedLeft.classList.remove('selected');
+        el.classList.add('matched');
+        matchScore++;
+        document.getElementById('matchScore').textContent = matchScore;
+        playTone(660, getCtx().currentTime, 0.3, 0.09, 'sine');
+        spawnParticles(el, 10);
+        matchSelectedLeft = null;
+        if (matchScore === ANIMAL_SOUNDS.length) {
+            celebrate(document.getElementById('stage-matchsound'));
+        }
+    } else {
+        el.classList.add('wrong');
+        playTone(180, getCtx().currentTime, 0.3, 0.08, 'sawtooth');
+        const leftRef = matchSelectedLeft;
+        setTimeout(() => {
+            el.classList.remove('wrong');
+            leftRef.classList.remove('selected');
+        }, 500);
+        matchSelectedLeft = null;
+    }
+}
 
 /* =========================================================
    ASTUCES POUR MAMANS
