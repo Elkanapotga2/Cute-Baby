@@ -7,7 +7,7 @@ const pages = document.querySelectorAll('.page');
 const navBtns = document.querySelectorAll('.bubble-btn, [data-page]');
 
 function goToPage(id) {
-    exitAllFullscreens();
+    exitAnyFullscreen();
     if (id !== 'alphabet') {
         if (typeof stopAutoplay === 'function') stopAutoplay();
         if (typeof stopSong === 'function') stopSong();
@@ -1983,65 +1983,83 @@ if (testimonialSubmitBtn) {
 }
 
 /* =========================================================
-   MODE PLEIN ÉCRAN — pour toutes les activités
-   On utilise un plein écran "maison" en CSS (position fixed
-   plein viewport) plutôt que l'API Fullscreen native, car
-   celle-ci est mal supportée sur iPad/Safari pour un simple
-   <div> — cette solution fonctionne partout, y compris sur
-   les tablettes des enfants.
+   MODE PLEIN ÉCRAN — API Fullscreen native du navigateur
+   On utilise l'API Fullscreen standard : l'élément est rendu
+   par le navigateur/l'OS dans une couche indépendante de tout
+   parent CSS. Cela évite tout conflit avec les transforms de
+   hover (.game-card:hover etc.), et donne un VRAI plein écran
+   sur Android/Chrome (barre d'adresse masquée). Un repli en
+   CSS fixed n'est utilisé qu'en tout dernier recours, pour les
+   très rares navigateurs sans support de l'API.
    ========================================================= */
+function fsCurrentElement() {
+    return document.fullscreenElement || document.webkitFullscreenElement || null;
+}
+function fsRequest(el) {
+    if (el.requestFullscreen) return el.requestFullscreen();
+    if (el.webkitRequestFullscreen) return el.webkitRequestFullscreen();
+    return Promise.reject(new Error('Fullscreen API non supportée'));
+}
+function fsExit() {
+    if (document.exitFullscreen) return document.exitFullscreen();
+    if (document.webkitExitFullscreen) return document.webkitExitFullscreen();
+}
+function exitAnyFullscreen() {
+    if (fsCurrentElement()) fsExit();
+    document.querySelectorAll('.fs-fallback-active').forEach(el => el.classList.remove('fs-fallback-active'));
+    document.body.classList.remove('fs-lock');
+}
+
+function onFsResize(container) {
+    setTimeout(() => {
+        if (container.id === 'drawStageWrap' && typeof drawCanvasResizeFn === 'function') drawCanvasResizeFn();
+        if (container.id === 'stage-fireworks' && typeof fwResizeCanvas === 'function') fwResizeCanvas();
+        if (container.id === 'alphabetPlayer' && traceModeOn && typeof setupTraceCanvas === 'function') setupTraceCanvas();
+    }, 80);
+}
+
 function makeFullscreenable(container) {
     if (!container || container.dataset.fsReady) return;
     container.dataset.fsReady = 'true';
+    container.setAttribute('data-fs-container', '');
 
     const openBtn = document.createElement('button');
+    openBtn.type = 'button';
     openBtn.className = 'fs-toggle-btn';
     openBtn.innerHTML = '⛶';
     openBtn.setAttribute('aria-label', 'Plein écran');
     container.appendChild(openBtn);
 
     const closeBtn = document.createElement('button');
+    closeBtn.type = 'button';
     closeBtn.className = 'fs-close-btn';
     closeBtn.innerHTML = '✕';
     closeBtn.setAttribute('aria-label', 'Quitter le plein écran');
     container.appendChild(closeBtn);
 
-    function enter() {
-        exitAllFullscreens();
-        container.classList.add('fs-active');
-        document.body.classList.add('fs-lock');
-        onFullscreenResize(container);
-    }
-    function exit() {
-        container.classList.remove('fs-active');
+    openBtn.addEventListener('click', () => {
+        fsRequest(container)
+            .then(() => onFsResize(container))
+            .catch(() => {
+                // Repli pour les navigateurs sans API Fullscreen
+                container.classList.add('fs-fallback-active');
+                document.body.classList.add('fs-lock');
+                onFsResize(container);
+            });
+    });
+    closeBtn.addEventListener('click', () => {
+        if (fsCurrentElement() === container) fsExit();
+        container.classList.remove('fs-fallback-active');
         document.body.classList.remove('fs-lock');
-    }
-
-    openBtn.addEventListener('click', enter);
-    closeBtn.addEventListener('click', exit);
-    container._exitFullscreen = exit;
-}
-
-function exitAllFullscreens() {
-    document.querySelectorAll('.fs-active').forEach(el => {
-        if (el._exitFullscreen) el._exitFullscreen();
     });
 }
-document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') exitAllFullscreens();
-});
-function exitFullscreenIfActive(el) {
-    if (el && el.classList.contains('fs-active') && el._exitFullscreen) el._exitFullscreen();
-}
 
-// Redimensionne les canvas concernés au moment d'entrer en plein écran
-function onFullscreenResize(container) {
-    setTimeout(() => {
-        if (container.id === 'drawStageWrap' && typeof drawCanvasResizeFn === 'function') drawCanvasResizeFn();
-        if (container.id === 'stage-fireworks' && typeof fwResizeCanvas === 'function') fwResizeCanvas();
-        if (container.id === 'alphabetPlayer' && traceModeOn && typeof setupTraceCanvas === 'function') setupTraceCanvas();
-    }, 60);
-}
+['fullscreenchange', 'webkitfullscreenchange'].forEach(evt => {
+    document.addEventListener(evt, () => {
+        const active = fsCurrentElement();
+        if (active) onFsResize(active);
+    });
+});
 
 function initAllFullscreenActivities() {
     document.querySelectorAll('.game-stage').forEach(makeFullscreenable);
