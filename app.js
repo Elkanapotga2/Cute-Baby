@@ -12,6 +12,7 @@ function goToPage(id) {
         if (typeof stopSong === 'function') stopSong();
         window.speechSynthesis && window.speechSynthesis.cancel();
     }
+    if (id !== 'jeux' && typeof stopFireworks === 'function') stopFireworks();
     pages.forEach(p => p.classList.toggle('active', p.id === id));
     document.querySelectorAll('.bubble-btn').forEach(b => b.classList.toggle('active', b.dataset.page === id));
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -833,12 +834,14 @@ document.querySelectorAll('.play-cta').forEach(btn => {
         document.querySelectorAll('.game-stage').forEach(s => s.classList.remove('active'));
         const stage = document.getElementById('stage-' + game);
         stage.classList.add('active');
+        stopFireworks(); // on coupe l'animation si on quitte ce jeu
         if (game === 'bubbles') startBubbles();
         if (game === 'colors') startColorGame();
         if (game === 'memory') startMemory();
-        if (game === 'shapes') startShapeGame(); // Ajoutez cette ligne
+        if (game === 'shapes') startShapeGame();
         if (game === 'puzzle') startPuzzle();
         if (game === 'matchsound') startMatchSound();
+        if (game === 'fireworks') startFireworks();
     });
 });
 
@@ -1182,6 +1185,269 @@ function selectMatchRight(el) {
         }, 500);
         matchSelectedLeft = null;
     }
+}
+
+
+/* --- Jeu 7 : Feux d'artifice --- */
+let fireworksAnimId = null;
+let fireworksParticles = [];
+let fireworksRockets = [];
+let fireworksFrameCount = 0;
+let fireworksStars = [];
+let fireworksWidth = 0, fireworksHeight = 0;
+let fireworksInitialTimers = [];
+
+const FIREWORKS_PALETTES = [
+    ['#ff0040', '#ff6600', '#ffaa00', '#ffcc66'],
+    ['#0066ff', '#00ccff', '#66ccff', '#ffffff'],
+    ['#00ff44', '#66ff00', '#ccff00', '#aaff66'],
+    ['#cc00ff', '#ff00aa', '#ff66cc', '#ff99ff'],
+    ['#ffffff', '#ffdd88', '#ffaa44', '#ff8844'],
+    ['#ff0044', '#ffaa00', '#00ff66', '#0066ff', '#cc00ff'],
+    ['#ff0000', '#cc0033', '#ff3366', '#ff6699'],
+    ['#00ffcc', '#00ff88', '#66ffaa', '#ccffee'],
+];
+
+function fwRandom(min, max) { return Math.random() * (max - min) + min; }
+function fwRandomInt(min, max) { return Math.floor(fwRandom(min, max + 1)); }
+
+class FireworkParticle {
+    constructor(x, y, color, velocity, size, life, gravity = 0.05, fade = true) {
+        this.x = x; this.y = y; this.color = color;
+        this.vx = velocity.x; this.vy = velocity.y;
+        this.size = size; this.life = life; this.maxLife = life;
+        this.gravity = gravity; this.fade = fade; this.alpha = 1;
+        this.trail = []; this.maxTrail = 5;
+    }
+    update() {
+        this.trail.push({ x: this.x, y: this.y });
+        if (this.trail.length > this.maxTrail) this.trail.shift();
+        this.vx *= 0.99;
+        this.vy += this.gravity;
+        this.x += this.vx; this.y += this.vy;
+        this.life--;
+        if (this.fade) this.alpha = this.life / this.maxLife;
+        this.size *= 0.998;
+    }
+    draw(ctx) {
+        if (this.trail.length > 1) {
+            for (let i = 1; i < this.trail.length; i++) {
+                const alpha = (i / this.trail.length) * this.alpha * 0.4;
+                ctx.beginPath();
+                ctx.moveTo(this.trail[i - 1].x, this.trail[i - 1].y);
+                ctx.lineTo(this.trail[i].x, this.trail[i].y);
+                ctx.strokeStyle = this.color.replace('1)', alpha + ')');
+                ctx.lineWidth = this.size * (i / this.trail.length) * 0.8;
+                ctx.stroke();
+            }
+        }
+        const alpha = this.fade ? this.alpha : 1;
+        ctx.save();
+        ctx.globalAlpha = Math.max(0, alpha);
+        ctx.shadowBlur = this.size * 4;
+        ctx.shadowColor = this.color;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, Math.max(0.5, this.size), 0, Math.PI * 2);
+        ctx.fillStyle = this.color;
+        ctx.fill();
+        if (this.size > 2) {
+            ctx.shadowBlur = this.size * 8;
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size * 0.3, 0, Math.PI * 2);
+            ctx.fillStyle = 'rgba(255,255,255,0.8)';
+            ctx.fill();
+        }
+        ctx.restore();
+    }
+    isDead() { return this.life <= 0 || this.size < 0.3 || this.alpha < 0.01; }
+}
+
+class FireworkRocket {
+    constructor(startX, startY, targetX, targetY, palette) {
+        this.startX = startX; this.startY = startY;
+        this.targetX = targetX; this.targetY = targetY;
+        const dx = targetX - startX, dy = targetY - startY;
+        this.speed = fwRandom(6, 10);
+        this.angle = Math.atan2(dy, dx);
+        this.x = startX; this.y = startY;
+        this.vx = Math.cos(this.angle) * this.speed;
+        this.vy = Math.sin(this.angle) * this.speed;
+        this.trail = []; this.maxTrail = 16;
+        this.alive = true;
+        this.palette = palette || FIREWORKS_PALETTES[fwRandomInt(0, FIREWORKS_PALETTES.length - 1)];
+        this.explosionSize = fwRandom(40, 90);
+        this.particleCount = fwRandomInt(50, 120);
+        this.sparkle = 0;
+    }
+    update(width, height) {
+        this.trail.push({ x: this.x, y: this.y });
+        if (this.trail.length > this.maxTrail) this.trail.shift();
+        this.x += this.vx; this.y += this.vy;
+        this.sparkle = Math.random() * 0.5 + 0.5;
+        const dx = this.targetX - this.x, dy = this.targetY - this.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        if (distance < 10 || this.y > height + 50 || this.x < -50 || this.x > width + 50) {
+            this.alive = false;
+            this.explode();
+        }
+    }
+    explode() {
+        const count = this.particleCount;
+        const colors = this.palette;
+        for (let i = 0; i < count; i++) {
+            const theta = fwRandom(0, Math.PI * 2);
+            const phi = fwRandom(0, Math.PI);
+            const speed = fwRandom(1, 6) * (this.explosionSize / 100);
+            const vx = Math.sin(phi) * Math.cos(theta) * speed;
+            const vy = Math.sin(phi) * Math.sin(theta) * speed - fwRandom(0, 1);
+            const color = colors[fwRandomInt(0, colors.length - 1)];
+            const size = fwRandom(1.5, 4);
+            const life = fwRandomInt(35, 80);
+            const isStar = Math.random() < 0.08;
+            const particle = new FireworkParticle(this.x, this.y, color, { x: vx, y: vy },
+                isStar ? size * 2 : size, isStar ? life * 1.5 : life, 0.04 + fwRandom(0, 0.03), true);
+            if (isStar) { particle.maxTrail = 10; particle.gravity = 0.02; }
+            fireworksParticles.push(particle);
+        }
+        for (let i = 0; i < 15; i++) {
+            const theta = fwRandom(0, Math.PI * 2);
+            const speed = fwRandom(0, 2);
+            const particle = new FireworkParticle(this.x + fwRandom(-3, 3), this.y + fwRandom(-3, 3),
+                'rgba(255,255,255,0.9)', { x: Math.cos(theta) * speed, y: Math.sin(theta) * speed - 0.5 },
+                fwRandom(3, 6), fwRandomInt(5, 12), 0.01, true);
+            fireworksParticles.push(particle);
+        }
+    }
+    draw(ctx) {
+        if (this.trail.length > 1) {
+            for (let i = 1; i < this.trail.length; i++) {
+                const alpha = (i / this.trail.length) * 0.6;
+                ctx.beginPath();
+                ctx.moveTo(this.trail[i - 1].x, this.trail[i - 1].y);
+                ctx.lineTo(this.trail[i].x, this.trail[i].y);
+                ctx.strokeStyle = `rgba(255, 200, 100, ${alpha})`;
+                ctx.lineWidth = (i / this.trail.length) * 2.5;
+                ctx.stroke();
+            }
+        }
+        const gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, 6);
+        gradient.addColorStop(0, `rgba(255, 255, 255, ${0.9 * this.sparkle})`);
+        gradient.addColorStop(0.3, `rgba(255, 200, 100, ${0.6 * this.sparkle})`);
+        gradient.addColorStop(1, `rgba(255, 100, 50, 0)`);
+        ctx.save();
+        ctx.shadowBlur = 22;
+        ctx.shadowColor = '#ffaa44';
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, 4, 0, Math.PI * 2);
+        ctx.fillStyle = gradient;
+        ctx.fill();
+        ctx.restore();
+    }
+    isDead() { return !this.alive; }
+}
+
+function fwCreateFirework(x, y) {
+    const startX = x + fwRandom(-20, 20);
+    const startY = fireworksHeight + fwRandom(-10, 10);
+    const targetX = x + fwRandom(-30, 30);
+    const targetY = y + fwRandom(-40, 0);
+    fireworksRockets.push(new FireworkRocket(startX, startY, targetX, targetY));
+}
+
+function fwInitStars() {
+    fireworksStars = [];
+    for (let i = 0; i < 60; i++) {
+        fireworksStars.push({
+            x: fwRandom(0, fireworksWidth), y: fwRandom(0, fireworksHeight),
+            size: fwRandom(0.5, 1.6), brightness: fwRandom(0.3, 1),
+            speed: fwRandom(0.001, 0.01), phase: fwRandom(0, Math.PI * 2)
+        });
+    }
+}
+function fwDrawStars(ctx) {
+    for (const star of fireworksStars) {
+        const alpha = star.brightness * (0.5 + 0.5 * Math.sin(fireworksFrameCount * star.speed + star.phase));
+        ctx.beginPath();
+        ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
+        ctx.fill();
+    }
+}
+
+function fwResizeCanvas() {
+    const canvas = document.getElementById('fireworksCanvas');
+    const area = document.getElementById('fireworksArea');
+    if (!canvas || !area) return;
+    const rect = area.getBoundingClientRect();
+    fireworksWidth = canvas.width = rect.width;
+    fireworksHeight = canvas.height = rect.height;
+    fwInitStars();
+}
+
+function fwLoop() {
+    const canvas = document.getElementById('fireworksCanvas');
+    if (!canvas) { fireworksAnimId = null; return; }
+    const ctx = canvas.getContext('2d');
+
+    for (let i = fireworksRockets.length - 1; i >= 0; i--) {
+        fireworksRockets[i].update(fireworksWidth, fireworksHeight);
+        if (fireworksRockets[i].isDead()) fireworksRockets.splice(i, 1);
+    }
+    for (let i = fireworksParticles.length - 1; i >= 0; i--) {
+        fireworksParticles[i].update();
+        if (fireworksParticles[i].isDead()) fireworksParticles.splice(i, 1);
+    }
+    if (fireworksParticles.length > 1200) fireworksParticles.splice(0, fireworksParticles.length - 1200);
+    fireworksFrameCount++;
+
+    ctx.fillStyle = 'rgba(10, 10, 26, 0.28)';
+    ctx.fillRect(0, 0, fireworksWidth, fireworksHeight);
+    if (fireworksFrameCount % 60 === 0) fwDrawStars(ctx);
+    for (const rocket of fireworksRockets) rocket.draw(ctx);
+    for (const particle of fireworksParticles) particle.draw(ctx);
+
+    fireworksAnimId = requestAnimationFrame(fwLoop);
+}
+
+function startFireworks() {
+    stopFireworks(); // repart d'un écran propre à chaque ouverture
+    fireworksParticles = [];
+    fireworksRockets = [];
+    fireworksFrameCount = 0;
+    fwResizeCanvas();
+
+    const canvas = document.getElementById('fireworksCanvas');
+    if (canvas && !canvas.dataset.fwBound) {
+        canvas.addEventListener('click', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            const count = fwRandomInt(1, 2);
+            for (let i = 0; i < count; i++) {
+                setTimeout(() => fwCreateFirework(x + fwRandom(-30, 30), y + fwRandom(-20, 20)), i * fwRandom(80, 200));
+            }
+            playTone(400 + Math.random() * 200, getCtx().currentTime, 0.2, 0.05, 'sine');
+        });
+        canvas.dataset.fwBound = 'true';
+    }
+    window.addEventListener('resize', fwResizeCanvas);
+
+    // Petit spectacle de bienvenue
+    for (let i = 0; i < 3; i++) {
+        const t = setTimeout(() => {
+            fwCreateFirework(fwRandom(fireworksWidth * 0.2, fireworksWidth * 0.8), fwRandom(fireworksHeight * 0.2, fireworksHeight * 0.5));
+        }, 300 + i * 450);
+        fireworksInitialTimers.push(t);
+    }
+
+    fwLoop();
+}
+
+function stopFireworks() {
+    if (fireworksAnimId) { cancelAnimationFrame(fireworksAnimId); fireworksAnimId = null; }
+    fireworksInitialTimers.forEach(t => clearTimeout(t));
+    fireworksInitialTimers = [];
+    window.removeEventListener('resize', fwResizeCanvas);
 }
 
 /* =========================================================
