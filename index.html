@@ -2120,23 +2120,26 @@
         .fs-close-btn {
             display: none;
             background: rgba(200, 60, 60, 0.8);
+            top: 16px;
+            right: 16px;
         }
 
-        /* Styles appliqués UNIQUEMENT quand le navigateur est réellement en plein écran natif */
+        /* Le conteneur passe en display:block plein viewport — PAS de flex avec
+   align-items:center, qui empêchait les enfants de s'étirer en largeur
+   et créait le vide blanc autour du jeu. */
         [data-fs-container]:fullscreen,
         [data-fs-container]:-webkit-full-screen,
         .fs-fallback-active {
-            width: 100vw;
-            height: 100vh;
-            max-width: none;
+            width: 100vw !important;
+            height: 100vh !important;
+            max-width: none !important;
+            margin: 0 !important;
+            border-radius: 0 !important;
             background: var(--surface);
-            display: flex !important;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 18px;
-            padding: 50px 16px 30px;
+            display: block !important;
+            padding: 70px 24px 40px !important;
             overflow-y: auto;
+            box-sizing: border-box;
         }
 
         .fs-fallback-active {
@@ -2161,72 +2164,177 @@
             display: flex;
         }
 
-        /* Agrandir le contenu de chaque activité une fois en plein écran */
+        /* ---- Zones de jeu "canvas" (bulles / feux d'artifice) : remplissent
+   toute la largeur disponible + une grande hauteur ---- */
         [data-fs-container]:fullscreen .bubbles-area,
         [data-fs-container]:-webkit-full-screen .bubbles-area,
         [data-fs-container]:fullscreen .fireworks-stage-area,
         [data-fs-container]:-webkit-full-screen .fireworks-stage-area,
         .fs-fallback-active .bubbles-area,
         .fs-fallback-active .fireworks-stage-area {
-            width: min(96vw, 900px);
-            height: calc(100vh - 200px) !important;
+            width: 100% !important;
+            max-width: none !important;
+            height: calc(100vh - 170px) !important;
+            margin: 0 auto;
         }
 
+        /* ---- Grilles de jeu (mémory / puzzle / formes) : beaucoup plus grandes,
+   toujours centrées ---- */
         [data-fs-container]:fullscreen .memory-grid,
         [data-fs-container]:-webkit-full-screen .memory-grid,
+        .fs-fallback-active .memory-grid {
+            max-width: min(92vw, 720px) !important;
+        }
+
+        [data-fs-container]:fullscreen .memory-card,
+        [data-fs-container]:-webkit-full-screen .memory-card,
+        .fs-fallback-active .memory-card {
+            font-size: 3rem !important;
+        }
+
         [data-fs-container]:fullscreen .puzzle-grid,
         [data-fs-container]:-webkit-full-screen .puzzle-grid,
-        .fs-fallback-active .memory-grid,
         .fs-fallback-active .puzzle-grid {
-            max-width: min(90vw, 560px);
+            max-width: min(92vw, 520px) !important;
+        }
+
+        [data-fs-container]:fullscreen .puzzle-tile,
+        [data-fs-container]:-webkit-full-screen .puzzle-tile,
+        .fs-fallback-active .puzzle-tile {
+            font-size: 2.6rem !important;
         }
 
         [data-fs-container]:fullscreen .shape-options,
         [data-fs-container]:-webkit-full-screen .shape-options,
         .fs-fallback-active .shape-options {
-            max-width: min(90vw, 560px);
+            max-width: min(92vw, 720px) !important;
+        }
+
+        [data-fs-container]:fullscreen .shape-card .shape-emoji,
+        [data-fs-container]:-webkit-full-screen .shape-card .shape-emoji,
+        .fs-fallback-active .shape-card .shape-emoji {
+            font-size: 4.5rem !important;
+        }
+
+        [data-fs-container]:fullscreen .shape-prompt,
+        [data-fs-container]:-webkit-full-screen .shape-prompt,
+        [data-fs-container]:fullscreen .color-prompt,
+        [data-fs-container]:-webkit-full-screen .color-prompt,
+        .fs-fallback-active .shape-prompt,
+        .fs-fallback-active .color-prompt {
+            font-size: 2rem !important;
+        }
+
+        [data-fs-container]:fullscreen .color-dot,
+        [data-fs-container]:-webkit-full-screen .color-dot,
+        .fs-fallback-active .color-dot {
+            width: 100px !important;
+            height: 100px !important;
+        }
+
+        [data-fs-container]:fullscreen .color-options,
+        [data-fs-container]:-webkit-full-screen .color-options,
+        .fs-fallback-active .color-options {
+            max-width: min(92vw, 700px);
+            margin: 0 auto;
+            gap: 22px !important;
         }
 
         [data-fs-container]:fullscreen .match-columns,
         [data-fs-container]:-webkit-full-screen .match-columns,
         .fs-fallback-active .match-columns {
-            max-width: min(90vw, 560px);
-            gap: 40px;
+            max-width: min(92vw, 700px) !important;
+            margin: 0 auto;
+            gap: 60px !important;
+        }
+
+        [data-fs-container]:fullscreen .match-item,
+        [data-fs-container]:-webkit-full-screen .match-item,
+        .fs-fallback-active .match-item {
+            font-size: 1.6rem !important;
+            padding: 20px !important;
         }
 
         [data-fs-container]:fullscreen .score-line,
         [data-fs-container]:-webkit-full-screen .score-line,
         .fs-fallback-active .score-line {
-            font-size: 1.3rem;
+            font-size: 1.5rem;
+            text-align: center;
+        }
+
+        [data-fs-container]:fullscreen .puzzle-new-btn,
+        [data-fs-container]:-webkit-full-screen .puzzle-new-btn,
+        .fs-fallback-active .puzzle-new-btn {
+            display: block;
+            margin: 18px auto 0;
+            font-size: 1.05rem;
+            padding: 14px 28px;
+        }
+
+        /* ---- Dessin : le canvas remplit tout l'espace restant ---- */
+        .draw-canvas-wrap:fullscreen,
+        .draw-canvas-wrap:-webkit-full-screen,
+        .draw-canvas-wrap.fs-fallback-active {
+            padding: 70px 20px 30px !important;
+            display: flex !important;
+            flex-direction: column;
+            align-items: center;
         }
 
         .draw-canvas-wrap:fullscreen #drawCanvas,
         .draw-canvas-wrap:-webkit-full-screen #drawCanvas,
         .draw-canvas-wrap.fs-fallback-active #drawCanvas {
-            width: min(96vw, 1100px) !important;
+            width: 100% !important;
             max-width: none !important;
-            height: calc(100vh - 220px) !important;
+            flex: 1;
+            height: calc(100vh - 200px) !important;
             aspect-ratio: auto !important;
+        }
+
+        .draw-canvas-wrap:fullscreen .draw-toolbar,
+        .draw-canvas-wrap:-webkit-full-screen .draw-toolbar,
+        .draw-canvas-wrap.fs-fallback-active .draw-toolbar {
+            flex-shrink: 0;
+        }
+
+        /* ---- Alphabet ---- */
+        #alphabetPlayer:fullscreen,
+        #alphabetPlayer:-webkit-full-screen,
+        #alphabetPlayer.fs-fallback-active {
+            display: flex !important;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
 
         #alphabetPlayer:fullscreen .letter-stage,
         #alphabetPlayer:-webkit-full-screen .letter-stage,
         #alphabetPlayer.fs-fallback-active .letter-stage {
-            width: min(560px, 70vw);
-            height: min(560px, 65vh);
+            width: min(80vw, 680px) !important;
+            height: min(70vh, 680px) !important;
         }
 
         #alphabetPlayer:fullscreen .letter-char,
         #alphabetPlayer:-webkit-full-screen .letter-char,
         #alphabetPlayer.fs-fallback-active .letter-char {
-            font-size: clamp(9rem, 26vw, 17rem);
+            font-size: clamp(10rem, 28vw, 20rem) !important;
+        }
+
+        /* ---- Storytime ---- */
+        #storyPlayer:fullscreen,
+        #storyPlayer:-webkit-full-screen,
+        #storyPlayer.fs-fallback-active {
+            display: flex !important;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
 
         #storyPlayer:fullscreen .story-stage,
         #storyPlayer:-webkit-full-screen .story-stage,
         #storyPlayer.fs-fallback-active .story-stage {
-            min-height: 65vh;
-            width: min(96vw, 800px);
+            min-height: 70vh !important;
+            width: min(92vw, 900px) !important;
         }
     </style>
 </head>
@@ -2388,20 +2496,20 @@
             <span class="section-kicker" style="background:#262133;color:var(--sun);">Dessiner</span>
             <h2 class="section-title">Touche, glisse, crée !</h2>
             <p class="section-sub">Pose le doigt sur le tableau : chaque trait devient une jolie couleur.</p>
-            <div class="draw-canvas-wrap" id="drawStageWrap"></div>
-            <canvas id="drawCanvas" width="900" height="560"></canvas>
-            <div class="draw-toolbar">
-                <button class="tool-btn" id="clearCanvas">🧽 Effacer</button>
-                <div class="brush-selector">
-                    <button class="tool-btn brush-btn active" data-brush="rainbow">
-                        <span class="brush-dot rainbow-dot"></span> Arc-en-ciel
-                    </button>
-                    <button class="tool-btn brush-btn" data-brush="star">
-                        ⭐ Étoile
-                    </button>
+            <div class="draw-canvas-wrap" id="drawStageWrap">
+                <canvas id="drawCanvas" width="900" height="560"></canvas>
+                <div class="draw-toolbar">
+                    <button class="tool-btn" id="clearCanvas">🧽 Effacer</button>
+                    <div class="brush-selector">
+                        <button class="tool-btn brush-btn active" data-brush="rainbow">
+                            <span class="brush-dot rainbow-dot"></span> Arc-en-ciel
+                        </button>
+                        <button class="tool-btn brush-btn" data-brush="star">
+                            ⭐ Étoile
+                        </button>
+                    </div>
                 </div>
             </div>
-        </div>
         </div>
     </section>
 
