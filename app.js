@@ -7,6 +7,7 @@ const pages = document.querySelectorAll('.page');
 const navBtns = document.querySelectorAll('.bubble-btn, [data-page]');
 
 function goToPage(id) {
+    exitAllFullscreens();
     if (id !== 'alphabet') {
         if (typeof stopAutoplay === 'function') stopAutoplay();
         if (typeof stopSong === 'function') stopSong();
@@ -362,6 +363,7 @@ document.querySelectorAll('.lang-card').forEach(card => {
     });
 });
 document.getElementById('alphaBack').addEventListener('click', () => {
+    exitFullscreenIfActive(document.getElementById('alphabetPlayer'));
     stopAutoplay();
     stopSong();
     if (traceModeOn) toggleTraceMode();
@@ -635,6 +637,7 @@ document.getElementById('melodySwitch').addEventListener('click', function () {
    ========================================================= */
 let canvasReady = false;
 let currentBrush = 'rainbow';
+let drawCanvasResizeFn = null;
 
 function setupCanvas() {
     const canvas = document.getElementById('drawCanvas');
@@ -649,6 +652,10 @@ function setupCanvas() {
         ctx.lineCap = 'round';
     }
     resize();
+    drawCanvasResizeFn = resize; // réutilisable depuis le mode plein écran
+
+    if (canvasReady) return; // les écouteurs ne sont attachés qu'une seule fois
+
     window.addEventListener('resize', resize);
 
     let drawing = false;
@@ -1818,6 +1825,7 @@ function openStory(storyId) {
 }
 
 function closeStory() {
+    exitFullscreenIfActive(document.getElementById('storyPlayer'));
     stopStoryNarration();
     currentStory = null;
     const library = document.getElementById('storyLibrary');
@@ -1973,3 +1981,75 @@ if (testimonialSubmitBtn) {
         celebrate(document.getElementById('testimonialWall'));
     });
 }
+
+/* =========================================================
+   MODE PLEIN ÉCRAN — pour toutes les activités
+   On utilise un plein écran "maison" en CSS (position fixed
+   plein viewport) plutôt que l'API Fullscreen native, car
+   celle-ci est mal supportée sur iPad/Safari pour un simple
+   <div> — cette solution fonctionne partout, y compris sur
+   les tablettes des enfants.
+   ========================================================= */
+function makeFullscreenable(container) {
+    if (!container || container.dataset.fsReady) return;
+    container.dataset.fsReady = 'true';
+
+    const openBtn = document.createElement('button');
+    openBtn.className = 'fs-toggle-btn';
+    openBtn.innerHTML = '⛶';
+    openBtn.setAttribute('aria-label', 'Plein écran');
+    container.appendChild(openBtn);
+
+    const closeBtn = document.createElement('button');
+    closeBtn.className = 'fs-close-btn';
+    closeBtn.innerHTML = '✕';
+    closeBtn.setAttribute('aria-label', 'Quitter le plein écran');
+    container.appendChild(closeBtn);
+
+    function enter() {
+        exitAllFullscreens();
+        container.classList.add('fs-active');
+        document.body.classList.add('fs-lock');
+        onFullscreenResize(container);
+    }
+    function exit() {
+        container.classList.remove('fs-active');
+        document.body.classList.remove('fs-lock');
+    }
+
+    openBtn.addEventListener('click', enter);
+    closeBtn.addEventListener('click', exit);
+    container._exitFullscreen = exit;
+}
+
+function exitAllFullscreens() {
+    document.querySelectorAll('.fs-active').forEach(el => {
+        if (el._exitFullscreen) el._exitFullscreen();
+    });
+}
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') exitAllFullscreens();
+});
+function exitFullscreenIfActive(el) {
+    if (el && el.classList.contains('fs-active') && el._exitFullscreen) el._exitFullscreen();
+}
+
+// Redimensionne les canvas concernés au moment d'entrer en plein écran
+function onFullscreenResize(container) {
+    setTimeout(() => {
+        if (container.id === 'drawStageWrap' && typeof drawCanvasResizeFn === 'function') drawCanvasResizeFn();
+        if (container.id === 'stage-fireworks' && typeof fwResizeCanvas === 'function') fwResizeCanvas();
+        if (container.id === 'alphabetPlayer' && traceModeOn && typeof setupTraceCanvas === 'function') setupTraceCanvas();
+    }, 60);
+}
+
+function initAllFullscreenActivities() {
+    document.querySelectorAll('.game-stage').forEach(makeFullscreenable);
+    const drawWrap = document.getElementById('drawStageWrap');
+    if (drawWrap) makeFullscreenable(drawWrap);
+    const alphaPlayer = document.getElementById('alphabetPlayer');
+    if (alphaPlayer) makeFullscreenable(alphaPlayer);
+    const storyPlayerEl = document.getElementById('storyPlayer');
+    if (storyPlayerEl) makeFullscreenable(storyPlayerEl);
+}
+document.addEventListener('DOMContentLoaded', initAllFullscreenActivities);
