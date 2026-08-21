@@ -2061,6 +2061,36 @@
         .settings-modal.confirmed .settings-modal-default {
             display: none;
         }
+
+        /* ================= JEU FEUX D'ARTIFICE ================= */
+        .fireworks-stage-area {
+            position: relative;
+            height: 260px;
+            overflow: hidden;
+            border-radius: 14px;
+            background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
+            cursor: crosshair;
+        }
+
+        .fireworks-stage-area canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        .fireworks-hint {
+            position: absolute;
+            bottom: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(255, 255, 255, 0.75);
+            font-size: 0.78rem;
+            background: rgba(0, 0, 0, 0.45);
+            padding: 6px 14px;
+            border-radius: 20px;
+            pointer-events: none;
+            user-select: none;
+        }
     </style>
 </head>
 
@@ -2083,8 +2113,8 @@
                         class="label">Jeux</span></button>
                 <button class="bubble-btn" data-page="storytime"><span class="emoji">📖</span><span
                         class="label">Storytime</span></button>
-                <button class="bubble-btn" data-page="astuces"><span class="emoji">💛</span><span
-                        class="label">Astuces mamans</span></button>
+                <button class="bubble-btn" data-page="astuces"><span class="emoji">💛</span><span class="label">Astuces
+                        mamans</span></button>
             </nav>
             <button class="settings-toggle-btn" id="settingsToggle" aria-label="Paramètres et abonnement">⚙️</button>
             <button class="theme-toggle-btn" id="themeToggle" aria-label="Passer en mode nuit">🌙</button>
@@ -2323,6 +2353,18 @@
                         <div class="score-line">Bonnes paires : <span id="matchScore">0</span> / 6</div>
                     </div>
                 </div>
+
+                <div class="game-card">
+                    <h3>🎆 Feux d'artifice</h3>
+                    <p>Touche l'écran pour faire exploser de magnifiques feux d'artifice colorés.</p>
+                    <button class="play-cta" data-game="fireworks">Jouer</button>
+                    <div class="game-stage" id="stage-fireworks">
+                        <div class="fireworks-stage-area" id="fireworksArea">
+                            <canvas id="fireworksCanvas"></canvas>
+                            <div class="fireworks-hint">✨ Touche l'écran pour un feu d'artifice</div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="search-more games">
                 <span style="font-weight:700;">🔍 Chercher d'autres jeux :</span>
@@ -2518,8 +2560,10 @@
                     navigateur — c'est un premier pas vers une vraie communauté partagée !</div>
                 <div class="testimonial-wall" id="testimonialWall"></div>
                 <div class="testimonial-form">
-                    <input type="text" id="testimonialAuthor" placeholder="Ton pseudo (optionnel, ex. Une maman de jumeaux)">
-                    <textarea id="testimonialText" placeholder="Partage un mot doux, une astuce, un fou rire de maman..."></textarea>
+                    <input type="text" id="testimonialAuthor"
+                        placeholder="Ton pseudo (optionnel, ex. Une maman de jumeaux)">
+                    <textarea id="testimonialText"
+                        placeholder="Partage un mot doux, une astuce, un fou rire de maman..."></textarea>
                     <button id="testimonialSubmit">💌 Partager</button>
                 </div>
             </div>
@@ -2544,7 +2588,7 @@
                     <li>Résiliable à tout moment, en un clic</li>
                 </ul>
                 <button class="subscribe-btn" id="subscribeBtn">💛 S'abonner pour 2€/mois</button>
-    
+
             </div>
             <div class="subscribe-success" id="subscribeSuccess">
                 <span class="success-emoji">🎉</span>
