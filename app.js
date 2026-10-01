@@ -382,6 +382,124 @@ const AFRICAN_ALPHABETS = {
         ['U', 'Ùm', '🌳'],   // le baobab / l'arbre à palabres
         ['W', 'Wɛ̀', '👉'],   // toi
         ['Y', 'Yéba', '👋']    // saluer
+    ],
+    bam: [ // Bamiléké (Nufi) — [lettre, mot, emoji]
+        ['A', 'Ɑ̌', '✌️'],   // deux
+        ['Ɑ', 'Ɑ́', '🙋'],   // moi / je
+        ['B', 'Bɑ̄', '👨'],   // père
+        ['C', "Cà'", '🏞️'],   // la terre / le sol
+        ['D', 'Dʉ̀', '🌙'],   // la nuit
+        ['E', 'Esiē', '🙂'],   // le visage
+        ['Ǝ', 'Ə̀ə̀', '🙅'],   // non
+        ['Ɛ', 'Ɛ̀n', '👀'],   // voir
+        ['F', "Fá'", '🔨'],   // le travail
+        ['G', 'Gà', '🚶'],   // partir
+        ['Gh', 'Ghʉ̌', '🤲'],   // avoir
+        ['H', 'Hák', '🪝'],   // accrocher
+        ['I', 'Icwè', '🧑'],   // la tête
+        ['J', 'Jǎt', '🔁'],   // encore
+        ['K', "Kà'", '🌳'],   // l'arbre
+        ['L', "Lɑ́'", '🏘️'],   // le village
+        ['M', 'Mōō', '🧒'],   // l'enfant
+        ['N', 'Ndáp', '🏠'],   // la maison
+        ['Ŋ', 'Ŋɑ̌', '👤'],   // moi / je
+        ['O', 'Òbò', '💪'],   // le bras
+        ['Ɔ', 'Ɔ̀p', '🧺'],   // cueillir
+        ['P', 'Pōō', '👫'],   // les enfants
+        ['S', 'Sì', '🚫'],   // ne pas
+        ['T', "Tɑ̀'", '1️⃣'],   // un
+        ['U', 'Ù', '👉'],   // toi
+        ['Ʉ', 'Ʉ̀', '🌍'],   // le pays
+        ['V', 'Vʉ̀', '🕊️'],   // la mort (voir remarque)
+        ['W', 'Wā', '🫱'],   // mon / ma
+        ['Y', 'Yā', '👈'],   // son / sa
+        ['Z', 'Zâ', '❓']    // qui ?
+    ],
+    bul: [ // Bulu
+        ['A', 'Asú', '🙂'],   // le visage
+        ['B', 'Báná', '🧒'],   // les enfants
+        ['D', 'Doe', '🤏'],   // un peu
+        ['E', 'Ebak', '⛏️'],   // une houe
+        ['F', 'Fee', '🐍'],   // la vipère
+        ['G', 'Gə́', '🚶'],   // partir
+        ['H', 'Hom', '📍'],   // le lieu
+        ['I', 'Isá', '👨'],   // le père
+        ['J', 'Jôb', '☀️'],   // le soleil
+        ['K', 'Kalate', '📖'],   // le livre
+        ['L', 'Lat', '🤝'],   // unir
+        ['M', 'Minga', '👩'],   // la femme
+        ['N', 'Nemban', '📈'],   // dépasser
+        ['Ñ', 'Ñjo', '✂️'],   // le ciseau
+        ['O', 'Osú', '🏞️'],   // le ruisseau
+        ['Ô', 'Ôndó', '🌿'],   // la liane
+        ['P', 'Pát', '🪙'],   // la pièce de monnaie
+        ['S', 'Sili', '❓'],   // demander
+        ['T', 'Táñ', '🔢'],   // compter
+        ['U', 'Umvə́g', '👨‍👩‍👧‍👦'],  // la famille
+        ['V', 'Vom', '🗺️'],   // l'endroit
+        ['W', 'Wôé', '✨'],   // tuer (voir remarque)
+        ['Y', 'Yem', '🧠'],   // savoir
+        ['Z', 'Zambe', '🙏']    // Dieu
+    ],
+    ful: [ // Fulfuldé
+        ['A', 'Alwá', '🪧'],   // l'ardoise
+        ['B', 'Baba', '👨'],   // le père
+        ['Ɓ', 'Ɓeenge', '🏡'],   // la famille proche
+        ['C', 'Ceede', '💰'],   // l'argent
+        ['D', 'Dofugo', '🌱'],   // déraciner
+        ['Ɗ', 'Ɗon', '📍'],   // ici
+        ['E', 'Enendé', '🤗'],   // la pitié
+        ['F', 'Fámaru', '🤏'],   // petit
+        ['G', 'Gertogal', '🐔'],   // la poule
+        ['H', 'Haako', '🥬'],   // la feuille
+        ['I', 'Innde', '🏷️'],   // le nom
+        ['J', 'Jawdi', '🐄'],   // la richesse / le bétail
+        ['K', 'Kosam', '🥛'],   // le lait
+        ['L', 'Leydi', '🌍'],   // la terre
+        ['M', 'Maayo', '🏞️'],   // le fleuve
+        ['MB', 'Mbabba', '🫏'],   // l'âne
+        ['N', 'Naange', '☀️'],   // le soleil
+        ['ND', 'Ndiyam', '💧'],   // l'eau
+        ['NG', 'Ngari', '🐂'],   // le taureau
+        ['NJ', 'Njamndi', '🔩'],   // le fer
+        ['Ñ', 'Nyariigu', '🐱'],   // le chat
+        ['Ŋ', 'Ŋari', '✨'],   // la beauté
+        ['O', 'Oofigo', '🥵'],   // avoir chaud
+        ['P', 'Pallaandi', '🦎'],   // le lézard
+        ['R', 'Rawaandu', '🐶'],   // le chien
+        ['S', 'Saare', '🏠'],   // la concession
+        ['T', 'Tabaare', '🧱'],   // la brique
+        ['U', 'Unugo', '🥣'],   // piler
+        ['W', 'Wuro', '🏘️'],   // le village
+        ['Y', 'Yahrude', '🚶'],   // la démarche
+        ['Ƴ', 'Ƴiiƴam', '🩸'],   // le sang
+        ['ʼ', 'ʼAm', '🫱']    // mon / ma
+    ],
+    dua: [ // Douala
+        ['A', 'Aba', '🛖'],   // le hangar
+        ['B', 'Boba', '🕊️'],   // planer
+        ['Ɓ', 'Ɓon', '🧒'],   // les enfants
+        ['C', 'Ca', '🪵'],   // le bois de chauffage
+        ['D', 'Diɓa', '💍'],   // le mariage
+        ['E', 'Ewolo', '🔨'],   // le travail
+        ['Ɛ', 'Ɛbɛ', '🕳️'],   // la fosse
+        ['G', 'Gala', '⚫'],   // le charbon
+        ['I', 'Idiba', '🌅'],   // le matin
+        ['J', 'Jita', '👥'],   // beaucoup
+        ['K', 'Kalati', '📖'],   // le livre
+        ['L', 'Longɛ', '🌱'],   // la vie
+        ['M', 'Madiba', '💧'],   // l'eau
+        ['N', 'Ndabo', '🏠'],   // la maison
+        ['Ñ', 'Ñama', '🐾'],   // l'animal
+        ['Ŋ', 'Ŋgɔndɔ', '👧'],   // la jeune fille
+        ['O', 'Olo', '🦆'],   // le canard
+        ['Ɔ', 'Ɔndɔ', '🌿'],   // la liane
+        ['P', 'Penda', '🤔'],   // douter
+        ['S', 'Saŋgo', '👨'],   // le monsieur
+        ['T', 'Tata', '👴'],   // le grand-père
+        ['U', 'Uma', '☀️'],   // sécher au soleil
+        ['W', 'Wambu', '🧪'],   // le poison
+        ['Y', 'Yoma', '🗣️']    // gronder
     ]
 };
 
@@ -412,6 +530,10 @@ const PHRASE_TEMPLATES = {
     ru: (letter, word) => `${letter} как ${word}`,
     ewo: (letter, word) => `${letter} comme ${word}`,
     bas: (letter, word) => `${letter} comme ${word}`,
+    bam: (letter, word) => `${letter} comme ${word}`,
+    bul: (letter, word) => `${letter} comme ${word}`,
+    ful: (letter, word) => `${letter} comme ${word}`,
+    dua: (letter, word) => `${letter} comme ${word}`,
 };
 function buildLetterPhrase(lang, letter, word) {
     const template = PHRASE_TEMPLATES[lang] || PHRASE_TEMPLATES.en;
