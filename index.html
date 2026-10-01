@@ -2399,6 +2399,111 @@
             min-height: 70vh !important;
             width: min(92vw, 900px) !important;
         }
+
+        /* ---------- MORALE DANS LA CARTE DE BIBLIOTHÈQUE ---------- */
+        .story-moral-preview {
+            display: block;
+            font-size: 0.78rem;
+            font-style: italic;
+            color: #a3720f;
+            background: #fff7e6;
+            padding: 8px 12px;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            line-height: 1.4;
+            border-left: 3px solid var(--sun);
+        }
+
+        html[data-theme="dark"] .story-moral-preview {
+            background: #3a3020;
+            color: #f2cf8f;
+            border-left-color: var(--sun);
+        }
+
+        /* ---------- ENCADRÉ DE MORALE DANS LE LECTEUR ---------- */
+        .story-moral-box {
+            display: none;
+            align-items: flex-start;
+            gap: 14px;
+            max-width: 640px;
+            margin: 20px auto 0;
+            padding: 20px 24px;
+            background: linear-gradient(135deg, #FFF7E6, #FFEFC7);
+            border-radius: 22px;
+            box-shadow: var(--shadow);
+            border-left: 5px solid var(--sun);
+            animation: moralPop 0.5s ease;
+        }
+
+        .story-moral-box.active {
+            display: flex;
+        }
+
+        .story-moral-box .moral-icon {
+            font-size: 2rem;
+            flex-shrink: 0;
+            animation: bob 2.5s ease-in-out infinite;
+        }
+
+        .story-moral-box strong {
+            font-family: 'Baloo 2', sans-serif;
+            font-size: 1rem;
+            color: #a3720f;
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        .story-moral-box p {
+            margin: 0;
+            font-size: 1rem;
+            line-height: 1.5;
+            color: var(--plum);
+            font-style: italic;
+        }
+
+        html[data-theme="dark"] .story-moral-box {
+            background: linear-gradient(135deg, #3a3020, #2a2415);
+            border-left-color: var(--sun);
+        }
+
+        html[data-theme="dark"] .story-moral-box strong {
+            color: #f2cf8f;
+        }
+
+        html[data-theme="dark"] .story-moral-box p {
+            color: var(--plum);
+        }
+
+        @keyframes moralPop {
+            0% {
+                transform: scale(0.9) translateY(10px);
+                opacity: 0;
+            }
+
+            60% {
+                transform: scale(1.02) translateY(-3px);
+                opacity: 1;
+            }
+
+            100% {
+                transform: scale(1) translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .moral-listen-btn {
+            background: var(--sun);
+            color: #7a4a00;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            flex-shrink: 0;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
     </style>
 </head>
 
@@ -2725,6 +2830,14 @@
                     <button class="round-btn" id="storyPrev">◀</button>
                     <button class="round-btn big" id="storyPlayPause">🔊</button>
                     <button class="round-btn" id="storyNext">▶</button>
+                </div>
+                <div class="story-moral-box" id="storyMoralBox">
+                    <span class="moral-icon">💡</span>
+                    <div>
+                        <strong>La leçon de cette histoire :</strong>
+                        <p id="storyMoralText"></p>
+                    </div>
+                    <button class="moral-listen-btn" onclick="speakMoralOnly()" title="Réécouter la morale">🔊</button>
                 </div>
             </div>
         </div>
