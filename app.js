@@ -93,18 +93,111 @@ function playTone(freq, startTime, duration, gainPeak = 0.09, type = 'sine') {
 const NOTE = { C4: 261.6, D4: 293.7, E4: 329.6, F4: 349.2, G4: 392.0, A4: 440.0, B4: 493.9, C5: 523.3, D5: 587.3, E5: 659.3 };
 
 // Mélodies traditionnelles (domaine public)
+
+/* =========================================================
+   MÉLODIES COMPLÈTES — notes: [fréquence, durée_en_ms]
+   do=523, ré=587, mi=659, fa=698, sol=784, la=880, si=988
+   do2=1047, ré2=1175, mi2=1319
+   ========================================================= */
 const MELODIES = {
-    twinkle: [ // Ah vous dirai-je maman
-        ['C4', 0.4], ['C4', 0.4], ['G4', 0.4], ['G4', 0.4], ['A4', 0.4], ['A4', 0.4], ['G4', 0.8],
-        ['F4', 0.4], ['F4', 0.4], ['E4', 0.4], ['E4', 0.4], ['D4', 0.4], ['D4', 0.4], ['C4', 0.8]
+    twinkle: [
+        [523, 400], [523, 400], [784, 400], [784, 400], [880, 400], [880, 400], [784, 800],
+        [698, 400], [698, 400], [659, 400], [659, 400], [587, 400], [587, 400], [523, 800],
+        [784, 400], [784, 400], [698, 400], [698, 400], [659, 400], [659, 400], [587, 800],
+        [784, 400], [784, 400], [698, 400], [698, 400], [659, 400], [659, 400], [587, 800],
+        [523, 400], [523, 400], [784, 400], [784, 400], [880, 400], [880, 400], [784, 800],
+        [698, 400], [698, 400], [659, 400], [659, 400], [587, 400], [587, 400], [523, 800]
     ],
     frere_jacques: [
-        ['C4', 0.4], ['D4', 0.4], ['E4', 0.4], ['C4', 0.4], ['C4', 0.4], ['D4', 0.4], ['E4', 0.4], ['C4', 0.4],
-        ['E4', 0.4], ['F4', 0.4], ['G4', 0.8], ['E4', 0.4], ['F4', 0.4], ['G4', 0.8]
+        [523, 400], [587, 400], [659, 400], [523, 400],
+        [523, 400], [587, 400], [659, 400], [523, 400],
+        [659, 400], [698, 400], [784, 800],
+        [659, 400], [698, 400], [784, 800],
+        [784, 200], [880, 200], [784, 200], [698, 200], [659, 400], [523, 400],
+        [784, 200], [880, 200], [784, 200], [698, 200], [659, 400], [523, 400],
+        [523, 400], [392, 400], [523, 800],
+        [523, 400], [392, 400], [523, 800]
     ],
     clair_lune: [
-        ['C4', 0.4], ['C4', 0.4], ['C4', 0.4], ['D4', 0.4], ['E4', 0.8],
-        ['D4', 0.4], ['C4', 0.4], ['E4', 0.4], ['D4', 0.4], ['D4', 0.4], ['C4', 1.0]
+        [523, 400], [523, 400], [523, 400], [587, 400], [659, 800],
+        [587, 400], [523, 400], [659, 400], [587, 400], [523, 800],
+        [523, 400], [523, 400], [523, 400], [587, 400], [659, 800],
+        [587, 400], [523, 400], [659, 400], [587, 400], [523, 800],
+        [587, 400], [587, 400], [587, 400], [659, 400], [698, 800],
+        [659, 400], [587, 400], [698, 400], [659, 400], [587, 800]
+    ],
+    dodo_enfant: [
+        [659, 500], [659, 500], [784, 500], [784, 500],
+        [880, 500], [880, 500], [784, 1000],
+        [698, 500], [698, 500], [659, 500], [659, 500],
+        [587, 500], [587, 500], [523, 1000],
+        [659, 500], [659, 500], [784, 500], [784, 500],
+        [880, 500], [880, 500], [784, 1000]
+    ],
+    brahms: [
+        [784, 600], [784, 600], [880, 1200],
+        [784, 600], [784, 600], [880, 1200],
+        [784, 600], [880, 600], [1047, 600], [880, 600], [784, 1200],
+        [698, 600], [784, 600], [880, 600], [784, 600], [698, 1200],
+        [659, 600], [698, 600], [784, 600], [698, 600], [659, 1200],
+        [587, 600], [659, 600], [698, 600], [659, 600], [587, 1200],
+        [523, 600], [587, 600], [659, 600], [587, 600], [523, 1200]
+    ],
+    rockabye: [
+        [784, 600], [784, 600], [784, 1200],
+        [880, 600], [880, 600], [880, 1200],
+        [1047, 600], [1047, 600], [1047, 1200],
+        [880, 1800],
+        [784, 600], [784, 600], [784, 1200],
+        [698, 600], [698, 600], [698, 1200],
+        [659, 600], [659, 600], [659, 1200],
+        [587, 1800]
+    ],
+    hush: [
+        [659, 500], [659, 500], [880, 500], [880, 500],
+        [784, 500], [784, 500], [659, 1000],
+        [587, 500], [587, 500], [698, 500], [698, 500],
+        [659, 500], [659, 500], [523, 1000],
+        [659, 500], [659, 500], [880, 500], [880, 500],
+        [784, 500], [784, 500], [659, 1000]
+    ],
+    ainsi_font: [
+        [523, 400], [523, 400], [523, 400], [523, 400],
+        [587, 400], [587, 400], [587, 400], [587, 400],
+        [659, 400], [659, 400], [659, 400], [659, 400],
+        [523, 800], [523, 800],
+        [784, 400], [784, 400], [784, 400], [784, 400],
+        [698, 400], [698, 400], [698, 400], [698, 400],
+        [659, 400], [659, 400], [587, 400], [587, 400],
+        [523, 1600]
+    ],
+    meunier: [
+        [523, 400], [523, 400], [523, 400], [587, 400],
+        [659, 400], [659, 400], [659, 400], [698, 400],
+        [784, 800], [784, 800],
+        [880, 400], [880, 400], [880, 400], [784, 400],
+        [698, 400], [698, 400], [698, 400], [659, 400],
+        [587, 800], [523, 800]
+    ],
+    mozart: [
+        [659, 500], [659, 500], [880, 500], [880, 500],
+        [1047, 1000],
+        [880, 500], [880, 500], [784, 500], [784, 500],
+        [659, 1000],
+        [784, 500], [784, 500], [880, 500], [880, 500],
+        [1047, 1000],
+        [988, 500], [880, 500], [784, 500], [698, 500],
+        [659, 1500]
+    ],
+    sleep_baby: [
+        [523, 600], [587, 600], [659, 600], [698, 600],
+        [784, 1200],
+        [698, 600], [659, 600], [587, 600], [523, 600],
+        [587, 1200],
+        [659, 600], [698, 600], [784, 600], [880, 600],
+        [1047, 1200],
+        [880, 600], [784, 600], [698, 600], [659, 600],
+        [587, 1200], [523, 1500]
     ]
 };
 
@@ -1030,15 +1123,26 @@ function setupCanvas() {
     canvasReady = true;
 }
 /* =========================================================
-   MUSIQUE — playlist de berceuses (synthétisées, sans fichiers externes)
+   MUSIQUE — playlist de berceuses complètes (synthétisées)
    ========================================================= */
 const TRACKS = [
-    { name: 'Ah vous dirai-je maman', desc: 'Berceuse traditionnelle française', key: 'twinkle', color: 'var(--coral)', duration: '0:14' },
-    { name: 'Frère Jacques', desc: 'Comptine classique douce', key: 'frere_jacques', color: 'var(--sky)', duration: '0:12' },
-    { name: 'Au clair de la lune', desc: 'Chanson populaire pour bébé', key: 'clair_lune', color: 'var(--mint)', duration: '0:11' },
+    { name: 'Ah vous dirai-je maman', desc: 'Berceuse traditionnelle française', key: 'twinkle', color: 'var(--coral)', duration: '0:32' },
+    { name: 'Frère Jacques', desc: 'Comptine classique douce', key: 'frere_jacques', color: 'var(--sky)', duration: '0:28' },
+    { name: 'Au clair de la lune', desc: 'Chanson populaire pour bébé', key: 'clair_lune', color: 'var(--mint)', duration: '0:30' },
+    { name: 'Dodo, l\'enfant do', desc: 'Berceuse française endormeuse', key: 'dodo_enfant', color: 'var(--lavender)', duration: '0:26' },
+    { name: 'Brahms Lullaby', desc: 'La plus célèbre des berceuses', key: 'brahms', color: 'var(--peach)', duration: '0:34' },
+    { name: 'Rock-a-bye Baby', desc: 'Berceuse anglaise traditionnelle', key: 'rockabye', color: 'var(--sky)', duration: '0:28' },
+    { name: 'Twinkle Twinkle Little Star', desc: 'Étoile scintillante apaisante', key: 'twinkle', color: 'var(--yellow)', duration: '0:32' },
+    { name: 'Hush Little Baby', desc: 'Berceuse américaine douce', key: 'hush', color: 'var(--mint)', duration: '0:30' },
+    { name: 'Ainsi font font font', desc: 'Comptine à gestes pour bébé', key: 'ainsi_font', color: 'var(--coral)', duration: '0:24' },
+    { name: 'Meunier tu dors', desc: 'Ronde enfantine traditionnelle', key: 'meunier', color: 'var(--lavender)', duration: '0:26' },
+    { name: 'Berceuse de Mozart', desc: 'Mélodie classique apaisante', key: 'mozart', color: 'var(--peach)', duration: '0:36' },
+    { name: 'Sleep Baby Sleep', desc: 'Berceuse douce pour endormir', key: 'sleep_baby', color: 'var(--yellow)', duration: '0:30' },
 ];
+
 const playlistEl = document.getElementById('playlist');
 let currentTrackBtn = null;
+
 TRACKS.forEach(t => {
     const row = document.createElement('div');
     row.className = 'track';
@@ -1062,6 +1166,7 @@ TRACKS.forEach(t => {
     });
     playlistEl.appendChild(row);
 });
+
 document.getElementById('musicSearchBtn').addEventListener('click', () => {
     const q = document.getElementById('musicSearch').value.trim() || 'musique douce pour bébé';
     window.open(`https://www.youtube.com/results?search_query=${encodeURIComponent(q)}`, '_blank');
