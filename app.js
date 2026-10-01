@@ -294,27 +294,8 @@ const ALPHABETS = {
             ['Ш', 'Шар'], ['Щ', 'Щенок'], ['Ъ', 'Объект'], ['Ы', 'Мы'], ['Ь', 'Мать'],
             ['Э', 'Экскаватор'], ['Ю', 'Юла'], ['Я', 'Яблоко']
         ]
-    },
-
-    // ⚠️ À FAIRE VALIDER par un locuteur natif avant publication :
-    // orthographe, tons, et choix des mots. Complète les listes lettre par lettre.
-    // Pas de synthèse vocale native pour ces langues : on utilise la voix
-    // française, qui lira les mots de façon approximative.
-    ewo: {
-        voiceLang: 'fr-FR',
-        letters: [
-            ['N', 'Nda'],      // maison
-            ['N', 'Nkul'],     // tambour
-            // ['A', '...'], ['B', '...'], ['D', '...'], ['E', '...'], ['Ɛ', '...'], ...
-        ]
-    },
-    bas: {
-        voiceLang: 'fr-FR',
-        letters: [
-            ['N', 'Ndap'],     // maison
-            // ['A', '...'], ['B', '...'], ['K', '...'], ['Ŋ', '...'], ['Ɔ', '...'], ...
-        ]
     }
+
 };
 
 // Petites illustrations (emoji) pour chaque mot, alignées index par index
@@ -338,6 +319,81 @@ const ILLUSTRATIONS = {
     ewo: ['🏠', '🥁'],
     bas: ['🏠'],
 };
+
+// ⚠️ TABLEAU À COMPLÉTER avec un locuteur natif : [lettre, mot, emoji]
+// Laisse '' si tu n'as pas encore le mot : la lettre sera simplement
+// affichée et prononcée seule. Mots déjà remplis = à faire valider.
+const AFRICAN_ALPHABETS = {
+    ewo: [ // Ewondo — [lettre, mot, emoji]
+        ['A', 'Afúb', '🌾'],   // un champ
+        ['B', 'Bumi', '🏃'],   // s'enfuir
+        ['D', 'Dibi', '🌑'],   // l'obscurité
+        ['DZ', 'Dzōb', '☀️'],   // le soleil / le ciel
+        ['E', 'Esínga', '🐱'],   // un chat
+        ['Ə', 'Ə́ɲə́', '🙂'],   // lui / elle
+        ['Ɛ', 'Ɛvə́', '🎁'],   // un cadeau
+        ['F', 'Fəg', '🦉'],   // la sagesse
+        ['G', 'Gə́', '🚶'],   // partir / aller
+        ['GB', 'Gbwə́g', '💥'],   // casser
+        ['H', 'Hom', '📍'],   // un lieu
+        ['I', 'Isá', '👨'],   // le père
+        ['K', 'Kàbad', '🐐'],   // un mouton / une chèvre
+        ['KP', 'Kpál', '🧹'],   // balayer
+        ['L', 'Lób', '🦷'],   // mordre
+        ['M', 'Medzim', '💧'],   // l'eau
+        ['N', 'Ndoa', '🔥'],   // le feu
+        ['Ŋ', 'Ŋgál', '👩'],   // la femme
+        ['Ñ', 'Nyé', '💢'],   // la haine (voir remarque)
+        ['O', 'Osú', '🥇'],   // le début / en premier
+        ['Ɔ', 'Ɔ́nɔ́ŋ', '🐦'],   // un oiseau
+        ['P', 'Pát', '🪙'],   // une pièce de monnaie
+        ['R', 'Rad', '🛞'],   // la roue
+        ['S', 'Sɔ́ ndɔ́', '⛪'],   // le dimanche / la semaine
+        ['T', 'Táŋ', '🔢'],   // compter
+        ['TS', 'Tsíd', '🐾'],   // un animal / de la viande
+        ['U', 'Umvə́g', '👨‍👩‍👧‍👦'],  // une famille
+        ['V', 'Vian', '🌡️'],   // la chaleur du soleil
+        ['W', 'Wá', '👉'],   // toi
+        ['Y', 'Yam', '🍳'],   // cuisiner
+        ['Z', 'Zamba', '🙏']    // Dieu
+    ],
+    bas: [ // Bassa (Sanaga-Maritime) — [lettre, mot, emoji]
+        ['A', 'Àbɛ́', '🦵'],   // la cuisse / le sein
+        ['B', 'Bìat', '💬'],   // les paroles / l'histoire
+        ['Ɓ', 'Ɓɔ̀n', '🧒'],   // les enfants
+        ['C', 'Càl', '👆'],   // choisir
+        ['D', 'Dìbàl', '🚪'],   // ouvrir
+        ['E', 'Èbòk', '🪵'],   // le pilon
+        ['Ɛ', 'Ɛ̀l', '🧽'],   // essuyer / nettoyer
+        ['G', 'Gàgà', '🐔'],   // gratter / racler
+        ['H', 'Hɛ̀s', '💯'],   // complètement
+        ['I', 'Ìkùŋ', '🦉'],   // le hibou
+        ['J', 'Jôm', '🔟'],   // dix
+        ['K', 'Kààt', '📖'],   // le livre / la lettre
+        ['L', 'Lòŋgɛ̀', '🌱'],   // la vie / le bien
+        ['M', 'Màyéga', '🙏'],   // merci
+        ['N', 'Ndáp', '🏠'],   // la maison
+        ['Ŋ', 'Ŋgɔ̀nd', '👧'],   // la jeune fille
+        ['O', 'Òbôl', '🌴'],   // le palmier à huile
+        ['Ɔ', 'Ɔ̀p', '🧺'],   // cueillir / récolter
+        ['P', 'Pòs', '🪙'],   // pauvre (mot emprunté)
+        ['S', 'Sàŋ', '✏️'],   // écrire
+        ['T', 'Tàm', '🤲'],   // vouloir / désirer
+        ['U', 'Ùm', '🌳'],   // le baobab / l'arbre à palabres
+        ['W', 'Wɛ̀', '👉'],   // toi
+        ['Y', 'Yéba', '👋']    // saluer
+    ]
+};
+
+// Transforme le tableau ci-dessus en données utilisables par l'app
+Object.entries(AFRICAN_ALPHABETS).forEach(([lang, rows]) => {
+    ALPHABETS[lang] = {
+        voiceLang: 'fr-FR', // pas de voix native : la voix française est un pis-aller
+        letters: rows.map(([letter, word]) => [letter, word])
+    };
+    ILLUSTRATIONS[lang] = rows.map(row => row[2]);
+});
+
 function getIllustration(lang, index) {
     const arr = ILLUSTRATIONS[lang];
     if (!arr || !arr[index]) return '✨';
@@ -437,6 +493,7 @@ function updateLetterVisual(index) {
     const [letter, word] = data.letters[index];
     const color = LETTER_COLORS[index % LETTER_COLORS.length];
     letterChar.textContent = letter;
+    letterChar.classList.toggle('long', [...letter].length > 1);
     letterWord.textContent = buildLetterPhrase(currentLang, letter, word);
     letterStage.style.background = color;
     if (letterIllustration) {
@@ -2063,6 +2120,12 @@ function fsExit() {
 function exitAnyFullscreen() {
     if (fsCurrentElement()) fsExit();
     document.querySelectorAll('.fs-fallback-active').forEach(el => el.classList.remove('fs-fallback-active'));
+    document.body.classList.remove('fs-lock');
+}
+function exitFullscreenIfActive(el) {
+    if (!el) return;
+    if (fsCurrentElement() === el) fsExit();
+    el.classList.remove('fs-fallback-active');
     document.body.classList.remove('fs-lock');
 }
 
