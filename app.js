@@ -202,26 +202,37 @@ const MELODIES = {
 };
 
 let melodyLoopHandle = null;
+let melodyTimeouts = [];   // pour pouvoir tout annuler proprement
+
 function playMelody(key, loop = false, soft = false) {
     stopMelody();
     const ctx = getCtx();
+    if (ctx.state === 'suspended') ctx.resume();   // 🔑 débloque l'audio au 1er clic
+
     const seq = MELODIES[key] || MELODIES.twinkle;
+
     const playOnce = () => {
         let t = ctx.currentTime + 0.05;
-        seq.forEach(([note, dur]) => {
-            playTone(NOTE[note], t, dur, soft ? 0.045 : 0.09, 'triangle');
-            t += dur;
+        seq.forEach(([freq, dur]) => {
+            // freq est déjà une fréquence (523, 784...), pas un nom de note
+            playTone(freq, t, dur / 1000, soft ? 0.045 : 0.09, 'triangle');
+            t += dur / 1000;
         });
         return (t - ctx.currentTime) * 1000;
     };
+
     const totalMs = playOnce();
     if (loop) {
         melodyLoopHandle = setInterval(playOnce, totalMs + 900);
     }
 }
+
 function stopMelody() {
     if (melodyLoopHandle) { clearInterval(melodyLoopHandle); melodyLoopHandle = null; }
+    melodyTimeouts.forEach(t => clearTimeout(t));
+    melodyTimeouts = [];
 }
+
 
 /* =========================================================
    FÉLICITATIONS — voix "Bravo !" / "Super !" + petit motif
@@ -1125,19 +1136,20 @@ function setupCanvas() {
 /* =========================================================
    MUSIQUE — playlist de berceuses complètes (synthétisées)
    ========================================================= */
+
 const TRACKS = [
     { name: 'Ah vous dirai-je maman', desc: 'Berceuse traditionnelle française', key: 'twinkle', color: 'var(--coral)', duration: '0:32' },
     { name: 'Frère Jacques', desc: 'Comptine classique douce', key: 'frere_jacques', color: 'var(--sky)', duration: '0:28' },
     { name: 'Au clair de la lune', desc: 'Chanson populaire pour bébé', key: 'clair_lune', color: 'var(--mint)', duration: '0:30' },
-    { name: 'Dodo, l\'enfant do', desc: 'Berceuse française endormeuse', key: 'dodo_enfant', color: 'var(--lavender)', duration: '0:26' },
-    { name: 'Brahms Lullaby', desc: 'La plus célèbre des berceuses', key: 'brahms', color: 'var(--peach)', duration: '0:34' },
+    { name: "Dodo, l'enfant do", desc: 'Berceuse française endormeuse', key: 'dodo_enfant', color: 'var(--lilac)', duration: '0:26' },
+    { name: 'Brahms Lullaby', desc: 'La plus célèbre des berceuses', key: 'brahms', color: 'var(--coral)', duration: '0:34' },
     { name: 'Rock-a-bye Baby', desc: 'Berceuse anglaise traditionnelle', key: 'rockabye', color: 'var(--sky)', duration: '0:28' },
-    { name: 'Twinkle Twinkle Little Star', desc: 'Étoile scintillante apaisante', key: 'twinkle', color: 'var(--yellow)', duration: '0:32' },
+    { name: 'Twinkle Twinkle Little Star', desc: 'Étoile scintillante apaisante', key: 'twinkle', color: 'var(--sun)', duration: '0:32' },
     { name: 'Hush Little Baby', desc: 'Berceuse américaine douce', key: 'hush', color: 'var(--mint)', duration: '0:30' },
     { name: 'Ainsi font font font', desc: 'Comptine à gestes pour bébé', key: 'ainsi_font', color: 'var(--coral)', duration: '0:24' },
-    { name: 'Meunier tu dors', desc: 'Ronde enfantine traditionnelle', key: 'meunier', color: 'var(--lavender)', duration: '0:26' },
-    { name: 'Berceuse de Mozart', desc: 'Mélodie classique apaisante', key: 'mozart', color: 'var(--peach)', duration: '0:36' },
-    { name: 'Sleep Baby Sleep', desc: 'Berceuse douce pour endormir', key: 'sleep_baby', color: 'var(--yellow)', duration: '0:30' },
+    { name: 'Meunier tu dors', desc: 'Ronde enfantine traditionnelle', key: 'meunier', color: 'var(--lilac)', duration: '0:26' },
+    { name: 'Berceuse de Mozart', desc: 'Mélodie classique apaisante', key: 'mozart', color: 'var(--sun)', duration: '0:36' },
+    { name: 'Sleep Baby Sleep', desc: 'Berceuse douce pour endormir', key: 'sleep_baby', color: 'var(--sky)', duration: '0:30' },
 ];
 
 const playlistEl = document.getElementById('playlist');
@@ -1154,8 +1166,13 @@ TRACKS.forEach(t => {
     </div>
     <div class="duration">${t.duration}</div>
   `;
+
     const icon = row.querySelector('.play-icon');
     row.addEventListener('click', () => {
+        // 🔑 débloque l'audio dès la 1ère interaction (iOS/Safari surtout)
+        const ctx = getCtx();
+        if (ctx.state === 'suspended') ctx.resume();
+
         const isPlaying = icon.textContent === '⏸';
         document.querySelectorAll('.playlist .play-icon').forEach(i => i.textContent = '▶');
         stopMelody();
