@@ -2088,11 +2088,13 @@ renderTestimonials();
    STORYTIME — bibliothèque d'histoires + lecteur narré
    ========================================================= */
 const STORIES = [
+    // ---------- HISTOIRES EXISTANTES (avec morale ajoutée) ----------
     {
         id: 'nuage-curieux',
         emoji: '☁️',
         title: 'Le petit nuage curieux',
         desc: "Un tout petit nuage part à la découverte du grand ciel bleu.",
+        moral: "La curiosité nous fait grandir et découvrir de belles choses.",
         stageBg: 'linear-gradient(135deg, #74C7E3, #453B52)',
         pages: [
             { illu: '☁️', text: "Il était une fois un tout petit nuage, tout rond et tout doux, qui vivait haut dans le ciel." },
@@ -2107,6 +2109,7 @@ const STORIES = [
         emoji: '🐰',
         title: 'Le lapin et son doudou',
         desc: "Un petit lapin cherche partout son doudou avant l'heure du dodo.",
+        moral: "Ce qu'on cherche est souvent plus près qu'on ne le croit.",
         stageBg: 'linear-gradient(135deg, #C6A8E0, #453B52)',
         pages: [
             { illu: '🐰', text: "Ce soir, le petit lapin Câlin ne trouve plus son doudou préféré. Où a-t-il bien pu passer ?" },
@@ -2121,6 +2124,7 @@ const STORIES = [
         emoji: '🌱',
         title: 'La petite graine magique',
         desc: "Une graine minuscule rêve de devenir la plus belle fleur du jardin.",
+        moral: "Avec de la patience, les plus belles choses finissent toujours par grandir.",
         stageBg: 'linear-gradient(135deg, #8FD9A8, #453B52)',
         pages: [
             { illu: '🌱', text: "Au fond du jardin, une toute petite graine dormait sous la terre bien chaude." },
@@ -2135,6 +2139,7 @@ const STORIES = [
         emoji: '⭐',
         title: "L'étoile qui n'osait pas briller",
         desc: "Une petite étoile timide apprend à laisser sa lumière briller.",
+        moral: "Chacun est unique et a sa propre lumière à offrir au monde.",
         stageBg: 'linear-gradient(135deg, #FFC857, #453B52)',
         pages: [
             { illu: '✨', text: "Tout en haut du ciel nocturne, une petite étoile n'osait pas briller trop fort, de peur de déranger ses voisines." },
@@ -2142,6 +2147,188 @@ const STORIES = [
             { illu: '🌠', text: "Une nuit, la lune lui murmura : chaque étoile brille à sa façon, et c'est ce qui rend le ciel si beau." },
             { illu: '💫', text: "Rassurée, la petite étoile ferma les yeux et laissa sa lumière sortir, toute douce et toute unique." },
             { illu: '🌙', text: "Depuis ce jour-là, un enfant en bas, en la regardant, fait toujours un vœu avant de s'endormir." }
+        ]
+    },
+
+    // ---------- NOUVELLES HISTOIRES ----------
+    {
+        id: 'tortue-presse',
+        emoji: '🐢',
+        title: 'La tortue qui voulait aller trop vite',
+        desc: "Tortue veut gagner la course, mais elle apprend que la douceur aussi compte.",
+        moral: "La précipitation fait perdre du temps ; la patience fait gagner en sagesse.",
+        stageBg: 'linear-gradient(135deg, #8FD9A8, #3a6b4e)',
+        pages: [
+            { illu: '🐢', text: "Tortue en avait assez d'être toujours la dernière. Elle décida de courir plus vite que le vent." },
+            { illu: '💨', text: "Elle partit en trombe, sans regarder où elle mettait les pattes... et trébucha sur une racine." },
+            { illu: '🐇', text: "Lapin, qui passait par là, l'aida à se relever en souriant : on n'arrive pas plus vite en se dépêchant mal." },
+            { illu: '🌿', text: "Tortue respira un grand coup et repartit, cette fois tranquillement, en regardant le chemin." },
+            { illu: '🏁', text: "Elle arriva essoufflée mais heureuse : elle avait appris que le calme mène plus loin que la course." }
+        ]
+    },
+    {
+        id: 'ourson-partage',
+        emoji: '🐻',
+        title: "L'ourson qui ne voulait pas partager",
+        desc: "Petit Ours garde tous ses jouets pour lui... jusqu'à se sentir bien seul.",
+        moral: "Partager rend heureux, celui qui donne comme celui qui reçoit.",
+        stageBg: 'linear-gradient(135deg, #FF8B6A, #7a3a22)',
+        pages: [
+            { illu: '🐻', text: "Petit Ours avait une montagne de jouets. Mais quand ses amis venaient, il les cachait tous." },
+            { illu: '🚪', text: "Un jour, ils ne vinrent plus du tout. La grotte de Petit Ours était bien silencieuse." },
+            { illu: '🥺', text: "Petit Ours comprit qu'avoir beaucoup de choses ne sert à rien si on est tout seul pour en profiter." },
+            { illu: '🎁', text: "Il alla frapper chez Lapin avec son ballon préféré et lui proposa de jouer ensemble." },
+            { illu: '🤝', text: "Très vite, tous les amis revinrent : partager, c'était bien plus amusant que garder." }
+        ]
+    },
+    {
+        id: 'oiseau-chante',
+        emoji: '🐦',
+        title: "L'oiseau qui avait perdu sa chanson",
+        desc: "Un petit oiseau ne sait plus chanter... il découvre que sa voix est en lui.",
+        moral: "Ce que l'on cherche parfois se trouve déjà au fond de soi.",
+        stageBg: 'linear-gradient(135deg, #74C7E3, #3a5b7a)',
+        pages: [
+            { illu: '🐦', text: "Un matin, Petit Oiseau ouvrit le bec... et aucun son ne sortit. Sa chanson avait disparu." },
+            { illu: '🌳', text: "Il demanda au chêne : as-tu vu ma chanson ? Le chêne murmura : écoute en toi, petit." },
+            { illu: '🌬️', text: "Il demanda au vent, à la rivière, à la lune. Chacun lui répondit : ta chanson t'attend au fond de ton cœur." },
+            { illu: '🌅', text: "Alors Petit Oiseau ferma les yeux, respira l'air du matin... et un filet de musique sortit tout seul." },
+            { illu: '🎵', text: "Depuis, il chante chaque jour, plus fort encore qu'avant, pour tous ceux qui ont perdu la leur." }
+        ]
+    },
+    {
+        id: 'lune-jalouse',
+        emoji: '🌙',
+        title: 'La lune jalouse du soleil',
+        desc: "La lune voudrait briller comme le soleil, jusqu'à découvrir son propre éclat.",
+        moral: "Il ne sert à rien de vouloir être quelqu'un d'autre : on a sa propre beauté.",
+        stageBg: 'linear-gradient(135deg, #C6A8E0, #2a1f42)',
+        pages: [
+            { illu: '🌙', text: "Chaque matin, la lune regardait le soleil se lever et se sentait bien triste." },
+            { illu: '☀️', text: "Comme il brille, se disait-elle. Pourquoi moi je ne peux pas être aussi éclatante ?" },
+            { illu: '🌟', text: "Une étoile lui murmura : mais petite lune, le ciel a besoin de toi la nuit, quand il fait tout noir." },
+            { illu: '🐺', text: "Cette nuit-là, un louveteau perdu trouva son chemin grâce à sa douce lumière." },
+            { illu: '💫', text: "La lune comprit : elle n'était pas moins belle que le soleil, elle était simplement différente." }
+        ]
+    },
+    {
+        id: 'petit-elephant',
+        emoji: '🐘',
+        title: "Le petit éléphant qui oubliait tout",
+        desc: "Petit Éléphant perd sa mémoire... et découvre le pouvoir des amis.",
+        moral: "On n'a pas besoin d'être parfait : demander de l'aide est une force.",
+        stageBg: 'linear-gradient(135deg, #74C7E3, #2a5b6e)',
+        pages: [
+            { illu: '🐘', text: "Petit Éléphant avait un problème : il oubliait tout, tout le temps, même où il avait mis ses cacahuètes." },
+            { illu: '😟', text: "Il se sentait nul. Les autres éléphants, eux, se souvenaient toujours de tout." },
+            { illu: '🐒', text: "Un jour, Singe lui dit : et si on notait ensemble les choses importantes ?" },
+            { illu: '📝', text: "Ils firent une grande liste : les câlins, les rires, les bons repas... et Petit Éléphant la relisait chaque soir." },
+            { illu: '💛', text: "Petit Éléphant comprit que la mémoire ne fait pas tout : l'amitié, elle, retient l'essentiel." }
+        ]
+    },
+    {
+        id: 'chenille-papillon',
+        emoji: '🐛',
+        title: 'La chenille qui ne voulait pas changer',
+        desc: "Chenille a peur de devenir papillon, mais elle finit par s'émerveiller.",
+        moral: "Le changement fait peur, mais il nous ouvre souvent de plus belles ailes.",
+        stageBg: 'linear-gradient(135deg, #8FD9A8, #3a7a5e)',
+        pages: [
+            { illu: '🐛', text: "Chenille rampait tranquillement sur sa feuille, heureuse de sa petite vie verte." },
+            { illu: '🌫️', text: "Un matin, elle sentit quelque chose d'étrange : elle avait envie de s'enrouler dans un cocon." },
+            { illu: '😨', text: "Elle avait peur. Et si elle ne reconnaissait plus rien après ? Et si elle n'était plus elle ?" },
+            { illu: '✨', text: "Elle prit une grande respiration et se laissa envelopper, tout doucement, par la soie chaude." },
+            { illu: '🦋', text: "Quelques jours plus tard, elle ouvrit les yeux... et découvrit qu'elle avait des ailes magnifiques." }
+        ]
+    },
+    {
+        id: 'etoile-mer',
+        emoji: '🌟',
+        title: "L'étoile de mer qui voulait voler",
+        desc: "Une étoile de mer rêve de voler dans le ciel avec les étoiles.",
+        moral: "Nos rêves peuvent changer de forme : l'important est de continuer à rêver.",
+        stageBg: 'linear-gradient(135deg, #74C7E3, #1e3a4a)',
+        pages: [
+            { illu: '🌟', text: "Au fond de l'océan, une petite étoile de mer regardait les étoiles du ciel avec envie." },
+            { illu: '🌊', text: "Comme elles sont belles, se disait-elle. Moi aussi je voudrais briller là-haut." },
+            { illu: '🐠', text: "Un poisson-clown lui dit : ici, tu brilles déjà pour nous, tu égayes notre récif." },
+            { illu: '🪸', text: "L'étoile de mer regarda autour d'elle : les coraux, les poissons, les coquillages... un vrai ciel sous la mer." },
+            { illu: '💙', text: "Elle comprit que son rêve n'était pas perdu : il avait juste pris une autre forme, encore plus belle." }
+        ]
+    },
+    {
+        id: 'grenouille-chante',
+        emoji: '🐸',
+        title: 'La grenouille qui chantait faux',
+        desc: "Grenouille chante faux, mais sa voix unique fait danser l'étang.",
+        moral: "Ce qui nous rend différents est souvent ce qui nous rend précieux.",
+        stageBg: 'linear-gradient(135deg, #8FD9A8, #2e6b4e)',
+        pages: [
+            { illu: '🐸', text: "Grenouille adorait chanter. Mais quand elle ouvrait la bouche, tout l'étang se bouchait les oreilles." },
+            { illu: '😔', text: "Elle se sentait si mal qu'elle décida de ne plus jamais chanter, pour ne pas déranger." },
+            { illu: '🦆', text: "Un jour, un caneton perdu au bord de l'étang entendit son filet de voix et retrouva son chemin." },
+            { illu: '🌙', text: "Le soir, tous les animaux demandèrent à Grenouille de chanter pour eux." },
+            { illu: '🎶', text: "Depuis ce jour, chaque nuit d'été, l'étang entier danse au son de sa voix... unique." }
+        ]
+    },
+    {
+        id: 'arbre-genereux',
+        emoji: '🌳',
+        title: "L'arbre qui donnait tout",
+        desc: "Un grand arbre offre ses fruits, son ombre, ses branches... et apprend à recevoir.",
+        moral: "Donner rend heureux, mais recevoir de l'amour est aussi essentiel.",
+        stageBg: 'linear-gradient(135deg, #8FD9A8, #4a7a3e)',
+        pages: [
+            { illu: '🌳', text: "Il y avait un arbre magnifique qui donnait tout : ses pommes, son ombre, ses branches pour grimper." },
+            { illu: '🧺', text: "Chaque jour, les enfants du village venaient se servir, sans jamais dire merci." },
+            { illu: '🍂', text: "Un automne, l'arbre n'eut plus un seul fruit. Et plus personne ne vint." },
+            { illu: '👧', text: "Seule une petite fille resta, s'assit contre son tronc et lui dit simplement : merci pour tout." },
+            { illu: '💚', text: "L'arbre sentit une chaleur douce l'envahir. Ce jour-là, il comprit qu'il avait aussi besoin d'amour." }
+        ]
+    },
+    {
+        id: 'petit-poisson-orage',
+        emoji: '🐟',
+        title: "Le petit poisson qui avait peur de l'orage",
+        desc: "Petit Poisson tremble au moindre bruit, jusqu'à découvrir sa force intérieure.",
+        moral: "Le courage, ce n'est pas ne pas avoir peur, c'est avancer malgré la peur.",
+        stageBg: 'linear-gradient(135deg, #74C7E3, #1c3a52)',
+        pages: [
+            { illu: '🐟', text: "Petit Poisson vivait dans un joli lagon. Mais dès qu'un orage grondait, il se cachait dans son corail." },
+            { illu: '⛈️', text: "Un jour, une grande tempête secoua toute la mer. Petit Poisson tremblait de partout." },
+            { illu: '🐠', text: "Sa maman lui dit tout bas : regarde autour de toi, tous les poissons ont peur aussi, mais ils nagent." },
+            { illu: '💪', text: "Petit Poisson décida de nager un peu, puis un peu plus, et encore un peu." },
+            { illu: '🌈', text: "L'orage passa. Petit Poisson avait découvert qu'il pouvait être courageux, même quand il tremblait." }
+        ]
+    },
+    {
+        id: 'nuage-pluie',
+        emoji: '🌧️',
+        title: 'Le nuage qui ne voulait pas pleurer',
+        desc: "Un petit nuage retient ses larmes, jusqu'à ce qu'il comprenne leur beauté.",
+        moral: "Pleurer n'est pas une faiblesse : parfois, c'est ce qui fait fleurir la vie.",
+        stageBg: 'linear-gradient(135deg, #74C7E3, #3a4a5e)',
+        pages: [
+            { illu: '🌧️', text: "Petit Nuage avait une chose à l'intérieur qui pesait lourd, mais il ne voulait pas pleurer." },
+            { illu: '😶', text: "Il serrait très fort ses gouttes, de peur que les autres nuages se moquent de lui." },
+            { illu: '🌾', text: "En bas, les fleurs commençaient à avoir soif, les champs à devenir jaunes." },
+            { illu: '💧', text: "Alors Petit Nuage se laissa aller, doucement, et ses larmes tombèrent comme une pluie fine." },
+            { illu: '🌸', text: "Partout, la terre fleurit. Petit Nuage comprit que ses larmes avaient fait renaître la vie." }
+        ]
+    },
+    {
+        id: 'etoile-partagee',
+        emoji: '💫',
+        title: "L'enfant qui comptait les étoiles",
+        desc: "Un enfant veut garder les étoiles pour lui... jusqu'à comprendre leur plus belle magie.",
+        moral: "Les plus belles choses ne s'achètent pas : elles se partagent.",
+        stageBg: 'linear-gradient(135deg, #C6A8E0, #1a1a3a)',
+        pages: [
+            { illu: '👦', text: "Un soir, un enfant décida de compter toutes les étoiles du ciel. Il voulait les avoir pour lui tout seul." },
+            { illu: '🌠', text: "Il compta une, deux, dix, cent... Il n'arrivait jamais à la fin, et cela le rendait triste." },
+            { illu: '👧', text: "Sa sœur s'assit à côté de lui et lui dit : et si on les regardait ensemble, sans les compter ?" },
+            { illu: '🌌', text: "Ils restèrent longtemps, main dans la main, à admirer le ciel sans rien dire." },
+            { illu: '💛', text: "L'enfant comprit : les étoiles ne se gardent pas, elles se contemplent et se partagent." }
         ]
     }
 ];
@@ -2158,6 +2345,7 @@ function renderStoryLibrary() {
             <span class="story-emoji">${story.emoji}</span>
             <h3>${story.title}</h3>
             <p>${story.desc}</p>
+            <span class="story-moral-preview">💡 ${story.moral}</span>
             <span class="story-play-cta">▶ Écouter</span>
         </button>
     `).join('');
@@ -2213,6 +2401,10 @@ function showStoryPage(index, autoplay) {
 
     renderStoryDots();
 
+    // Cache la morale tant qu'on n'est pas à la dernière page
+    const moralBox = document.getElementById('storyMoralBox');
+    if (moralBox) moralBox.classList.remove('active');
+
     if (autoplay !== false) {
         speakStoryPage();
     } else {
@@ -2224,7 +2416,14 @@ function speakStoryPage() {
     if (!window.speechSynthesis || !currentStory) return;
     window.speechSynthesis.cancel();
     const page = currentStory.pages[currentPageIndex];
-    const utter = new SpeechSynthesisUtterance(page.text);
+
+    // Si c'est la dernière page, on lit le texte PUIS la morale
+    const isLastPage = currentPageIndex === currentStory.pages.length - 1;
+    const textToSpeak = isLastPage
+        ? page.text + " ... La leçon de cette histoire : " + currentStory.moral
+        : page.text;
+
+    const utter = new SpeechSynthesisUtterance(textToSpeak);
     utter.lang = 'fr-FR';
     utter.rate = 0.92;
     utter.pitch = 1.05;
@@ -2233,6 +2432,14 @@ function speakStoryPage() {
     utter.onend = () => {
         storyIsPlaying = false;
         updatePlayPauseBtn();
+        // À la fin de la dernière page, on affiche la morale
+        if (isLastPage) {
+            const moralBox = document.getElementById('storyMoralBox');
+            const moralText = document.getElementById('storyMoralText');
+            if (moralText) moralText.textContent = currentStory.moral;
+            if (moralBox) moralBox.classList.add('active');
+            celebrate(document.getElementById('storyPlayer'));
+        }
     };
     window.speechSynthesis.speak(utter);
 }
@@ -2241,6 +2448,18 @@ function stopStoryNarration() {
     if (window.speechSynthesis) window.speechSynthesis.cancel();
     storyIsPlaying = false;
     updatePlayPauseBtn();
+}
+
+function speakMoralOnly() {
+    if (!currentStory || !window.speechSynthesis) return;
+    window.speechSynthesis.cancel();
+    const utter = new SpeechSynthesisUtterance(
+        "La leçon de cette histoire : " + currentStory.moral
+    );
+    utter.lang = 'fr-FR';
+    utter.rate = 0.9;
+    utter.pitch = 1.1;
+    window.speechSynthesis.speak(utter);
 }
 
 function updatePlayPauseBtn() {
