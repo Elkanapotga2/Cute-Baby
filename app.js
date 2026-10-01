@@ -294,6 +294,26 @@ const ALPHABETS = {
             ['Ш', 'Шар'], ['Щ', 'Щенок'], ['Ъ', 'Объект'], ['Ы', 'Мы'], ['Ь', 'Мать'],
             ['Э', 'Экскаватор'], ['Ю', 'Юла'], ['Я', 'Яблоко']
         ]
+    },
+
+    // ⚠️ À FAIRE VALIDER par un locuteur natif avant publication :
+    // orthographe, tons, et choix des mots. Complète les listes lettre par lettre.
+    // Pas de synthèse vocale native pour ces langues : on utilise la voix
+    // française, qui lira les mots de façon approximative.
+    ewo: {
+        voiceLang: 'fr-FR',
+        letters: [
+            ['N', 'Nda'],      // maison
+            ['N', 'Nkul'],     // tambour
+            // ['A', '...'], ['B', '...'], ['D', '...'], ['E', '...'], ['Ɛ', '...'], ...
+        ]
+    },
+    bas: {
+        voiceLang: 'fr-FR',
+        letters: [
+            ['N', 'Ndap'],     // maison
+            // ['A', '...'], ['B', '...'], ['K', '...'], ['Ŋ', '...'], ['Ɔ', '...'], ...
+        ]
     }
 };
 
@@ -314,7 +334,9 @@ const ILLUSTRATIONS = {
         '✈️', '🦌', '🐦', '🦌', '🐘', '🐱', '📖', '🍋', '🍌', '⭐', '🌙', '🌹', '✋'],
     ru: ['🍉', '🍌', '🐺', '🍄', '🏠', '🌲', '🦔', '🦒', '🐰', '🧸', '🥣', '🐱', '🦁', '👩', '👃',
         '☁️', '🐼', '🌈', '☀️', '🐯', '🐥', '🍏', '🐹', '🌸', '🐢', '🎈', '🐶', '📦', '🙌', '👩',
-        '🚜', '🌀', '🍎']
+        '🚜', '🌀', '🍎'],
+    ewo: ['🏠', '🥁'],
+    bas: ['🏠'],
 };
 function getIllustration(lang, index) {
     const arr = ILLUSTRATIONS[lang];
@@ -331,7 +353,9 @@ const PHRASE_TEMPLATES = {
     zh: (letter, word) => `${letter} 就像 ${word}`,
     ja: (letter, word) => `${letter} は ${word} の ${letter}`,
     ar: (letter, word) => `${letter} مثل ${word}`,
-    ru: (letter, word) => `${letter} как ${word}`
+    ru: (letter, word) => `${letter} как ${word}`,
+    ewo: (letter, word) => `${letter} comme ${word}`,
+    bas: (letter, word) => `${letter} comme ${word}`,
 };
 function buildLetterPhrase(lang, letter, word) {
     const template = PHRASE_TEMPLATES[lang] || PHRASE_TEMPLATES.en;
@@ -372,6 +396,38 @@ document.getElementById('alphaBack').addEventListener('click', () => {
     alphabetPlayer.classList.remove('active');
     langScreen.style.display = 'flex';
 });
+
+/* ---------- Carrousel des langues (flèches gauche / droite) ---------- */
+(function initLangCarousel() {
+    const track = document.getElementById('langOptions');
+    const prev = document.getElementById('langPrev');
+    const next = document.getElementById('langNext');
+    if (!track || !prev || !next) return;
+
+    function step() {
+        const card = track.querySelector('.lang-card');
+        const gap = parseFloat(getComputedStyle(track).columnGap) || 24;
+        return card ? (card.offsetWidth + gap) * 2 : 300;   // avance de 2 langues
+    }
+    function updateArrows() {
+        const max = track.scrollWidth - track.clientWidth;
+        prev.classList.toggle('disabled', track.scrollLeft <= 4);
+        next.classList.toggle('disabled', track.scrollLeft >= max - 4);
+        // Si tout tient à l'écran, on masque les flèches
+        const needed = max > 4;
+        prev.style.visibility = next.style.visibility = needed ? 'visible' : 'hidden';
+    }
+
+    prev.addEventListener('click', () => track.scrollBy({ left: -step(), behavior: 'smooth' }));
+    next.addEventListener('click', () => track.scrollBy({ left: step(), behavior: 'smooth' }));
+    track.addEventListener('scroll', updateArrows, { passive: true });
+    window.addEventListener('resize', updateArrows);
+
+    // L'onglet Alphabet est caché au départ : on recalcule à son ouverture
+    document.querySelector('[data-page="alphabet"]')
+        .addEventListener('click', () => setTimeout(updateArrows, 80));
+    updateArrows();
+})();
 
 // Met à jour uniquement l'affichage (lettre, mot, couleur, illustration,
 // guide de tracé) sans déclencher la voix ni la mélodie — réutilisé par
