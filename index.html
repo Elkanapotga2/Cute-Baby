@@ -2505,542 +2505,622 @@
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
     </style>
+    <link rel="stylesheet" href="gateway.css">
 </head>
 
-<body>
-
-    <!-- ===================== NAV ===================== -->
-    <div class="nav-wrap">
-        <div class="logo">Cute<span>Baby</span></div>
-        <div class="nav-right">
-            <nav class="bubble-nav" id="bubbleNav">
-                <button class="bubble-btn active" data-page="home"><span class="emoji">🏠</span><span
-                        class="label">Accueil</span></button>
-                <button class="bubble-btn" data-page="alphabet"><span class="emoji">🔤</span><span
-                        class="label">Alphabet</span></button>
-                <button class="bubble-btn" data-page="dessiner"><span class="emoji">🎨</span><span
-                        class="label">Dessiner</span></button>
-                <button class="bubble-btn" data-page="musique"><span class="emoji">🎵</span><span
-                        class="label">Musique</span></button>
-                <button class="bubble-btn" data-page="jeux"><span class="emoji">🧩</span><span
-                        class="label">Jeux</span></button>
-                <button class="bubble-btn" data-page="storytime"><span class="emoji">📖</span><span
-                        class="label">Storytime</span></button>
-                <button class="bubble-btn" data-page="astuces"><span class="emoji">💛</span><span class="label">Astuces
-                        mamans</span></button>
-            </nav>
-            <button class="settings-toggle-btn" id="settingsToggle" aria-label="Paramètres et abonnement">⚙️</button>
-            <button class="theme-toggle-btn" id="themeToggle" aria-label="Passer en mode nuit">🌙</button>
+<body data-zone="gateway"><!-- ===================== PORTE D'ENTRÉE : LES 4 CERCLES ===================== -->
+    <main id="gateway">
+        <div class="gw-bg">
+            <span class="gw-orb o1"></span>
+            <span class="gw-orb o2"></span>
+            <span class="gw-orb o3"></span>
         </div>
+
+        <header class="gw-top">
+            <div class="gw-logo">Cute<span>Baby</span></div>
+            <button class="gw-theme-btn js-theme-btn" id="gatewayThemeToggle"
+                aria-label="Passer en mode nuit">🌙</button>
+        </header>
+
+        <div class="gw-main">
+            <span class="gw-eyebrow">✨ Un compagnon pour toute la vie</span>
+            <h1 class="gw-title">Quel est ton <span>cercle</span> ?</h1>
+            <p class="gw-sub">Choisis ta tranche d'âge : chaque cercle ouvre un univers pensé pour toi.</p>
+
+            <div class="gw-circles">
+                <div class="gw-item" style="--c1:#FF8B6A;--c2:#FFC857;--i:0">
+                    <button class="gw-circle" data-zone="kids" aria-label="Cercle 0 à 7 ans">
+                        <span class="gw-ring"></span>
+                        <span class="gw-emoji">🧸</span>
+                        <span class="gw-age">0–7</span>
+                        <span class="gw-unit">ans</span>
+                    </button>
+                    <span class="gw-caption"><b>Les petits</b>Alphabet, jeux, histoires</span>
+                </div>
+
+                <div class="gw-item" style="--c1:#4FA9D6;--c2:#8FD9A8;--i:1">
+                    <button class="gw-circle" data-zone="tweens" aria-label="Cercle 8 à 12 ans">
+                        <span class="gw-ring"></span>
+                        <span class="gw-emoji">🚀</span>
+                        <span class="gw-age">8–12</span>
+                        <span class="gw-unit">ans</span>
+                    </button>
+                    <span class="gw-caption"><b>Les explorateurs</b>Défis, logique, créativité</span>
+                </div>
+
+                <div class="gw-item" style="--c1:#9B6FD0;--c2:#F08BB5;--i:2">
+                    <button class="gw-circle" data-zone="teens" aria-label="Cercle 13 à 18 ans">
+                        <span class="gw-ring"></span>
+                        <span class="gw-emoji">🎧</span>
+                        <span class="gw-age">13–18</span>
+                        <span class="gw-unit">ans</span>
+                    </button>
+                    <span class="gw-caption"><b>Les ados</b>Études, avenir, bien-être</span>
+                </div>
+
+                <div class="gw-item" style="--c1:#2E3F6B;--c2:#74C7E3;--i:3">
+                    <button class="gw-circle" data-zone="adults" aria-label="Cercle 18 ans et plus">
+                        <span class="gw-ring"></span>
+                        <span class="gw-emoji">🌟</span>
+                        <span class="gw-age">18+</span>
+                        <span class="gw-unit">ans</span>
+                    </button>
+                    <span class="gw-caption"><b>Les grands</b>Carrière, finances, équilibre</span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- ===================== TON SITE BÉBÉ ACTUEL (cercle 0-7) ===================== -->
+    <div id="babyApp">
+        <!-- ===================== NAV ===================== -->
+        <div class="nav-wrap">
+            <div class="logo">Cute<span>Baby</span></div>
+            <div class="nav-right">
+                <nav class="bubble-nav" id="bubbleNav">
+                    <button class="bubble-btn active" data-page="home"><span class="emoji">🏠</span><span
+                            class="label">Accueil</span></button>
+                    <button class="bubble-btn" data-page="alphabet"><span class="emoji">🔤</span><span
+                            class="label">Alphabet</span></button>
+                    <button class="bubble-btn" data-page="dessiner"><span class="emoji">🎨</span><span
+                            class="label">Dessiner</span></button>
+                    <button class="bubble-btn" data-page="musique"><span class="emoji">🎵</span><span
+                            class="label">Musique</span></button>
+                    <button class="bubble-btn" data-page="jeux"><span class="emoji">🧩</span><span
+                            class="label">Jeux</span></button>
+                    <button class="bubble-btn" data-page="storytime"><span class="emoji">📖</span><span
+                            class="label">Storytime</span></button>
+                    <button class="bubble-btn" data-page="astuces"><span class="emoji">💛</span><span
+                            class="label">Astuces
+                            mamans</span></button>
+
+
+                </nav>
+                <div class="nav-right">
+                    <nav class="bubble-nav" id="bubbleNav"> ... </nav>
+                    <button class="settings-toggle-btn" id="backToGateway" aria-label="Changer de cercle"
+                        title="Changer de cercle">⭕</button>
+                    <button class="settings-toggle-btn" id="settingsToggle"
+                        aria-label="Paramètres et abonnement">⚙️</button>
+                    <button class="theme-toggle-btn js-theme-btn" id="themeToggle"
+                        aria-label="Passer en mode nuit">🌙</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===================== HOME ===================== -->
+        <section id="home" class="page active">
+            <div class="hero-media-wrap" style="position:absolute;inset:0;">
+                <video class="hero-media" id="heroVideo" autoplay muted loop playsinline poster="">
+                    <source src="assets/hero-baby.mp4" type="video/mp4">
+                </video>
+                <div class="hero-fallback" id="heroFallback"></div>
+            </div>
+            <div class="hero-overlay"></div>
+            <div class="floating-blob"
+                style="width:90px;height:90px;background:var(--sun);top:18%;left:10%;animation-delay:0s;"></div>
+            <div class="floating-blob"
+                style="width:60px;height:60px;background:var(--mint);top:65%;left:15%;animation-delay:1.2s;"></div>
+            <div class="floating-blob"
+                style="width:70px;height:70px;background:var(--sky);top:22%;right:12%;animation-delay:0.6s;"></div>
+            <div class="floating-blob"
+                style="width:44px;height:44px;background:var(--coral);top:70%;right:18%;animation-delay:1.8s;"></div>
+
+            <div class="hero-content">
+                <span class="hero-eyebrow">✨ Un monde tout doux pour bébé</span>
+                <h1 class="hero-title">Bienvenue sur<br><span class="accent">Cute Baby</span></h1>
+                <p class="hero-sub">Alphabet en musique, dessin magique, comptines et jeux — et plein de conseils
+                    tendres
+                    pour les mamans, réunis au même endroit.</p>
+                <div class="hero-actions">
+                    <button class="pill-btn primary" data-page="alphabet">Découvrir l'alphabet</button>
+                    <button class="pill-btn ghost" data-page="astuces">Astuces pour mamans</button>
+                </div>
+            </div>
+        </section>
+
+        <div class="section-inner" style="padding-top:70px;">
+            <div class="section-header">
+                <span class="section-kicker" style="background:#FFE9DC;color:var(--coral-deep);">À explorer</span>
+                <h2 class="section-title">Six univers pour grandir en douceur</h2>
+            </div>
+            <div class="home-grid">
+                <div class="home-card" data-page="alphabet">
+                    <div class="icon-badge" style="background:#FFE9DC;">🔤</div>
+                    <h3>Alphabet</h3>
+                    <p>Les lettres défilent en couleur, prononcées à voix haute, sur une petite mélodie.</p>
+                </div>
+                <div class="home-card" data-page="dessiner">
+                    <div class="icon-badge" style="background:#E7E2F5;">🎨</div>
+                    <h3>Dessiner</h3>
+                    <p>Un tableau noir magique où chaque geste laisse une trace de couleur.</p>
+                </div>
+                <div class="home-card" data-page="musique">
+                    <div class="icon-badge" style="background:#DDF3F1;">🎵</div>
+                    <h3>Musique</h3>
+                    <p>Une playlist de berceuses douces, et la possibilité d'en chercher d'autres.</p>
+                </div>
+                <div class="home-card" data-page="jeux">
+                    <div class="icon-badge" style="background:#FBE3EE;">🧩</div>
+                    <h3>Jeux</h3>
+                    <p>Des petits jeux pensés pour les tout-petits, à découvrir en famille.</p>
+                </div>
+                <div class="home-card" data-page="storytime">
+                    <div class="icon-badge" style="background:#FFF3D6;">📖</div>
+                    <h3>Storytime</h3>
+                    <p>De petites histoires animées et racontées à voix haute, à écouter blotti contre bébé.</p>
+                </div>
+                <div class="home-card" data-page="astuces">
+                    <div class="icon-badge" style="background:#F0E7FA;">💛</div>
+                    <h3>Astuces pour mamans</h3>
+                    <p>Grossesse, accouchement, allaitement : des conseils bienveillants, pas à pas.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===================== ALPHABET ===================== -->
+        <section id="alphabet" class="page">
+            <div class="section-inner">
+                <div class="lang-select-screen" id="langScreen">
+                    <div class="section-header" style="margin-bottom:0;">
+                        <span class="section-kicker" style="background:#FFE9DC;color:var(--coral-deep);">Alphabet</span>
+                        <h2 class="section-title">Dans quelle langue veux-tu apprendre ?</h2>
+                        <p class="section-sub">Choisis une langue pour commencer à découvrir les lettres.</p>
+                    </div>
+                    <div class="lang-carousel">
+                        <button class="round-btn lang-arrow" id="langPrev" aria-label="Langues précédentes">◀</button>
+
+                        <div class="lang-options" id="langOptions">
+                            <button class="lang-card" data-lang="fr"><span class="flag">🇫🇷</span><span
+                                    class="lang-name">Français</span></button>
+                            <button class="lang-card" data-lang="en"><span class="flag">🇬🇧</span><span
+                                    class="lang-name">English</span></button>
+                            <button class="lang-card" data-lang="zh"><span class="flag">🇨🇳</span><span
+                                    class="lang-name">中文</span></button>
+                            <button class="lang-card" data-lang="ja"><span class="flag">🇯🇵</span><span
+                                    class="lang-name">日本語</span></button>
+                            <button class="lang-card" data-lang="ar"><span class="flag">🇸🇦</span><span
+                                    class="lang-name">العربية</span></button>
+                            <button class="lang-card" data-lang="ru"><span class="flag">🇷🇺</span><span
+                                    class="lang-name">Русский</span></button>
+                            <!-- Langues locales africaines -->
+                            <button class="lang-card" data-lang="ewo"><span class="flag">🇨🇲</span><span
+                                    class="lang-name">Ewondo</span></button>
+                            <button class="lang-card" data-lang="bas"><span class="flag">🇨🇲</span><span
+                                    class="lang-name">Bassa</span></button>
+                            <button class="lang-card" data-lang="bam"><span class="flag">🇨🇲</span><span
+                                    class="lang-name">Bamiléké</span></button>
+                            <button class="lang-card" data-lang="bul"><span class="flag">🇨🇲</span><span
+                                    class="lang-name">Bulu</span></button>
+                            <button class="lang-card" data-lang="ful"><span class="flag">🇨🇲</span><span
+                                    class="lang-name">Fulfuldé</span></button>
+                            <button class="lang-card" data-lang="dua"><span class="flag">🇨🇲</span><span
+                                    class="lang-name">Douala</span></button>
+                        </div>
+
+                        <button class="round-btn lang-arrow" id="langNext" aria-label="Langues suivantes">▶</button>
+                    </div>
+                </div>
+
+                <div class="alphabet-player" id="alphabetPlayer">
+                    <button class="back-link" id="alphaBack">← Changer de langue</button>
+                    <div class="letter-stage" id="letterStage">
+                        <span class="letter-char" id="letterChar">A</span>
+                        <span class="letter-illustration bounce" id="letterIllustration">🍍</span>
+                        <canvas class="trace-canvas" id="traceCanvas"></canvas>
+                    </div>
+                    <div class="letter-word" id="letterWord">A comme Ananas</div>
+                    <div class="alphabet-controls">
+                        <button class="round-btn" id="prevLetter">◀</button>
+                        <button class="round-btn big" id="sayLetter">🔊</button>
+                        <button class="round-btn" id="nextLetter">▶</button>
+                    </div>
+                    <div class="melody-toggle">
+                        <span>Mélodie douce</span>
+                        <div class="switch on" id="melodySwitch"></div>
+                    </div>
+                    <div class="alphabet-extra-controls">
+                        <button class="pill-toggle-btn" id="autoplayToggle">▶️ Lecture auto</button>
+                        <button class="pill-toggle-btn" id="songBtn">🎵 Chanson</button>
+                        <button class="pill-toggle-btn" id="traceToggle">✏️ Tracer la lettre</button>
+                    </div>
+                    <div class="trace-tools" id="traceTools">
+                        <button class="round-btn" id="traceClear">🧽</button>
+                        <button class="round-btn" id="traceDone">✅</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===================== DESSINER ===================== -->
+        <section id="dessiner" class="page">
+            <div class="draw-wrap">
+                <span class="section-kicker" style="background:#262133;color:var(--sun);">Dessiner</span>
+                <h2 class="section-title">Touche, glisse, crée !</h2>
+                <p class="section-sub">Pose le doigt sur le tableau : chaque trait devient une jolie couleur.</p>
+                <div class="draw-canvas-wrap" id="drawStageWrap">
+                    <canvas id="drawCanvas" width="900" height="560"></canvas>
+                    <div class="draw-toolbar">
+                        <button class="tool-btn" id="clearCanvas">🧽 Effacer</button>
+                        <div class="brush-selector">
+                            <button class="tool-btn brush-btn active" data-brush="rainbow">
+                                <span class="brush-dot rainbow-dot"></span> Arc-en-ciel
+                            </button>
+                            <button class="tool-btn brush-btn" data-brush="star">
+                                ⭐ Étoile
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===================== MUSIQUE ===================== -->
+        <section id="musique" class="page">
+            <div class="section-inner">
+                <div class="section-header">
+                    <span class="section-kicker" style="background:#DDF3F1;color:#1c8c82;">Musique</span>
+                    <h2 class="section-title">La playlist de bébé</h2>
+                    <p class="section-sub">De douces berceuses traditionnelles, à écouter à tout moment.</p>
+                </div>
+                <div class="playlist" id="playlist"></div>
+                <div class="search-more">
+                    <span style="font-weight:700;">🔍 Chercher d'autres musiques :</span>
+                    <input type="text" id="musicSearch" placeholder="Ex. berceuse, comptine, musique douce...">
+                    <button id="musicSearchBtn">Rechercher</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===================== JEUX ===================== -->
+        <section id="jeux" class="page">
+            <div class="section-inner">
+                <div class="section-header">
+                    <span class="section-kicker" style="background:#FBE3EE;color:#c23f7c;">Jeux</span>
+                    <h2 class="section-title">L'heure de jouer !</h2>
+                    <p class="section-sub">Des petits jeux simples et amusants, adaptés aux tout-petits.</p>
+                </div>
+                <div class="games-grid">
+                    <div class="game-card">
+                        <h3>🫧 Éclate les bulles</h3>
+                        <p>Des bulles colorées flottent à l'écran : tape dessus pour les faire éclater.</p>
+                        <button class="play-cta" data-game="bubbles">Jouer</button>
+                        <div class="game-stage" id="stage-bubbles">
+                            <div class="bubbles-area" id="bubblesArea"></div>
+                            <div class="score-line">Bulles éclatées : <span id="bubbleScore">0</span></div>
+                        </div>
+                    </div>
+                    <div class="game-card">
+                        <h3>🎨 Trouve la couleur</h3>
+                        <p>Un nom de couleur s'affiche : touche le bon rond pour gagner un point.</p>
+                        <button class="play-cta" data-game="colors">Jouer</button>
+                        <div class="game-stage" id="stage-colors">
+                            <div class="color-prompt">Trouve : <span id="colorTarget">Rouge</span></div>
+                            <div class="color-options" id="colorOptions"></div>
+                            <div class="score-line">Bonnes réponses : <span id="colorScore">0</span></div>
+                        </div>
+                    </div>
+                    <div class="game-card">
+                        <h3>🔺 Trouve la forme</h3>
+                        <p>Une forme géométrique s'affiche : touche la bonne figure pour gagner un point.</p>
+                        <button class="play-cta" data-game="shapes">Jouer</button>
+                        <div class="game-stage" id="stage-shapes">
+                            <div class="shape-prompt">Trouve : <span id="shapeTarget">Carré</span></div>
+                            <div class="shape-options" id="shapeOptions"></div>
+                            <div class="score-line">Bonnes réponses : <span id="shapeScore">0</span></div>
+                        </div>
+                    </div>
+                    <div class="game-card">
+                        <h3>🐣 Mémory des animaux</h3>
+                        <p>Retourne les cartes deux par deux pour retrouver les paires d'animaux.</p>
+                        <button class="play-cta" data-game="memory">Jouer</button>
+                        <div class="game-stage" id="stage-memory">
+                            <div class="memory-grid" id="memoryGrid"></div>
+                            <div class="score-line">Paires trouvées : <span id="memoryScore">0</span> / 8</div>
+                        </div>
+                    </div>
+                    <div class="game-card">
+                        <h3>🧩 Puzzle numéroté</h3>
+                        <p>Fais glisser les cases pour remettre les chiffres de 1 à 8 dans l'ordre.</p>
+                        <button class="play-cta" data-game="puzzle">Jouer</button>
+                        <div class="game-stage" id="stage-puzzle">
+                            <div class="puzzle-grid" id="puzzleGrid"></div>
+                            <button class="puzzle-new-btn" id="puzzleNew">🔀 Nouveau puzzle</button>
+                            <div class="score-line">Coups joués : <span id="puzzleMoves">0</span></div>
+                        </div>
+                    </div>
+                    <div class="game-card">
+                        <h3>🔊 Qui fait quel bruit ?</h3>
+                        <p>Associe chaque animal au cri qu'il fait, en touchant les deux cartes qui vont ensemble.</p>
+                        <button class="play-cta" data-game="matchsound">Jouer</button>
+                        <div class="game-stage" id="stage-matchsound">
+                            <div class="match-prompt">Relie l'animal à son cri !</div>
+                            <div class="match-columns">
+                                <div class="match-column" id="matchLeft"></div>
+                                <div class="match-column" id="matchRight"></div>
+                            </div>
+                            <div class="score-line">Bonnes paires : <span id="matchScore">0</span> / 6</div>
+                        </div>
+                    </div>
+
+                    <div class="game-card">
+                        <h3>🎆 Feux d'artifice</h3>
+                        <p>Touche l'écran pour faire exploser de magnifiques feux d'artifice colorés.</p>
+                        <button class="play-cta" data-game="fireworks">Jouer</button>
+                        <div class="game-stage" id="stage-fireworks">
+                            <div class="fireworks-stage-area" id="fireworksArea">
+                                <canvas id="fireworksCanvas"></canvas>
+                                <div class="fireworks-hint">✨ Touche l'écran pour un feu d'artifice</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="search-more games">
+                    <span style="font-weight:700;">🔍 Chercher d'autres jeux :</span>
+                    <input type="text" id="gameSearch" placeholder="Ex. jeux d'éveil, coloriage, puzzle bébé...">
+                    <button id="gameSearchBtn" style="background:var(--coral);">Rechercher</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===================== STORYTIME ===================== -->
+        <section id="storytime" class="page">
+            <div class="section-inner">
+                <div class="section-header">
+                    <span class="section-kicker" style="background:#FFF3D6;color:#a3720f;">Storytime</span>
+                    <h2 class="section-title">De petites histoires à écouter</h2>
+                    <p class="section-sub">Choisis une histoire : elle est racontée à voix haute, page après page,
+                        avec une jolie illustration à chaque fois.</p>
+                </div>
+                <div class="story-library" id="storyLibrary"></div>
+
+                <div class="story-player" id="storyPlayer">
+                    <button class="back-link" id="storyBack">← Retour aux histoires</button>
+                    <div class="story-stage" id="storyStage">
+                        <span class="story-illustration" id="storyIllustration">📖</span>
+                        <p class="story-text" id="storyText">Il était une fois...</p>
+                    </div>
+                    <div class="story-progress-dots" id="storyDots"></div>
+                    <div class="story-controls">
+                        <button class="round-btn" id="storyPrev">◀</button>
+                        <button class="round-btn big" id="storyPlayPause">🔊</button>
+                        <button class="round-btn" id="storyNext">▶</button>
+                    </div>
+                    <div class="story-moral-box" id="storyMoralBox">
+                        <span class="moral-icon">💡</span>
+                        <div>
+                            <strong>La leçon de cette histoire :</strong>
+                            <p id="storyMoralText"></p>
+                        </div>
+                        <button class="moral-listen-btn" onclick="speakMoralOnly()"
+                            title="Réécouter la morale">🔊</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===================== ASTUCES MAMANS ===================== -->
+        <section id="astuces" class="page">
+            <div class="section-inner">
+                <div class="section-header">
+                    <span class="section-kicker" style="background:#F0E7FA;color:#7a4fb0;">Astuces pour mamans</span>
+                    <h2 class="section-title">Des conseils tout en douceur</h2>
+                    <p class="section-sub">Cinq étapes du chemin, une checklist, des articles et une communauté de
+                        mamans — tout pour t'accompagner.</p>
+                </div>
+
+                <!-- 17. CARROUSEL DE CONSEILS -->
+                <div class="carousel-wrap">
+                    <div class="carousel-viewport">
+                        <div class="carousel-track" id="carouselTrack">
+                            <div class="carousel-slide slide-bg-grossesse">
+                                <span class="slide-decor" style="top:14px;left:20px;">🌿</span>
+                                <span class="slide-decor" style="bottom:16px;right:24px;animation-delay:1.4s;">🌅</span>
+                                <span class="a-icon">🤰</span>
+                                <h3>Pendant la grossesse</h3>
+                                <p>Chaque grossesse a son propre rythme. Voici quelques repères pour vivre cette période
+                                    avec plus de sérénité :</p>
+                                <ul>
+                                    <li>Bois régulièrement de l'eau et mange varié : fruits, légumes, protéines et
+                                        bonnes
+                                        graisses.</li>
+                                    <li>Repose-toi dès que le besoin s'en fait sentir, même en journée — la fatigue est
+                                        normale.</li>
+                                    <li>Bouge en douceur : marche, natation ou yoga prénatal aident le corps à
+                                        s'adapter.</li>
+                                    <li>Prépare une valise de maternité un mois avant le terme, pour partir
+                                        sereinement.</li>
+                                    <li>Parle à ton bébé : dès le 2ᵉ trimestre, il perçoit déjà les sons et les voix
+                                        familières.</li>
+                                </ul>
+                                <div class="a-note">Ces conseils sont généraux. Pour toute question médicale, consulte
+                                    ta sage-femme ou ton médecin.</div>
+                            </div>
+
+                            <div class="carousel-slide slide-bg-accouchement">
+                                <span class="slide-decor" style="top:18px;right:26px;">🌸</span>
+                                <span class="slide-decor" style="bottom:20px;left:22px;animation-delay:0.8s;">☁️</span>
+                                <span class="a-icon">🌸</span>
+                                <h3>Pendant l'accouchement</h3>
+                                <p>Le jour J approche : voici de quoi t'aider à te sentir plus prête et plus confiante.
+                                </p>
+                                <ul>
+                                    <li>Prépare un plan de naissance simple avec tes souhaits, tout en restant
+                                        flexible.</li>
+                                    <li>Travaille ta respiration à l'avance : elle t'aidera à traverser chaque
+                                        contraction.</li>
+                                    <li>Change de position régulièrement — debout, à quatre pattes, sur un ballon — pour
+                                        soulager la douleur.</li>
+                                    <li>Entoure-toi d'une présence rassurante : partenaire, doula ou sage-femme.</li>
+                                    <li>Fais confiance à ton corps : il sait, étape par étape, comment accueillir ton
+                                        bébé.</li>
+                                </ul>
+                                <div class="a-note">Chaque accouchement est unique. L'équipe médicale qui t'accompagne
+                                    reste ta meilleure ressource le jour venu.</div>
+                            </div>
+
+                            <div class="carousel-slide slide-bg-allaitement">
+                                <span class="slide-decor" style="top:16px;left:24px;">🍃</span>
+                                <span class="slide-decor" style="bottom:18px;right:20px;animation-delay:1.1s;">🌊</span>
+                                <span class="a-icon">🍼</span>
+                                <h3>Pendant l'allaitement</h3>
+                                <p>Que tu allaites ou donnes le biberon, l'essentiel est de trouver ton propre rythme.
+                                </p>
+                                <ul>
+                                    <li>Installe-toi confortablement, avec un coussin d'allaitement si besoin, avant
+                                        chaque tétée.</li>
+                                    <li>Nourris bébé à la demande les premières semaines, pour établir une bonne
+                                        production de lait.</li>
+                                    <li>Bois beaucoup d'eau et mange suffisamment : ton corps travaille aussi pour ton
+                                        bébé.</li>
+                                    <li>Une douleur qui persiste n'est pas normale — demande de l'aide à une consultante
+                                        en lactation.</li>
+                                    <li>Accepte que ce ne soit pas toujours simple au début : la pratique et le soutien
+                                        font la différence.</li>
+                                </ul>
+                                <div class="a-note">En cas de douleur, de fièvre ou de doute sur la prise de poids de
+                                    bébé, consulte rapidement un professionnel de santé.</div>
+                            </div>
+
+                            <div class="carousel-slide slide-bg-astuces">
+                                <span class="slide-decor" style="top:16px;right:22px;">🌼</span>
+                                <span class="slide-decor" style="bottom:16px;left:26px;animation-delay:0.5s;">☀️</span>
+                                <span class="a-icon">💡</span>
+                                <h3>Petites astuces du quotidien</h3>
+                                <ul>
+                                    <li>Prépare des tenues de bébé par taille et par saison à l'avance : ça change
+                                        vite !</li>
+                                    <li>Garde un petit sac déjà prêt (couches, lingettes, change) pour sortir sans
+                                        stress.</li>
+                                    <li>Instaure un rituel du coucher simple et répété : bain, câlin, berceuse, dodo.
+                                    </li>
+                                    <li>Note les heures de sommeil et de repas les premières semaines, pour mieux
+                                        repérer les rythmes.</li>
+                                    <li>Accepte l'aide qu'on te propose — un repas, une lessive, une heure de repos font
+                                        beaucoup de bien.</li>
+                                </ul>
+                            </div>
+
+                            <div class="carousel-slide slide-bg-conseil">
+                                <span class="slide-decor" style="top:18px;left:20px;">🌷</span>
+                                <span class="slide-decor" style="bottom:18px;right:24px;animation-delay:1.7s;">🌙</span>
+                                <span class="a-icon">💬</span>
+                                <h3>Conseils de cœur</h3>
+                                <ul>
+                                    <li>Tu n'as pas besoin d'être une maman parfaite, juste une maman présente.</li>
+                                    <li>Compare-toi le moins possible aux autres familles : chaque bébé avance à son
+                                        rythme.</li>
+                                    <li>Prends soin de toi aussi : quelques minutes rien que pour toi comptent
+                                        vraiment.</li>
+                                    <li>Parle de ce que tu ressens, même les jours plus difficiles — ce n'est pas un
+                                        échec.</li>
+                                    <li>Célèbre les petites victoires : chaque jour avec bébé est un apprentissage pour
+                                        vous deux.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="carousel-arrow prev" id="carouselPrev">◀</button>
+                    <button class="carousel-arrow next" id="carouselNext">▶</button>
+                    <div class="carousel-dots" id="carouselDots">
+                        <button class="carousel-dot active" data-index="0">🤰 Grossesse</button>
+                        <button class="carousel-dot" data-index="1">🌸 Accouchement</button>
+                        <button class="carousel-dot" data-index="2">🍼 Allaitement</button>
+                        <button class="carousel-dot" data-index="3">💡 Astuces</button>
+                        <button class="carousel-dot" data-index="4">💬 Conseils</button>
+                    </div>
+                </div>
+
+                <!-- 19. CHECKLIST -->
+                <div class="astuces-block">
+                    <div class="astuces-block-header">
+                        <h3>✅ Ma checklist de maman</h3>
+                        <p>Coche au fur et à mesure — tout reste enregistré sur ton appareil.</p>
+                    </div>
+                    <div class="checklist-grid" id="checklistGrid"></div>
+                </div>
+
+                <!-- 20. BLOG / ARTICLES -->
+                <div class="astuces-block">
+                    <div class="astuces-block-header">
+                        <h3>📖 Articles à lire tranquillement</h3>
+                        <p>Pour aller un peu plus loin, quand bébé fait la sieste.</p>
+                    </div>
+                    <div class="articles-grid" id="articlesGrid"></div>
+                </div>
+
+                <!-- 18. TÉMOIGNAGES / COMMUNAUTÉ -->
+                <div class="astuces-block">
+                    <div class="astuces-block-header">
+                        <h3>💛 Témoignages de mamans</h3>
+                        <p>Des mots doux, des rires, des vécus partagés — anonymement.</p>
+                    </div>
+                    <div class="community-note">💬 Les messages ajoutés ici restent enregistrés sur ton appareil et ton
+                        navigateur — c'est un premier pas vers une vraie communauté partagée !</div>
+                    <div class="testimonial-wall" id="testimonialWall"></div>
+                    <div class="testimonial-form">
+                        <input type="text" id="testimonialAuthor"
+                            placeholder="Ton pseudo (optionnel, ex. Une maman de jumeaux)">
+                        <textarea id="testimonialText"
+                            placeholder="Partage un mot doux, une astuce, un fou rire de maman..."></textarea>
+                        <button id="testimonialSubmit">💌 Partager</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer>Cute Baby — un cocon numérique tout doux, pensé pour bébé et pour toi. 💛</footer>
+
+        <!-- ===================== MODALE PARAMÈTRES / ABONNEMENT ===================== -->
+        <div class="modal-overlay" id="settingsModal">
+            <div class="settings-modal" id="settingsModalInner">
+                <button class="modal-close-btn" id="settingsClose">✕</button>
+                <div class="settings-modal-default">
+                    <span class="premium-badge">✨ Cute Baby Premium</span>
+                    <h3>Débloque tout le contenu</h3>
+                    <div class="price-tag">10€<span>/mois</span></div>
+                    <ul class="premium-perks">
+                        <li>Toutes les histoires Storytime, sans limite</li>
+                        <li>Nouvelles comptines et berceuses chaque mois</li>
+                        <li>Nouveaux jeux ajoutés régulièrement</li>
+                        <li>Zéro publicité, une expérience toute douce</li>
+                        <li>Résiliable à tout moment, en un clic</li>
+                    </ul>
+                    <button class="subscribe-btn" id="subscribeBtn">💛 S'abonner pour 10€/mois</button>
+
+                </div>
+                <div class="subscribe-success" id="subscribeSuccess">
+                    <span class="success-emoji">🎉</span>
+                    <h3>Merci !</h3>
+                    <p class="subscribe-note" style="margin-top:0;">Ton abonnement Cute Baby Premium est activé .</p>
+                </div>
+            </div>
+        </div>
+
+
     </div>
-
-    <!-- ===================== HOME ===================== -->
-    <section id="home" class="page active">
-        <div class="hero-media-wrap" style="position:absolute;inset:0;">
-            <video class="hero-media" id="heroVideo" autoplay muted loop playsinline poster="">
-                <source src="assets/hero-baby.mp4" type="video/mp4">
-            </video>
-            <div class="hero-fallback" id="heroFallback"></div>
-        </div>
-        <div class="hero-overlay"></div>
-        <div class="floating-blob"
-            style="width:90px;height:90px;background:var(--sun);top:18%;left:10%;animation-delay:0s;"></div>
-        <div class="floating-blob"
-            style="width:60px;height:60px;background:var(--mint);top:65%;left:15%;animation-delay:1.2s;"></div>
-        <div class="floating-blob"
-            style="width:70px;height:70px;background:var(--sky);top:22%;right:12%;animation-delay:0.6s;"></div>
-        <div class="floating-blob"
-            style="width:44px;height:44px;background:var(--coral);top:70%;right:18%;animation-delay:1.8s;"></div>
-
-        <div class="hero-content">
-            <span class="hero-eyebrow">✨ Un monde tout doux pour bébé</span>
-            <h1 class="hero-title">Bienvenue sur<br><span class="accent">Cute Baby</span></h1>
-            <p class="hero-sub">Alphabet en musique, dessin magique, comptines et jeux — et plein de conseils tendres
-                pour les mamans, réunis au même endroit.</p>
-            <div class="hero-actions">
-                <button class="pill-btn primary" data-page="alphabet">Découvrir l'alphabet</button>
-                <button class="pill-btn ghost" data-page="astuces">Astuces pour mamans</button>
-            </div>
-        </div>
-    </section>
-
-    <div class="section-inner" style="padding-top:70px;">
-        <div class="section-header">
-            <span class="section-kicker" style="background:#FFE9DC;color:var(--coral-deep);">À explorer</span>
-            <h2 class="section-title">Six univers pour grandir en douceur</h2>
-        </div>
-        <div class="home-grid">
-            <div class="home-card" data-page="alphabet">
-                <div class="icon-badge" style="background:#FFE9DC;">🔤</div>
-                <h3>Alphabet</h3>
-                <p>Les lettres défilent en couleur, prononcées à voix haute, sur une petite mélodie.</p>
-            </div>
-            <div class="home-card" data-page="dessiner">
-                <div class="icon-badge" style="background:#E7E2F5;">🎨</div>
-                <h3>Dessiner</h3>
-                <p>Un tableau noir magique où chaque geste laisse une trace de couleur.</p>
-            </div>
-            <div class="home-card" data-page="musique">
-                <div class="icon-badge" style="background:#DDF3F1;">🎵</div>
-                <h3>Musique</h3>
-                <p>Une playlist de berceuses douces, et la possibilité d'en chercher d'autres.</p>
-            </div>
-            <div class="home-card" data-page="jeux">
-                <div class="icon-badge" style="background:#FBE3EE;">🧩</div>
-                <h3>Jeux</h3>
-                <p>Des petits jeux pensés pour les tout-petits, à découvrir en famille.</p>
-            </div>
-            <div class="home-card" data-page="storytime">
-                <div class="icon-badge" style="background:#FFF3D6;">📖</div>
-                <h3>Storytime</h3>
-                <p>De petites histoires animées et racontées à voix haute, à écouter blotti contre bébé.</p>
-            </div>
-            <div class="home-card" data-page="astuces">
-                <div class="icon-badge" style="background:#F0E7FA;">💛</div>
-                <h3>Astuces pour mamans</h3>
-                <p>Grossesse, accouchement, allaitement : des conseils bienveillants, pas à pas.</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- ===================== ALPHABET ===================== -->
-    <section id="alphabet" class="page">
-        <div class="section-inner">
-            <div class="lang-select-screen" id="langScreen">
-                <div class="section-header" style="margin-bottom:0;">
-                    <span class="section-kicker" style="background:#FFE9DC;color:var(--coral-deep);">Alphabet</span>
-                    <h2 class="section-title">Dans quelle langue veux-tu apprendre ?</h2>
-                    <p class="section-sub">Choisis une langue pour commencer à découvrir les lettres.</p>
-                </div>
-                <div class="lang-carousel">
-                    <button class="round-btn lang-arrow" id="langPrev" aria-label="Langues précédentes">◀</button>
-
-                    <div class="lang-options" id="langOptions">
-                        <button class="lang-card" data-lang="fr"><span class="flag">🇫🇷</span><span
-                                class="lang-name">Français</span></button>
-                        <button class="lang-card" data-lang="en"><span class="flag">🇬🇧</span><span
-                                class="lang-name">English</span></button>
-                        <button class="lang-card" data-lang="zh"><span class="flag">🇨🇳</span><span
-                                class="lang-name">中文</span></button>
-                        <button class="lang-card" data-lang="ja"><span class="flag">🇯🇵</span><span
-                                class="lang-name">日本語</span></button>
-                        <button class="lang-card" data-lang="ar"><span class="flag">🇸🇦</span><span
-                                class="lang-name">العربية</span></button>
-                        <button class="lang-card" data-lang="ru"><span class="flag">🇷🇺</span><span
-                                class="lang-name">Русский</span></button>
-                        <!-- Langues locales africaines -->
-                        <button class="lang-card" data-lang="ewo"><span class="flag">🇨🇲</span><span
-                                class="lang-name">Ewondo</span></button>
-                        <button class="lang-card" data-lang="bas"><span class="flag">🇨🇲</span><span
-                                class="lang-name">Bassa</span></button>
-                        <button class="lang-card" data-lang="bam"><span class="flag">🇨🇲</span><span
-                                class="lang-name">Bamiléké</span></button>
-                        <button class="lang-card" data-lang="bul"><span class="flag">🇨🇲</span><span
-                                class="lang-name">Bulu</span></button>
-                        <button class="lang-card" data-lang="ful"><span class="flag">🇨🇲</span><span
-                                class="lang-name">Fulfuldé</span></button>
-                        <button class="lang-card" data-lang="dua"><span class="flag">🇨🇲</span><span
-                                class="lang-name">Douala</span></button>
-                    </div>
-
-                    <button class="round-btn lang-arrow" id="langNext" aria-label="Langues suivantes">▶</button>
-                </div>
-            </div>
-
-            <div class="alphabet-player" id="alphabetPlayer">
-                <button class="back-link" id="alphaBack">← Changer de langue</button>
-                <div class="letter-stage" id="letterStage">
-                    <span class="letter-char" id="letterChar">A</span>
-                    <span class="letter-illustration bounce" id="letterIllustration">🍍</span>
-                    <canvas class="trace-canvas" id="traceCanvas"></canvas>
-                </div>
-                <div class="letter-word" id="letterWord">A comme Ananas</div>
-                <div class="alphabet-controls">
-                    <button class="round-btn" id="prevLetter">◀</button>
-                    <button class="round-btn big" id="sayLetter">🔊</button>
-                    <button class="round-btn" id="nextLetter">▶</button>
-                </div>
-                <div class="melody-toggle">
-                    <span>Mélodie douce</span>
-                    <div class="switch on" id="melodySwitch"></div>
-                </div>
-                <div class="alphabet-extra-controls">
-                    <button class="pill-toggle-btn" id="autoplayToggle">▶️ Lecture auto</button>
-                    <button class="pill-toggle-btn" id="songBtn">🎵 Chanson</button>
-                    <button class="pill-toggle-btn" id="traceToggle">✏️ Tracer la lettre</button>
-                </div>
-                <div class="trace-tools" id="traceTools">
-                    <button class="round-btn" id="traceClear">🧽</button>
-                    <button class="round-btn" id="traceDone">✅</button>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ===================== DESSINER ===================== -->
-    <section id="dessiner" class="page">
-        <div class="draw-wrap">
-            <span class="section-kicker" style="background:#262133;color:var(--sun);">Dessiner</span>
-            <h2 class="section-title">Touche, glisse, crée !</h2>
-            <p class="section-sub">Pose le doigt sur le tableau : chaque trait devient une jolie couleur.</p>
-            <div class="draw-canvas-wrap" id="drawStageWrap">
-                <canvas id="drawCanvas" width="900" height="560"></canvas>
-                <div class="draw-toolbar">
-                    <button class="tool-btn" id="clearCanvas">🧽 Effacer</button>
-                    <div class="brush-selector">
-                        <button class="tool-btn brush-btn active" data-brush="rainbow">
-                            <span class="brush-dot rainbow-dot"></span> Arc-en-ciel
-                        </button>
-                        <button class="tool-btn brush-btn" data-brush="star">
-                            ⭐ Étoile
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ===================== MUSIQUE ===================== -->
-    <section id="musique" class="page">
-        <div class="section-inner">
-            <div class="section-header">
-                <span class="section-kicker" style="background:#DDF3F1;color:#1c8c82;">Musique</span>
-                <h2 class="section-title">La playlist de bébé</h2>
-                <p class="section-sub">De douces berceuses traditionnelles, à écouter à tout moment.</p>
-            </div>
-            <div class="playlist" id="playlist"></div>
-            <div class="search-more">
-                <span style="font-weight:700;">🔍 Chercher d'autres musiques :</span>
-                <input type="text" id="musicSearch" placeholder="Ex. berceuse, comptine, musique douce...">
-                <button id="musicSearchBtn">Rechercher</button>
-            </div>
-        </div>
-    </section>
-
-    <!-- ===================== JEUX ===================== -->
-    <section id="jeux" class="page">
-        <div class="section-inner">
-            <div class="section-header">
-                <span class="section-kicker" style="background:#FBE3EE;color:#c23f7c;">Jeux</span>
-                <h2 class="section-title">L'heure de jouer !</h2>
-                <p class="section-sub">Des petits jeux simples et amusants, adaptés aux tout-petits.</p>
-            </div>
-            <div class="games-grid">
-                <div class="game-card">
-                    <h3>🫧 Éclate les bulles</h3>
-                    <p>Des bulles colorées flottent à l'écran : tape dessus pour les faire éclater.</p>
-                    <button class="play-cta" data-game="bubbles">Jouer</button>
-                    <div class="game-stage" id="stage-bubbles">
-                        <div class="bubbles-area" id="bubblesArea"></div>
-                        <div class="score-line">Bulles éclatées : <span id="bubbleScore">0</span></div>
-                    </div>
-                </div>
-                <div class="game-card">
-                    <h3>🎨 Trouve la couleur</h3>
-                    <p>Un nom de couleur s'affiche : touche le bon rond pour gagner un point.</p>
-                    <button class="play-cta" data-game="colors">Jouer</button>
-                    <div class="game-stage" id="stage-colors">
-                        <div class="color-prompt">Trouve : <span id="colorTarget">Rouge</span></div>
-                        <div class="color-options" id="colorOptions"></div>
-                        <div class="score-line">Bonnes réponses : <span id="colorScore">0</span></div>
-                    </div>
-                </div>
-                <div class="game-card">
-                    <h3>🔺 Trouve la forme</h3>
-                    <p>Une forme géométrique s'affiche : touche la bonne figure pour gagner un point.</p>
-                    <button class="play-cta" data-game="shapes">Jouer</button>
-                    <div class="game-stage" id="stage-shapes">
-                        <div class="shape-prompt">Trouve : <span id="shapeTarget">Carré</span></div>
-                        <div class="shape-options" id="shapeOptions"></div>
-                        <div class="score-line">Bonnes réponses : <span id="shapeScore">0</span></div>
-                    </div>
-                </div>
-                <div class="game-card">
-                    <h3>🐣 Mémory des animaux</h3>
-                    <p>Retourne les cartes deux par deux pour retrouver les paires d'animaux.</p>
-                    <button class="play-cta" data-game="memory">Jouer</button>
-                    <div class="game-stage" id="stage-memory">
-                        <div class="memory-grid" id="memoryGrid"></div>
-                        <div class="score-line">Paires trouvées : <span id="memoryScore">0</span> / 8</div>
-                    </div>
-                </div>
-                <div class="game-card">
-                    <h3>🧩 Puzzle numéroté</h3>
-                    <p>Fais glisser les cases pour remettre les chiffres de 1 à 8 dans l'ordre.</p>
-                    <button class="play-cta" data-game="puzzle">Jouer</button>
-                    <div class="game-stage" id="stage-puzzle">
-                        <div class="puzzle-grid" id="puzzleGrid"></div>
-                        <button class="puzzle-new-btn" id="puzzleNew">🔀 Nouveau puzzle</button>
-                        <div class="score-line">Coups joués : <span id="puzzleMoves">0</span></div>
-                    </div>
-                </div>
-                <div class="game-card">
-                    <h3>🔊 Qui fait quel bruit ?</h3>
-                    <p>Associe chaque animal au cri qu'il fait, en touchant les deux cartes qui vont ensemble.</p>
-                    <button class="play-cta" data-game="matchsound">Jouer</button>
-                    <div class="game-stage" id="stage-matchsound">
-                        <div class="match-prompt">Relie l'animal à son cri !</div>
-                        <div class="match-columns">
-                            <div class="match-column" id="matchLeft"></div>
-                            <div class="match-column" id="matchRight"></div>
-                        </div>
-                        <div class="score-line">Bonnes paires : <span id="matchScore">0</span> / 6</div>
-                    </div>
-                </div>
-
-                <div class="game-card">
-                    <h3>🎆 Feux d'artifice</h3>
-                    <p>Touche l'écran pour faire exploser de magnifiques feux d'artifice colorés.</p>
-                    <button class="play-cta" data-game="fireworks">Jouer</button>
-                    <div class="game-stage" id="stage-fireworks">
-                        <div class="fireworks-stage-area" id="fireworksArea">
-                            <canvas id="fireworksCanvas"></canvas>
-                            <div class="fireworks-hint">✨ Touche l'écran pour un feu d'artifice</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="search-more games">
-                <span style="font-weight:700;">🔍 Chercher d'autres jeux :</span>
-                <input type="text" id="gameSearch" placeholder="Ex. jeux d'éveil, coloriage, puzzle bébé...">
-                <button id="gameSearchBtn" style="background:var(--coral);">Rechercher</button>
-            </div>
-        </div>
-    </section>
-
-    <!-- ===================== STORYTIME ===================== -->
-    <section id="storytime" class="page">
-        <div class="section-inner">
-            <div class="section-header">
-                <span class="section-kicker" style="background:#FFF3D6;color:#a3720f;">Storytime</span>
-                <h2 class="section-title">De petites histoires à écouter</h2>
-                <p class="section-sub">Choisis une histoire : elle est racontée à voix haute, page après page,
-                    avec une jolie illustration à chaque fois.</p>
-            </div>
-            <div class="story-library" id="storyLibrary"></div>
-
-            <div class="story-player" id="storyPlayer">
-                <button class="back-link" id="storyBack">← Retour aux histoires</button>
-                <div class="story-stage" id="storyStage">
-                    <span class="story-illustration" id="storyIllustration">📖</span>
-                    <p class="story-text" id="storyText">Il était une fois...</p>
-                </div>
-                <div class="story-progress-dots" id="storyDots"></div>
-                <div class="story-controls">
-                    <button class="round-btn" id="storyPrev">◀</button>
-                    <button class="round-btn big" id="storyPlayPause">🔊</button>
-                    <button class="round-btn" id="storyNext">▶</button>
-                </div>
-                <div class="story-moral-box" id="storyMoralBox">
-                    <span class="moral-icon">💡</span>
-                    <div>
-                        <strong>La leçon de cette histoire :</strong>
-                        <p id="storyMoralText"></p>
-                    </div>
-                    <button class="moral-listen-btn" onclick="speakMoralOnly()" title="Réécouter la morale">🔊</button>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ===================== ASTUCES MAMANS ===================== -->
-    <section id="astuces" class="page">
-        <div class="section-inner">
-            <div class="section-header">
-                <span class="section-kicker" style="background:#F0E7FA;color:#7a4fb0;">Astuces pour mamans</span>
-                <h2 class="section-title">Des conseils tout en douceur</h2>
-                <p class="section-sub">Cinq étapes du chemin, une checklist, des articles et une communauté de
-                    mamans — tout pour t'accompagner.</p>
-            </div>
-
-            <!-- 17. CARROUSEL DE CONSEILS -->
-            <div class="carousel-wrap">
-                <div class="carousel-viewport">
-                    <div class="carousel-track" id="carouselTrack">
-                        <div class="carousel-slide slide-bg-grossesse">
-                            <span class="slide-decor" style="top:14px;left:20px;">🌿</span>
-                            <span class="slide-decor" style="bottom:16px;right:24px;animation-delay:1.4s;">🌅</span>
-                            <span class="a-icon">🤰</span>
-                            <h3>Pendant la grossesse</h3>
-                            <p>Chaque grossesse a son propre rythme. Voici quelques repères pour vivre cette période
-                                avec plus de sérénité :</p>
-                            <ul>
-                                <li>Bois régulièrement de l'eau et mange varié : fruits, légumes, protéines et bonnes
-                                    graisses.</li>
-                                <li>Repose-toi dès que le besoin s'en fait sentir, même en journée — la fatigue est
-                                    normale.</li>
-                                <li>Bouge en douceur : marche, natation ou yoga prénatal aident le corps à
-                                    s'adapter.</li>
-                                <li>Prépare une valise de maternité un mois avant le terme, pour partir
-                                    sereinement.</li>
-                                <li>Parle à ton bébé : dès le 2ᵉ trimestre, il perçoit déjà les sons et les voix
-                                    familières.</li>
-                            </ul>
-                            <div class="a-note">Ces conseils sont généraux. Pour toute question médicale, consulte
-                                ta sage-femme ou ton médecin.</div>
-                        </div>
-
-                        <div class="carousel-slide slide-bg-accouchement">
-                            <span class="slide-decor" style="top:18px;right:26px;">🌸</span>
-                            <span class="slide-decor" style="bottom:20px;left:22px;animation-delay:0.8s;">☁️</span>
-                            <span class="a-icon">🌸</span>
-                            <h3>Pendant l'accouchement</h3>
-                            <p>Le jour J approche : voici de quoi t'aider à te sentir plus prête et plus confiante.
-                            </p>
-                            <ul>
-                                <li>Prépare un plan de naissance simple avec tes souhaits, tout en restant
-                                    flexible.</li>
-                                <li>Travaille ta respiration à l'avance : elle t'aidera à traverser chaque
-                                    contraction.</li>
-                                <li>Change de position régulièrement — debout, à quatre pattes, sur un ballon — pour
-                                    soulager la douleur.</li>
-                                <li>Entoure-toi d'une présence rassurante : partenaire, doula ou sage-femme.</li>
-                                <li>Fais confiance à ton corps : il sait, étape par étape, comment accueillir ton
-                                    bébé.</li>
-                            </ul>
-                            <div class="a-note">Chaque accouchement est unique. L'équipe médicale qui t'accompagne
-                                reste ta meilleure ressource le jour venu.</div>
-                        </div>
-
-                        <div class="carousel-slide slide-bg-allaitement">
-                            <span class="slide-decor" style="top:16px;left:24px;">🍃</span>
-                            <span class="slide-decor" style="bottom:18px;right:20px;animation-delay:1.1s;">🌊</span>
-                            <span class="a-icon">🍼</span>
-                            <h3>Pendant l'allaitement</h3>
-                            <p>Que tu allaites ou donnes le biberon, l'essentiel est de trouver ton propre rythme.
-                            </p>
-                            <ul>
-                                <li>Installe-toi confortablement, avec un coussin d'allaitement si besoin, avant
-                                    chaque tétée.</li>
-                                <li>Nourris bébé à la demande les premières semaines, pour établir une bonne
-                                    production de lait.</li>
-                                <li>Bois beaucoup d'eau et mange suffisamment : ton corps travaille aussi pour ton
-                                    bébé.</li>
-                                <li>Une douleur qui persiste n'est pas normale — demande de l'aide à une consultante
-                                    en lactation.</li>
-                                <li>Accepte que ce ne soit pas toujours simple au début : la pratique et le soutien
-                                    font la différence.</li>
-                            </ul>
-                            <div class="a-note">En cas de douleur, de fièvre ou de doute sur la prise de poids de
-                                bébé, consulte rapidement un professionnel de santé.</div>
-                        </div>
-
-                        <div class="carousel-slide slide-bg-astuces">
-                            <span class="slide-decor" style="top:16px;right:22px;">🌼</span>
-                            <span class="slide-decor" style="bottom:16px;left:26px;animation-delay:0.5s;">☀️</span>
-                            <span class="a-icon">💡</span>
-                            <h3>Petites astuces du quotidien</h3>
-                            <ul>
-                                <li>Prépare des tenues de bébé par taille et par saison à l'avance : ça change
-                                    vite !</li>
-                                <li>Garde un petit sac déjà prêt (couches, lingettes, change) pour sortir sans
-                                    stress.</li>
-                                <li>Instaure un rituel du coucher simple et répété : bain, câlin, berceuse, dodo.
-                                </li>
-                                <li>Note les heures de sommeil et de repas les premières semaines, pour mieux
-                                    repérer les rythmes.</li>
-                                <li>Accepte l'aide qu'on te propose — un repas, une lessive, une heure de repos font
-                                    beaucoup de bien.</li>
-                            </ul>
-                        </div>
-
-                        <div class="carousel-slide slide-bg-conseil">
-                            <span class="slide-decor" style="top:18px;left:20px;">🌷</span>
-                            <span class="slide-decor" style="bottom:18px;right:24px;animation-delay:1.7s;">🌙</span>
-                            <span class="a-icon">💬</span>
-                            <h3>Conseils de cœur</h3>
-                            <ul>
-                                <li>Tu n'as pas besoin d'être une maman parfaite, juste une maman présente.</li>
-                                <li>Compare-toi le moins possible aux autres familles : chaque bébé avance à son
-                                    rythme.</li>
-                                <li>Prends soin de toi aussi : quelques minutes rien que pour toi comptent
-                                    vraiment.</li>
-                                <li>Parle de ce que tu ressens, même les jours plus difficiles — ce n'est pas un
-                                    échec.</li>
-                                <li>Célèbre les petites victoires : chaque jour avec bébé est un apprentissage pour
-                                    vous deux.</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <button class="carousel-arrow prev" id="carouselPrev">◀</button>
-                <button class="carousel-arrow next" id="carouselNext">▶</button>
-                <div class="carousel-dots" id="carouselDots">
-                    <button class="carousel-dot active" data-index="0">🤰 Grossesse</button>
-                    <button class="carousel-dot" data-index="1">🌸 Accouchement</button>
-                    <button class="carousel-dot" data-index="2">🍼 Allaitement</button>
-                    <button class="carousel-dot" data-index="3">💡 Astuces</button>
-                    <button class="carousel-dot" data-index="4">💬 Conseils</button>
-                </div>
-            </div>
-
-            <!-- 19. CHECKLIST -->
-            <div class="astuces-block">
-                <div class="astuces-block-header">
-                    <h3>✅ Ma checklist de maman</h3>
-                    <p>Coche au fur et à mesure — tout reste enregistré sur ton appareil.</p>
-                </div>
-                <div class="checklist-grid" id="checklistGrid"></div>
-            </div>
-
-            <!-- 20. BLOG / ARTICLES -->
-            <div class="astuces-block">
-                <div class="astuces-block-header">
-                    <h3>📖 Articles à lire tranquillement</h3>
-                    <p>Pour aller un peu plus loin, quand bébé fait la sieste.</p>
-                </div>
-                <div class="articles-grid" id="articlesGrid"></div>
-            </div>
-
-            <!-- 18. TÉMOIGNAGES / COMMUNAUTÉ -->
-            <div class="astuces-block">
-                <div class="astuces-block-header">
-                    <h3>💛 Témoignages de mamans</h3>
-                    <p>Des mots doux, des rires, des vécus partagés — anonymement.</p>
-                </div>
-                <div class="community-note">💬 Les messages ajoutés ici restent enregistrés sur ton appareil et ton
-                    navigateur — c'est un premier pas vers une vraie communauté partagée !</div>
-                <div class="testimonial-wall" id="testimonialWall"></div>
-                <div class="testimonial-form">
-                    <input type="text" id="testimonialAuthor"
-                        placeholder="Ton pseudo (optionnel, ex. Une maman de jumeaux)">
-                    <textarea id="testimonialText"
-                        placeholder="Partage un mot doux, une astuce, un fou rire de maman..."></textarea>
-                    <button id="testimonialSubmit">💌 Partager</button>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <footer>Cute Baby — un cocon numérique tout doux, pensé pour bébé et pour toi. 💛</footer>
-
-    <!-- ===================== MODALE PARAMÈTRES / ABONNEMENT ===================== -->
-    <div class="modal-overlay" id="settingsModal">
-        <div class="settings-modal" id="settingsModalInner">
-            <button class="modal-close-btn" id="settingsClose">✕</button>
-            <div class="settings-modal-default">
-                <span class="premium-badge">✨ Cute Baby Premium</span>
-                <h3>Débloque tout le contenu</h3>
-                <div class="price-tag">10€<span>/mois</span></div>
-                <ul class="premium-perks">
-                    <li>Toutes les histoires Storytime, sans limite</li>
-                    <li>Nouvelles comptines et berceuses chaque mois</li>
-                    <li>Nouveaux jeux ajoutés régulièrement</li>
-                    <li>Zéro publicité, une expérience toute douce</li>
-                    <li>Résiliable à tout moment, en un clic</li>
-                </ul>
-                <button class="subscribe-btn" id="subscribeBtn">💛 S'abonner pour 10€/mois</button>
-
-            </div>
-            <div class="subscribe-success" id="subscribeSuccess">
-                <span class="success-emoji">🎉</span>
-                <h3>Merci !</h3>
-                <p class="subscribe-note" style="margin-top:0;">Ton abonnement Cute Baby Premium est activé .</p>
-            </div>
-        </div>
-    </div>
-
     <script src="app.js"></script>
+    <script src="gateway.js"></script>
 </body>
 
 </html>
