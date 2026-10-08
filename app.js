@@ -45,13 +45,13 @@ setTimeout(() => {
    THÈME — mode jour / nuit
    ========================================================= */
 const THEME_KEY_ATTR = 'data-theme';
+
 function applyTheme(theme) {
     document.documentElement.setAttribute(THEME_KEY_ATTR, theme);
-    const btn = document.getElementById('themeToggle');
-    if (btn) {
+    document.querySelectorAll('.js-theme-btn').forEach(btn => {
         btn.textContent = theme === 'dark' ? '☀️' : '🌙';
         btn.setAttribute('aria-label', theme === 'dark' ? 'Passer en mode jour' : 'Passer en mode nuit');
-    }
+    });
 }
 function initTheme() {
     // Pas de stockage persistant requis : on démarre en mode jour à chaque
