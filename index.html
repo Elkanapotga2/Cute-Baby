@@ -2506,6 +2506,8 @@
         }
     </style>
     <link rel="stylesheet" href="gateway.css">
+    <link href="https://fonts.googleapis.com/css2?family=Lilita+One&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="explorers.css">
 </head>
 
 <body data-zone="gateway"><!-- ===================== PORTE D'ENTRÉE : LES 4 CERCLES ===================== -->
@@ -3137,10 +3139,220 @@
         </div>
 
 
-    </div>
+    </div><!-- /#babyApp -->
+
+    <!-- ===================== CERCLE 8-12 ANS : EXPLORERS ===================== -->
+    <div id="tweenApp">
+        <header class="tw-bar">
+            <div class="tw-brand">Cute<span>Baby</span><em>Explorers</em></div>
+
+            <nav class="tw-nav" id="twNav">
+                <button class="on" data-tw="home"><i>🏠</i><span>Accueil</span></button>
+                <button data-tw="games"><i>🎮</i><span>Défis</span></button>
+                <button data-tw="atelier"><i>🎨</i><span>Atelier</span></button>
+                <button data-tw="tv"><i>📺</i><span>Télé</span></button>
+            </nav>
+
+            <div class="tw-tools">
+                <div class="tw-chip">Niv. <b data-bind="level">1</b> · <b data-bind="xp">0</b> XP</div>
+                <button class="tw-icon js-theme-btn" aria-label="Passer en mode nuit">🌙</button>
+                <button class="tw-icon" id="twBack" aria-label="Changer de cercle" title="Changer de cercle">⭕</button>
+            </div>
+        </header>
+
+        <main>
+            <!-- ============ ACCUEIL ============ -->
+            <section class="tw-page active" id="tw-home">
+                <div class="tw-hero">
+                    <div class="tw-hero-fallback"></div>
+                    <video class="tw-hero-media" id="twHeroVideo" autoplay muted loop playsinline>
+                        <source src="assets/hero-explorers.mp4" type="video/mp4">
+                    </video>
+                    <div class="tw-hero-shade"></div>
+
+                    <div class="tw-hero-body">
+                        <div>
+                            <h1>Ta prochaine mission commence ici.</h1>
+                            <p class="tw-lead">Des défis pour muscler ton cerveau, un atelier pour créer, ta propre télé
+                                :
+                                gagne de l'XP, monte en grade et débloque des badges.</p>
+                            <div class="tw-cta">
+                                <button class="tw-btn pri" data-tw="games">Lancer un défi</button>
+                                <button class="tw-btn gh" data-tw="tv">Allumer la télé</button>
+                            </div>
+                        </div>
+
+                        <aside class="tw-hud">
+                            <div class="tw-ring" id="twRing">
+                                <div><small>NIVEAU</small><b data-bind="level">1</b></div>
+                            </div>
+                            <div class="tw-rank" data-bind="rank">Recrue</div>
+                            <div class="tw-xp"><span data-bind="xpin">0</span> / <span data-bind="xpmax">120</span> XP
+                            </div>
+                            <div class="tw-daily">🔥 Mission du jour : <b id="twDailyName"></b><br>XP doublée !</div>
+                        </aside>
+                    </div>
+                </div>
+
+                <div class="tw-wrap">
+                    <h2>Choisis ta mission</h2>
+                    <p class="tw-sub">Chaque défi te rapporte de l'XP. Celui du jour en rapporte deux fois plus.</p>
+                    <div class="tw-cards">
+                        <button class="tw-mcard" style="--c:#29D3F5" data-tw="games" data-open="calc">
+                            <span class="ico">⚡</span><strong>Calcul éclair</strong>
+                            <span class="d">60 secondes, un maximum de bonnes réponses. Les calculs se compliquent
+                                !</span>
+                        </button>
+                        <button class="tw-mcard" style="--c:#B6F24A" data-tw="games" data-open="seq">
+                            <span class="ico">🧠</span><strong>Séquence mémoire</strong>
+                            <span class="d">Regarde la suite de lumières, puis répète-la sans te tromper.</span>
+                        </button>
+                        <button class="tw-mcard" style="--c:#FF4FA3" data-tw="games" data-open="quiz">
+                            <span class="ico">🌍</span><strong>Quiz culture</strong>
+                            <span class="d">Espace, animaux, monde : prouve que tu en sais long.</span>
+                        </button>
+                        <button class="tw-mcard" style="--c:#FFB93B" data-tw="atelier">
+                            <span class="ico">🎨</span><strong>Atelier pixel art</strong>
+                            <span class="d">Crée ton personnage pixel par pixel et enregistre-le en image.</span>
+                        </button>
+                        <button class="tw-mcard" style="--c:#8E5BFF" data-tw="tv">
+                            <span class="ico">📺</span><strong>Ma télé</strong>
+                            <span class="d">Tes dessins animés et émissions préférés, rien que pour toi.</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="tw-wrap" style="padding-top:20px;">
+                    <h2>Tes badges</h2>
+                    <p class="tw-sub">Relève les défis pour les débloquer tous.</p>
+                    <div class="tw-badges" id="twBadges"></div>
+                </div>
+            </section>
+
+            <!-- ============ DÉFIS ============ -->
+            <section class="tw-page" id="tw-games">
+                <div class="tw-wrap">
+                    <div id="twPicker">
+                        <h2>Défis</h2>
+                        <p class="tw-sub">Trois façons de t'entraîner. Ton meilleur score est enregistré sur cet
+                            appareil.</p>
+                        <div class="tw-cards">
+                            <button class="tw-mcard" style="--c:#29D3F5" data-open="calc">
+                                <span class="ico">⚡</span><strong>Calcul éclair</strong>
+                                <span class="d">Meilleur score : <b data-bind="best-calc">0</b></span>
+                            </button>
+                            <button class="tw-mcard" style="--c:#B6F24A" data-open="seq">
+                                <span class="ico">🧠</span><strong>Séquence mémoire</strong>
+                                <span class="d">Meilleure suite : <b data-bind="best-seq">0</b></span>
+                            </button>
+                            <button class="tw-mcard" style="--c:#FF4FA3" data-open="quiz">
+                                <span class="ico">🌍</span><strong>Quiz culture</strong>
+                                <span class="d">Meilleur score : <b data-bind="best-quiz">0</b> / 6</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Calcul éclair -->
+                    <div class="tw-panel tw-stage" id="st-calc" hidden>
+                        <div class="tw-stage-top"><button class="tw-ghost" data-close>← Défis</button>
+                            <div class="tw-stat">Meilleur : <b data-bind="best-calc">0</b></div>
+                        </div>
+                        <div class="tw-play">
+                            <div class="tw-timer"><i id="calcBar"></i></div>
+                            <div class="tw-score"><span>Score <b id="calcScore">0</b></span><span
+                                    id="calcStreak"></span></div>
+                            <div class="tw-q" id="calcQ"></div>
+                            <div class="tw-opts" id="calcOpts"></div>
+                        </div>
+                        <div class="tw-result" hidden></div>
+                    </div>
+
+                    <!-- Séquence mémoire -->
+                    <div class="tw-panel tw-stage" id="st-seq" hidden>
+                        <div class="tw-stage-top"><button class="tw-ghost" data-close>← Défis</button>
+                            <div class="tw-stat">Meilleur : <b data-bind="best-seq">0</b></div>
+                        </div>
+                        <div class="tw-play">
+                            <div class="tw-score"><span>Manche <b id="seqScore">0</b></span></div>
+                            <div class="tw-pads" id="seqPads">
+                                <button class="tw-pad" style="--c:#29D3F5" data-pad="0" aria-label="Pad bleu"></button>
+                                <button class="tw-pad" style="--c:#B6F24A" data-pad="1" aria-label="Pad vert"></button>
+                                <button class="tw-pad" style="--c:#FF4FA3" data-pad="2" aria-label="Pad rose"></button>
+                                <button class="tw-pad" style="--c:#FFB93B" data-pad="3"
+                                    aria-label="Pad orange"></button>
+                            </div>
+                            <div class="tw-status" id="seqStatus"></div>
+                        </div>
+                        <div class="tw-result" hidden></div>
+                    </div>
+
+                    <!-- Quiz -->
+                    <div class="tw-panel tw-stage" id="st-quiz" hidden>
+                        <div class="tw-stage-top"><button class="tw-ghost" data-close>← Défis</button>
+                            <div class="tw-stat">Meilleur : <b data-bind="best-quiz">0</b> / 6</div>
+                        </div>
+                        <div class="tw-play">
+                            <div id="quizPick">
+                                <div class="tw-qtext">Quel sujet choisis-tu ?</div>
+                                <div class="tw-themes" id="quizThemes"></div>
+                            </div>
+                            <div id="quizPlay" hidden>
+                                <div class="tw-prog" id="quizProg"></div>
+                                <div class="tw-qtext" id="quizQ"></div>
+                                <div class="tw-opts quiz" id="quizOpts"></div>
+                            </div>
+                        </div>
+                        <div class="tw-result" hidden></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============ ATELIER PIXEL ============ -->
+            <section class="tw-page" id="tw-atelier">
+                <div class="tw-wrap">
+                    <h2>Atelier pixel art</h2>
+                    <p class="tw-sub">Choisis une couleur, touche la grille et glisse le doigt pour dessiner.</p>
+                    <div class="tw-atelier">
+                        <canvas id="pxCanvas" width="320" height="320"></canvas>
+                        <div class="tw-tools-col">
+                            <div class="tw-palette" id="pxPalette"></div>
+                            <button class="tw-btn gh" id="pxErase"
+                                style="color:var(--ink);background:var(--bg2);border:2px solid var(--line)">🧽
+                                Gomme</button>
+                            <button class="tw-btn gh" id="pxClear"
+                                style="color:var(--ink);background:var(--bg2);border:2px solid var(--line)">🗑️ Tout
+                                effacer</button>
+                            <button class="tw-btn pri" id="pxSave">💾 Enregistrer en image</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============ TÉLÉ ============ -->
+            <section class="tw-page" id="tw-tv">
+                <div class="tw-wrap">
+                    <h2>📺 Ma télé</h2>
+                    <p class="tw-sub">Touche une carte pour lancer ton émission.</p>
+                    <div class="tv-grid" id="twTvGrid"></div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Lecteur télé -->
+        <div class="tv-modal" id="twTvModal" aria-hidden="true">
+            <div class="tv-inner">
+                <button class="tv-close" id="twTvClose" aria-label="Fermer">✕</button>
+                <div class="tv-screen" id="twTvScreen"></div>
+                <div class="tv-title" id="twTvTitle"></div>
+            </div>
+        </div>
+
+        <div id="twToasts" aria-live="polite"></div>
+    </div><!-- /#tweenApp -->
     <script src="app.js"></script>
     <script src="gateway.js"></script>
     <script src="cartoons.js"></script>
+    <script src="explorers.js"></script>
 </body>
 
 </html>
