@@ -2,12 +2,6 @@
    PORTE D'ENTRÉE — navigation entre les 4 cercles
    ========================================================= */
 const ZONE_SCREENS = {
-    tweens: {
-        age: '8–12', c1: '#4FA9D6', c2: '#8FD9A8', emoji: '🚀',
-        title: 'Cercle des explorateurs',
-        text: "Cette interface arrive bientôt, avec ses propres activités pour les 8 à 12 ans.",
-        ideas: ['🧮 Défis de calcul', '🧠 Jeux de logique', '🌍 Quiz de culture', '🎨 Pixel art', '📚 Défis de lecture']
-    },
     teens: {
         age: '13–18', c1: '#9B6FD0', c2: '#F08BB5', emoji: '🎧',
         title: 'Cercle des ados',
