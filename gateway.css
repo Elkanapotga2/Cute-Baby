@@ -420,3 +420,46 @@ html[data-theme="dark"] .gw-orb {
     background: var(--surface);
     box-shadow: 0 4px 12px rgba(69, 59, 82, .1);
 }
+
+/* =========================================================
+   GRAND ÉCRAN : les 3 boutons (🌙 ⚙️ ⭕) passent en colonne
+   à droite, sous la ligne des onglets. Mobile inchangé.
+   ========================================================= */
+@media (min-width: 901px) {
+
+    /* Le conteneur de droite ne participe plus à la mise en page de la barre :
+       les onglets restent donc dans la ligne du haut, sans être poussés. */
+    #babyApp .nav-right {
+        display: contents;
+    }
+
+    /* Colonne de boutons, fixée à droite */
+    #babyApp .nav-right>.theme-toggle-btn,
+    #babyApp .nav-right>.settings-toggle-btn {
+        position: fixed;
+        right: 28px;
+        z-index: 101;
+    }
+
+    /* Ordre demandé : lune, puis paramètres, puis cercle rouge */
+    #babyApp #themeToggle {
+        top: 84px;
+    }
+
+    /* 🌙 juste sous la ligne des onglets */
+    #babyApp #settingsToggle {
+        top: 142px;
+    }
+
+    /* ⚙️ en dessous */
+    #babyApp #backToGateway {
+        top: 200px;
+    }
+
+    /* ⭕ tout en bas de la colonne */
+
+    /* La barre d'onglets reste dans la ligne du haut, alignée à droite */
+    #babyApp .nav-wrap {
+        padding-right: 28px;
+    }
+}
