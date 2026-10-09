@@ -463,3 +463,220 @@ html[data-theme="dark"] .gw-orb {
         padding-right: 28px;
     }
 }
+
+/* =========================================================
+   DESSINS ANIMÉS (onglet Storytime)
+   ========================================================= */
+.cartoons-block {
+    max-width: 1000px;
+    margin: 90px auto 0;
+}
+
+/* Caché quand un lecteur d'histoire est ouvert */
+.story-player.active~.cartoons-block {
+    display: none;
+}
+
+.cartoon-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 22px;
+}
+
+.cartoon-card {
+    background: var(--white);
+    border-radius: 26px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    text-align: left;
+    color: var(--plum);
+    display: flex;
+    flex-direction: column;
+    border: 3px solid transparent;
+    padding: 0;
+}
+
+.cartoon-card:hover {
+    border-color: var(--coral);
+}
+
+.cartoon-thumb {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cartoon-thumb-emoji {
+    font-size: 4rem;
+    filter: drop-shadow(0 8px 14px rgba(0, 0, 0, .25));
+    animation: bob 5s ease-in-out infinite;
+}
+
+.cartoon-play {
+    position: absolute;
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, .92);
+    color: var(--coral-deep);
+    font-size: 1.3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-left: 4px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, .25);
+    transition: transform .25s ease;
+}
+
+.cartoon-card:hover .cartoon-play {
+    transform: scale(1.15);
+}
+
+.cartoon-duration {
+    position: absolute;
+    bottom: 10px;
+    right: 12px;
+    background: rgba(0, 0, 0, .65);
+    color: #fff;
+    font-size: .75rem;
+    font-weight: 700;
+    padding: 3px 9px;
+    border-radius: 10px;
+}
+
+.cartoon-info {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    padding: 16px 20px 20px;
+}
+
+.cartoon-info strong {
+    font-family: 'Baloo 2', sans-serif;
+    font-size: 1.1rem;
+}
+
+.cartoon-info small {
+    color: var(--plum-soft);
+    font-size: .85rem;
+    line-height: 1.4;
+}
+
+.cartoon-empty {
+    grid-column: 1 / -1;
+    text-align: center;
+    background: var(--white);
+    border-radius: 26px;
+    padding: 44px 24px;
+    box-shadow: var(--shadow);
+}
+
+.cartoon-empty span {
+    font-size: 3rem;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.cartoon-empty h3 {
+    font-size: 1.3rem;
+    margin-bottom: 6px;
+}
+
+.cartoon-empty p {
+    color: var(--plum-soft);
+    margin: 0;
+}
+
+/* ---------- Lecteur ---------- */
+.cartoon-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 2500;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(12, 9, 16, .88);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+.cartoon-modal.active {
+    display: flex;
+}
+
+.cartoon-modal-inner {
+    position: relative;
+    width: min(1000px, 100%);
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.cartoon-screen {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    max-height: 78vh;
+    background: #000;
+    border-radius: 22px;
+    overflow: hidden;
+    box-shadow: 0 30px 80px rgba(0, 0, 0, .6);
+}
+
+.cartoon-screen video,
+.cartoon-screen iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    display: block;
+    background: #000;
+}
+
+.cartoon-error {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    text-align: center;
+    padding: 20px;
+    gap: 6px;
+}
+
+.cartoon-modal-title {
+    color: #fff;
+    text-align: center;
+    font-family: 'Baloo 2', sans-serif;
+    font-weight: 700;
+    font-size: 1.3rem;
+}
+
+.cartoon-close {
+    position: absolute;
+    top: -14px;
+    right: -6px;
+    z-index: 5;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--coral);
+    color: #fff;
+    font-size: 1.1rem;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, .35);
+}
+
+@media (max-width: 640px) {
+    .cartoon-close {
+        top: -50px;
+        right: 0;
+    }
+
+    .cartoons-block {
+        margin-top: 60px;
+    }
+}
