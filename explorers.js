@@ -12,8 +12,8 @@
 
     /* ---------- Progression (enregistrée sur l'appareil) ---------- */
     const KEY = 'cutebaby_explorers_v1';
-    const XP_PER_LEVEL = 120;
-    const RANKS = ['Recrue', 'Éclaireur', 'Navigateur', 'Pilote', 'Commandant', 'Légende'];
+    const XP_PER_LEVEL = 150;
+    const RANKS = ['Recrue', 'Éclaireur', 'Navigateur', 'Pilote', 'Capitaine', 'Commandant', 'Amiral', 'Légende'];
     const fresh = () => ({ xp: 0, best: { calc: 0, seq: 0, quiz: 0 }, badges: {} });
     function load() {
         try {
@@ -34,12 +34,23 @@
         { id: 'seq7', e: '🧠', n: 'Mémoire d\'acier', d: 'Répéter une suite de 7' },
         { id: 'quiz', e: '🎓', n: 'Grand cerveau', d: 'Quiz sans aucune faute' },
         { id: 'art', e: '🎨', n: 'Artiste', d: 'Enregistrer un pixel art' },
-        { id: 'lvl3', e: '⭐', n: 'Étoile montante', d: 'Atteindre le niveau 3' }
+        { id: 'lvl3', e: '⭐', n: 'Étoile montante', d: 'Atteindre le niveau 3' },
+        { id: 'touche', e: '🧭', n: 'Touche-à-tout', d: 'Essayer 6 jeux différents' },
+        { id: 'maitre', e: '👑', n: 'Maître des défis', d: 'Réussir un défi de niveau Légende' },
+        { id: 'lvl10', e: '🏵️', n: 'Vétéran', d: 'Atteindre le niveau 10' }
     ];
 
     const DAILY_IDS = ['calc', 'seq', 'quiz'];
     const DAILY_NAMES = { calc: 'Calcul éclair', seq: 'Séquence mémoire', quiz: 'Quiz culture' };
-    const daily = DAILY_IDS[Math.floor(Date.now() / 864e5) % 3];
+    let daily = DAILY_IDS[0];
+    function setDaily() {
+        daily = DAILY_IDS[Math.floor(Date.now() / 864e5) % DAILY_IDS.length];
+        $('#twDailyName').textContent = DAILY_NAMES[daily];
+        $$('.x2').forEach(x => x.remove());
+        $$('.tw-cards [data-open]').forEach(c => {
+            if (c.dataset.open === daily) c.insertAdjacentHTML('beforeend', '<span class="x2">×2 XP</span>');
+        });
+    }
 
     function toast(msg) {
         const box = $('#twToasts');
@@ -63,7 +74,7 @@
         const set = (k, v) => $$(`[data-bind="${k}"]`).forEach(el => el.textContent = v);
         set('level', level()); set('xp', S.xp); set('rank', rank());
         set('xpin', inLvl); set('xpmax', XP_PER_LEVEL);
-        set('best-calc', S.best.calc); set('best-seq', S.best.seq); set('best-quiz', S.best.quiz);
+        Object.keys(S.best).forEach(k => set('best-' + k, S.best[k]));
         $('#twRing').style.setProperty('--p', Math.round(inLvl / XP_PER_LEVEL * 100));
         $('#twBadges').innerHTML = BADGES.map(b => `
             <div class="tw-badge ${S.badges[b.id] ? '' : 'locked'}"><i>${b.e}</i><b>${b.n}</b><small>${b.d}</small></div>`).join('');
@@ -84,6 +95,7 @@
             [523, 659, 784, 1047].forEach((f, i) => setTimeout(() => tone(f, 0.25, 0.09, 'triangle'), i * 110));
         }
         if (level() >= 3) unlock('lvl3');
+        if (level() >= 10) unlock('lvl10');
         save(); renderHUD();
     }
     // XP doublée pour le défi du jour
@@ -138,6 +150,7 @@
     }
     function closeStage() {
         stopCalc(); stopSeq();
+        Object.values(STAGES).forEach(st => st.stop && st.stop());
         $$('.tw-stage').forEach(s => s.hidden = true);
         $('#twPicker').hidden = false;
     }
@@ -479,10 +492,34 @@
     document.addEventListener('keydown', e => { if (e.key === 'Escape' && tvModal.classList.contains('active')) closeTV(); });
 
     /* ---------- Démarrage ---------- */
-    $('#twDailyName').textContent = DAILY_NAMES[daily];
-    $$('.tw-cards [data-open]').forEach(c => {
-        if (c.dataset.open === daily) c.insertAdjacentHTML('beforeend', '<span class="x2">×2 XP</span>');
-    });
+    /* ---------- API pour les jeux supplémentaires (explorers-plus.js) ---------- */
+    const CATS = { logique: '🧩 Logique', maths: '🔢 Maths', mots: '🔤 Mots', memoire: '🧠 Mémoire', culture: '🌍 Culture' };
+    function register(def) {
+        const st = document.createElement('div');
+        st.className = 'tw-panel tw-stage'; st.id = 'st-' + def.id; st.hidden = true;
+        st.innerHTML = `<div class="tw-stage-top"><button class="tw-ghost" data-close>← Défis</button>
+            <div class="tw-stat">${def.emoji} ${def.title} · Meilleur : <b data-bind="best-${def.id}">0</b></div></div>
+            <div class="tw-play"></div><div class="tw-result" hidden></div>`;
+        $('#tw-games .tw-wrap').appendChild(st);
+        if (S.best[def.id] === undefined) S.best[def.id] = 0;
+        STAGES[def.id] = { start: () => { resetStage(def.id); def.start($('.tw-play', st)); }, stop: def.stop };
+        let more = $('#twMore');
+        if (!more) { more = document.createElement('div'); more.id = 'twMore'; $('#twPicker').appendChild(more); }
+        let grid = $('#cat-' + def.cat, more);
+        if (!grid) {
+            more.insertAdjacentHTML('beforeend', `<h3 class="tw-cat">${CATS[def.cat]}</h3><div class="tw-cards" id="cat-${def.cat}"></div>`);
+            grid = $('#cat-' + def.cat, more);
+        }
+        const card = document.createElement('button');
+        card.className = 'tw-mcard'; card.style.setProperty('--c', def.color); card.dataset.open = def.id;
+        card.innerHTML = `<span class="ico">${def.emoji}</span><strong>${def.title}</strong><span class="d">${def.desc}</span>`;
+        card.addEventListener('click', () => openStage(def.id));
+        grid.appendChild(card);
+        DAILY_IDS.push(def.id); DAILY_NAMES[def.id] = def.title;
+    }
+    window.TW = { S, BADGES, level, addXP, gain, unlock, toast, tone, save, renderHUD, showResult, rnd, shuffle, register, setDaily, $, $$, app };
+
+    setDaily();
     renderTV();
     renderHUD();
 })();
