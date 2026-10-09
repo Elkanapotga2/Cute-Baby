@@ -2915,6 +2915,17 @@
                             title="Réécouter la morale">🔊</button>
                     </div>
                 </div>
+                <!-- ===== REGARDEZ VOS DESSINS ANIMÉS ===== -->
+                <div class="cartoons-block" id="cartoonsBlock">
+                    <div class="section-header" style="margin-bottom:28px;">
+                        <span class="section-kicker" style="background:#FFE9DC;color:var(--coral-deep);">Télé de
+                            bébé</span>
+                        <h2 class="section-title">📺 Regardez vos dessins animés</h2>
+                        <p class="section-sub">Les petits films rien que pour les enfants : touche une carte pour lancer
+                            l'émission.</p>
+                    </div>
+                    <div class="cartoon-grid" id="cartoonGrid"></div>
+                </div>
             </div>
         </section>
 
@@ -3116,10 +3127,20 @@
             </div>
         </div>
 
+        <!-- ===== LECTEUR DE DESSINS ANIMÉS ===== -->
+        <div class="cartoon-modal" id="cartoonModal" aria-hidden="true">
+            <div class="cartoon-modal-inner">
+                <button class="cartoon-close" id="cartoonClose" aria-label="Fermer">✕</button>
+                <div class="cartoon-screen" id="cartoonScreen"></div>
+                <div class="cartoon-modal-title" id="cartoonModalTitle"></div>
+            </div>
+        </div>
+
 
     </div>
     <script src="app.js"></script>
     <script src="gateway.js"></script>
+    <script src="cartoons.js"></script>
 </body>
 
 </html>
