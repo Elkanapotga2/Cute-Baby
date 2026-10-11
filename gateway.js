@@ -1,6 +1,9 @@
 /* =========================================================
    PORTE D'ENTRÉE — navigation entre les 4 cercles
    ========================================================= */
+const ZONE_SCREENS = {
+
+};
 
 // Construit les écrans « en construction » à partir de la config ci-dessus
 Object.entries(ZONE_SCREENS).forEach(([zone, z]) => {
