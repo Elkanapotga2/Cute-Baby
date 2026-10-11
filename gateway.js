@@ -2,12 +2,7 @@
    PORTE D'ENTRÉE — navigation entre les 4 cercles
    ========================================================= */
 const ZONE_SCREENS = {
-    teens: {
-        age: '13–18', c1: '#9B6FD0', c2: '#F08BB5', emoji: '🎧',
-        title: 'Cercle des ados',
-        text: "Cette interface arrive bientôt, avec ses propres activités pour les 13 à 18 ans.",
-        ideas: ['⏱️ Minuteur de révisions', '🧭 Orientation', '🧘 Bien-être & stress', '🗣️ Langues', '📓 Journal perso']
-    },
+
     adults: {
         age: '18+', c1: '#2E3F6B', c2: '#74C7E3', emoji: '🌟',
         title: 'Cercle des grands',
