@@ -1,15 +1,6 @@
 /* =========================================================
    PORTE D'ENTRÉE — navigation entre les 4 cercles
    ========================================================= */
-const ZONE_SCREENS = {
-
-    adults: {
-        age: '18+', c1: '#2E3F6B', c2: '#74C7E3', emoji: '🌟',
-        title: 'Cercle des grands',
-        text: "Cette interface arrive bientôt, avec ses propres activités pour les 18 ans et plus.",
-        ideas: ['💼 Générateur de CV', '💰 Budget', '✅ Suivi d’habitudes', '🧘 Méditation', '🎯 Objectifs de vie']
-    }
-};
 
 // Construit les écrans « en construction » à partir de la config ci-dessus
 Object.entries(ZONE_SCREENS).forEach(([zone, z]) => {
