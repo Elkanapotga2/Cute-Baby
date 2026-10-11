@@ -2508,6 +2508,10 @@
     <link rel="stylesheet" href="gateway.css">
     <link href="https://fonts.googleapis.com/css2?family=Lilita+One&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="explorers.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="teens.css">
 </head>
 
 <body data-zone="gateway"><!-- ===================== PORTE D'ENTRÉE : LES 4 CERCLES ===================== -->
@@ -3349,12 +3353,256 @@
 
         <div id="twToasts" aria-live="polite"></div>
     </div><!-- /#tweenApp -->
+
+    <!-- ===================== CERCLE 13-18 ANS : NEXT ===================== -->
+    <div id="teenApp">
+        <!-- Barre latérale (desktop) / barre du bas (mobile) -->
+        <aside class="tn-rail">
+            <div class="tn-logo">CB</div>
+            <nav class="tn-nav" id="tnNav">
+                <button class="on" data-tn="home"><i>🏠</i><span>Accueil</span></button>
+                <button data-tn="focus"><i>⏱️</i><span>Focus</span></button>
+                <button data-tn="study"><i>🧠</i><span>Réviser</span></button>
+                <button data-tn="orient"><i>🧭</i><span>Avenir</span></button>
+                <button data-tn="well"><i>🌿</i><span>Bien-être</span></button>
+                <button data-tn="lab"><i>🧪</i><span>Labo</span></button>
+                <button data-tn="watch"><i>🎬</i><span>Watch</span></button>
+            </nav>
+        </aside>
+
+        <!-- Boutons flottants en haut à droite -->
+        <div class="tn-float">
+            <div class="tn-chip">Niv. <b data-b="level">1</b> · <b data-b="xp">0</b> XP</div>
+            <button class="tn-ic js-theme-btn" aria-label="Passer en mode nuit">🌙</button>
+            <button class="tn-ic" id="tnBack" aria-label="Changer de cercle" title="Changer de cercle">⭕</button>
+        </div>
+
+        <main class="tn-main">
+            <!-- ============ ACCUEIL ============ -->
+            <section class="tn-page active" id="tn-home">
+                <div class="tn-hero">
+                    <div class="tn-hero-bg"><span></span><span></span><span></span></div>
+                    <video class="tn-hero-media" id="tnHeroVideo" autoplay muted loop playsinline>
+                        <source src="assets/hero-teens.mp4" type="video/mp4">
+                    </video>
+                    <div class="tn-hero-shade"></div>
+                    <div class="tn-hero-in">
+                        <div class="tn-pill">🔥 <b data-b="streak">1</b> jour de suite · <b data-b="rank">Rookie</b>
+                        </div>
+                        <h1>Construis ton <em>avenir</em>.<br>Un jour à la fois.</h1>
+                        <p>Focus, révisions, orientation, bien-être et code : ton espace pour avancer à ton rythme,
+                            sans pression.</p>
+                        <div class="tn-cta">
+                            <button class="tn-btn pri" data-tn="focus">Lancer un focus</button>
+                            <button class="tn-btn gh" data-tn="orient">Trouver ma voie</button>
+                        </div>
+                    </div>
+                    <div class="tn-marquee">
+                        <div>FOCUS ✦ RÉVISE ✦ CRÉE ✦ RESPIRE ✦ CODE ✦ AVANCE ✦ FOCUS ✦ RÉVISE ✦ CRÉE ✦
+                            RESPIRE ✦ CODE ✦ AVANCE ✦ FOCUS ✦ RÉVISE ✦ CRÉE ✦ RESPIRE ✦ CODE ✦ AVANCE ✦</div>
+                    </div>
+                </div>
+
+                <div class="tn-wrap">
+                    <div class="tn-sec-h"><span>Ton espace</span>
+                        <h2>Tout ce qu'il te faut</h2>
+                    </div>
+                    <div class="tn-bento">
+                        <button class="tn-b b-focus" style="--g1:#8B5CF6;--g2:#FF3D81" data-tn="focus">
+                            <i>⏱️</i>
+                            <h3>Focus</h3>
+                            <p>Minuteur Pomodoro, tâches et ambiance sonore pour enfin te concentrer.</p><em>→</em>
+                        </button>
+                        <button class="tn-b b-study" style="--g1:#22D3EE;--g2:#8B5CF6" data-tn="study">
+                            <i>🧠</i>
+                            <h3>Réviser</h3>
+                            <p>Fiches mémoire à répétition espacée.</p><em>→</em>
+                        </button>
+                        <button class="tn-b b-orient" style="--g1:#A3E635;--g2:#22D3EE" data-tn="orient">
+                            <i>🧭</i>
+                            <h3>Avenir</h3>
+                            <p>Découvre ton profil et des pistes de métiers.</p><em>→</em>
+                        </button>
+                        <button class="tn-b b-well" style="--g1:#34D399;--g2:#22D3EE" data-tn="well">
+                            <i>🌿</i>
+                            <h3>Bien-être</h3>
+                            <p>Humeur, respiration, journal.</p><em>→</em>
+                        </button>
+                        <button class="tn-b b-lab" style="--g1:#FF3D81;--g2:#FB923C" data-tn="lab">
+                            <i>🧪</i>
+                            <h3>Labo</h3>
+                            <p>Code, vitesse de frappe, réflexes.</p><em>→</em>
+                        </button>
+                        <button class="tn-b b-watch" style="--g1:#8B5CF6;--g2:#22D3EE" data-tn="watch">
+                            <i>🎬</i>
+                            <h3>Watch</h3>
+                            <p>Ta chaîne : vidéos et émissions.</p><em>→</em>
+                        </button>
+                    </div>
+
+                    <div class="tn-stats">
+                        <div class="tn-card">
+                            <small>NIVEAU</small>
+                            <div class="tn-lvl"><b data-b="level">1</b><span data-b="rank">Rookie</span></div>
+                            <div class="tn-bar"><i id="tnXpBar"></i></div>
+                            <small><span data-b="xpin">0</span> / <span data-b="xpmax">200</span> XP</small>
+                        </div>
+                        <div class="tn-card">
+                            <small>FOCUS · 7 DERNIERS JOURS</small>
+                            <div class="tn-chart" id="tnChart"></div>
+                            <small><b data-b="focusToday">0</b> min aujourd'hui</small>
+                        </div>
+                        <div class="tn-card">
+                            <small>FICHES À RÉVISER</small>
+                            <div class="tn-lvl"><b data-b="due">0</b><span>prêtes</span></div>
+                            <button class="tn-btn gh sm" data-tn="study">Ouvrir mes fiches</button>
+                        </div>
+                    </div>
+
+                    <div class="tn-sec-h" style="margin-top:56px"><span>Progression</span>
+                        <h2>Tes badges</h2>
+                    </div>
+                    <div class="tn-badges" id="tnBadges"></div>
+                </div>
+            </section>
+
+            <!-- ============ FOCUS ============ -->
+            <section class="tn-page" id="tn-focus">
+                <div class="tn-wrap">
+                    <div class="tn-sec-h"><span>Concentration</span>
+                        <h2>Focus</h2>
+                    </div>
+                    <p class="tn-sub">Travaille par blocs, pause entre chaque. Chaque minute de focus te rapporte 1 XP.
+                    </p>
+                    <div class="tn-grid2">
+                        <div class="tn-card tn-timer">
+                            <div class="tn-modes" id="fcModes">
+                                <button class="on" data-m="25" data-f="1">Focus 25</button>
+                                <button data-m="45" data-f="1">Deep 45</button>
+                                <button data-m="5">Pause 5</button>
+                                <button data-m="15">Longue 15</button>
+                            </div>
+                            <div class="tn-ring">
+                                <svg viewBox="0 0 200 200">
+                                    <circle class="bg" cx="100" cy="100" r="88" />
+                                    <circle class="fg" id="fcArc" cx="100" cy="100" r="88" />
+                                </svg>
+                                <div class="tn-time" id="fcTime">25:00</div>
+                            </div>
+                            <div class="tn-row">
+                                <button class="tn-btn pri" id="fcStart">Démarrer</button>
+                                <button class="tn-btn gh" id="fcReset">Reset</button>
+                                <button class="tn-btn gh" id="fcNoise">🎧 Ambiance</button>
+                            </div>
+                            <p class="tn-note" id="fcNote">Pose ton téléphone, ferme les onglets inutiles, et lance-toi.
+                            </p>
+                        </div>
+                        <div class="tn-card">
+                            <h3>Mes tâches</h3>
+                            <div class="tn-add"><input id="tkIn" placeholder="Nouvelle tâche…" maxlength="80"><button
+                                    id="tkAdd" aria-label="Ajouter">＋</button></div>
+                            <ul class="tn-tasks" id="tkList"></ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============ RÉVISER ============ -->
+            <section class="tn-page" id="tn-study">
+                <div class="tn-wrap">
+                    <div class="tn-sec-h"><span>Mémoire</span>
+                        <h2>Réviser</h2>
+                    </div>
+                    <p class="tn-sub">Crée tes fiches : celles que tu rates reviennent vite, celles que tu maîtrises
+                        s'espacent (1, 3 puis 7 jours).</p>
+                    <div id="stBody"></div>
+                </div>
+            </section>
+
+            <!-- ============ AVENIR ============ -->
+            <section class="tn-page" id="tn-orient">
+                <div class="tn-wrap">
+                    <div class="tn-sec-h"><span>Orientation</span>
+                        <h2>Trouve ta voie</h2>
+                    </div>
+                    <p class="tn-sub">12 questions rapides sur ce qui te plaît. Ce n'est pas un verdict, juste des
+                        pistes à explorer.</p>
+                    <div id="orBody"></div>
+                </div>
+            </section>
+
+            <!-- ============ BIEN-ÊTRE ============ -->
+            <section class="tn-page" id="tn-well">
+                <div class="tn-wrap">
+                    <div class="tn-sec-h"><span>Santé mentale</span>
+                        <h2>Bien-être</h2>
+                    </div>
+                    <p class="tn-sub">Prendre soin de toi, ça fait partie de réussir. Tes notes restent sur cet
+                        appareil.</p>
+                    <div class="tn-grid2">
+                        <div class="tn-card" id="mdBox"></div>
+                        <div class="tn-card" id="brBox"></div>
+                        <div class="tn-card" id="jrBox"></div>
+                        <div class="tn-card tn-help">
+                            <h3>💬 Si ça ne va vraiment pas</h3>
+                            <p>Se sentir mal, ça arrive à tout le monde, et tu n'as pas à gérer ça seul·e. Parle à un
+                                adulte de
+                                confiance (parent, prof, infirmier·ère scolaire) ou à un professionnel. Si tu es en
+                                danger
+                                immédiat, appelle le numéro d'urgence de ton pays ou va voir un adulte tout de suite.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============ LABO ============ -->
+            <section class="tn-page" id="tn-lab">
+                <div class="tn-wrap">
+                    <div class="tn-sec-h"><span>Expériences</span>
+                        <h2>Labo</h2>
+                    </div>
+                    <div class="tn-seg" id="labTabs">
+                        <button class="on" data-l="code">💻 Code</button>
+                        <button data-l="type">⌨️ Frappe</button>
+                        <button data-l="reflex">⚡ Réflexes</button>
+                    </div>
+                    <div id="labBody"></div>
+                </div>
+            </section>
+
+            <!-- ============ WATCH ============ -->
+            <section class="tn-page" id="tn-watch">
+                <div class="tn-wrap">
+                    <div class="tn-sec-h"><span>Ta chaîne</span>
+                        <h2>🎬 Watch</h2>
+                    </div>
+                    <p class="tn-sub">Les vidéos et émissions faites pour toi.</p>
+                    <div class="tv-grid tn-tv" id="tnTvGrid"></div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Lecteur vidéo -->
+        <div class="tv-modal tn-tvm" id="tnTvModal" aria-hidden="true">
+            <div class="tv-inner">
+                <button class="tv-close" id="tnTvClose" aria-label="Fermer">✕</button>
+                <div class="tv-screen" id="tnTvScreen"></div>
+                <div class="tv-title" id="tnTvTitle"></div>
+            </div>
+        </div>
+        <div id="tnToasts" aria-live="polite"></div>
+    </div><!-- /#teenApp -->
+
     <script src="app.js"></script>
     <script src="gateway.js"></script>
     <script src="cartoons.js"></script>
     <script src="explorers.js"></script>
     <script src="explorers-plus.js"></script>
     <script src="explorers-ateliers.js"></script>
+
+    <!--teens -->
+    <script src="teens.js"></script>
 </body>
 
 </html>
