@@ -2512,6 +2512,10 @@
         href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="teens.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400&family=Inter:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="adults.css">
 </head>
 
 <body data-zone="gateway"><!-- ===================== PORTE D'ENTRÉE : LES 4 CERCLES ===================== -->
@@ -3594,6 +3598,177 @@
         <div id="tnToasts" aria-live="polite"></div>
     </div><!-- /#teenApp -->
 
+    <!-- ===================== CERCLE 18+ : LIFE ===================== -->
+    <div id="adultApp">
+        <header class="ad-top">
+            <div class="ad-brand">CuteBaby<span>Life</span></div>
+            <nav class="ad-nav" id="adNav">
+                <button class="on" data-ad="home"><i>◐</i><span>Accueil</span></button>
+                <button data-ad="career"><i>💼</i><span>Carrière</span></button>
+                <button data-ad="money"><i>📈</i><span>Finances</span></button>
+                <button data-ad="habits"><i>✓</i><span>Habitudes</span></button>
+                <button data-ad="calm"><i>🌙</i><span>Sérénité</span></button>
+                <button data-ad="goals"><i>🎯</i><span>Objectifs</span></button>
+                <button data-ad="media"><i>▶</i><span>Médias</span></button>
+            </nav>
+            <div class="ad-tools">
+                <button class="ad-ic js-theme-btn" aria-label="Passer en mode nuit">🌙</button>
+                <button class="ad-ic" id="adBack" aria-label="Changer de cercle" title="Changer de cercle">⭕</button>
+            </div>
+        </header>
+
+        <main class="ad-main">
+            <!-- ============ ACCUEIL ============ -->
+            <section class="ad-page active" id="ad-home">
+                <div class="ad-hero">
+                    <div class="ad-hero-bg"></div>
+                    <video class="ad-hero-media" id="adHeroVideo" autoplay muted loop playsinline>
+                        <source src="assets/hero-adults.mp4" type="video/mp4">
+                    </video>
+                    <div class="ad-hero-shade"></div>
+                    <div class="ad-hero-in">
+                        <div class="ad-eyebrow">Espace adulte · 18+</div>
+                        <h1>Reprenez la main<br>sur <em>votre vie</em>.</h1>
+                        <p>Carrière, finances, habitudes, sérénité et objectifs : des outils sobres et efficaces pour
+                            piloter l'essentiel, au même endroit.</p>
+                        <div class="ad-cta">
+                            <button class="ad-btn gold" id="adToDash">Voir mon tableau de bord</button>
+                            <button class="ad-btn line" data-ad="goals">Définir un objectif</button>
+                        </div>
+                    </div>
+                    <aside class="ad-today">
+                        <small id="adDate"></small>
+                        <div class="ad-hello" id="adHello">Bonjour</div>
+                        <input id="adName" class="ad-in" placeholder="Votre prénom" maxlength="24"
+                            aria-label="Votre prénom">
+                        <p id="adQuote"></p>
+                    </aside>
+                </div>
+
+                <div class="ad-wrap" id="adDash">
+                    <div class="ad-head"><span>Tableau de bord</span>
+                        <h2>Votre situation en un coup d'œil</h2>
+                    </div>
+                    <div class="ad-metrics" id="adMetrics"></div>
+
+                    <div class="ad-head" style="margin-top:72px"><span>Vos espaces</span>
+                        <h2>Six outils, un seul objectif</h2>
+                    </div>
+                    <div class="ad-rows">
+                        <button class="ad-row" data-ad="career"><b>01</b>
+                            <h3>Carrière</h3>
+                            <p>CV prêt à imprimer, lettre de motivation, préparation d'entretien.</p><i>→</i>
+                        </button>
+                        <button class="ad-row" data-ad="money"><b>02</b>
+                            <h3>Finances</h3>
+                            <p>Budget 50/30/20, simulateur d'épargne, calcul de crédit.</p><i>→</i>
+                        </button>
+                        <button class="ad-row" data-ad="habits"><b>03</b>
+                            <h3>Habitudes</h3>
+                            <p>Suivi quotidien, séries et régularité sur 30 jours.</p><i>→</i>
+                        </button>
+                        <button class="ad-row" data-ad="calm"><b>04</b>
+                            <h3>Sérénité</h3>
+                            <p>Méditations guidées, test de stress, journal de gratitude.</p><i>→</i>
+                        </button>
+                        <button class="ad-row" data-ad="goals"><b>05</b>
+                            <h3>Objectifs</h3>
+                            <p>Roue de la vie et objectifs découpés en étapes.</p><i>→</i>
+                        </button>
+                        <button class="ad-row" data-ad="media"><b>06</b>
+                            <h3>Médias</h3>
+                            <p>Votre médiathèque : conférences, formations, émissions.</p><i>→</i>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============ CARRIÈRE ============ -->
+            <section class="ad-page" id="ad-career">
+                <div class="ad-wrap">
+                    <div class="ad-head"><span>Professionnel</span>
+                        <h2>Carrière</h2>
+                    </div>
+                    <div class="ad-seg" id="crTabs"><button class="on" data-t="cv">Curriculum vitae</button><button
+                            data-t="letter">Lettre de motivation</button><button data-t="iv">Entretien</button></div>
+                    <div id="crBody"></div>
+                </div>
+            </section>
+
+            <!-- ============ FINANCES ============ -->
+            <section class="ad-page" id="ad-money">
+                <div class="ad-wrap">
+                    <div class="ad-head"><span>Patrimoine</span>
+                        <h2>Finances</h2>
+                    </div>
+                    <div class="ad-bar-top">
+                        <div class="ad-seg" id="mnTabs"><button class="on" data-t="budget">Budget</button><button
+                                data-t="save">Épargne</button><button data-t="loan">Crédit</button></div>
+                        <label class="ad-cur">Devise <select id="mnCur" class="ad-in">
+                                <option value="FCFA">FCFA</option>
+                                <option value="EUR">€ Euro</option>
+                                <option value="USD">$ Dollar</option>
+                            </select></label>
+                    </div>
+                    <div id="mnBody"></div>
+                </div>
+            </section>
+
+            <!-- ============ HABITUDES ============ -->
+            <section class="ad-page" id="ad-habits">
+                <div class="ad-wrap">
+                    <div class="ad-head"><span>Régularité</span>
+                        <h2>Habitudes</h2>
+                    </div>
+                    <div id="hbBody"></div>
+                </div>
+            </section>
+
+            <!-- ============ SÉRÉNITÉ ============ -->
+            <section class="ad-page" id="ad-calm">
+                <div class="ad-wrap">
+                    <div class="ad-head"><span>Équilibre</span>
+                        <h2>Sérénité</h2>
+                    </div>
+                    <div id="clBody"></div>
+                </div>
+            </section>
+
+            <!-- ============ OBJECTIFS ============ -->
+            <section class="ad-page" id="ad-goals">
+                <div class="ad-wrap">
+                    <div class="ad-head"><span>Cap</span>
+                        <h2>Objectifs de vie</h2>
+                    </div>
+                    <div id="glBody"></div>
+                </div>
+            </section>
+
+            <!-- ============ MÉDIAS ============ -->
+            <section class="ad-page" id="ad-media">
+                <div class="ad-wrap">
+                    <div class="ad-head"><span>Médiathèque</span>
+                        <h2>Médias</h2>
+                    </div>
+                    <p class="ad-sub">Vos conférences, formations et émissions.</p>
+                    <div class="tv-grid" id="adTvGrid"></div>
+                </div>
+            </section>
+
+            <footer class="ad-foot">CuteBaby Life · Ces outils sont informatifs et ne remplacent pas l'avis d'un
+                professionnel (finance, santé, droit).</footer>
+        </main>
+
+        <div class="tv-modal" id="adTvModal" aria-hidden="true">
+            <div class="tv-inner">
+                <button class="tv-close" id="adTvClose" aria-label="Fermer">✕</button>
+                <div class="tv-screen" id="adTvScreen"></div>
+                <div class="tv-title" id="adTvTitle"></div>
+            </div>
+        </div>
+        <div id="adToasts" aria-live="polite"></div>
+    </div><!-- /#adultApp -->
+
     <script src="app.js"></script>
     <script src="gateway.js"></script>
     <script src="cartoons.js"></script>
@@ -3603,6 +3778,8 @@
 
     <!--teens -->
     <script src="teens.js"></script>
+    <!--Adult-->
+    <script src="adults.js"></script>
 </body>
 
 </html>
