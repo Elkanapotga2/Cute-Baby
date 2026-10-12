@@ -680,3 +680,33 @@ html[data-theme="dark"] .gw-orb {
         margin-top: 60px;
     }
 }
+
+/* À AJOUTER à la fin de gateway.css : boutons de filtre des dessins animés */
+.cartoon-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin: 0 auto 26px;
+    max-width: 1000px;
+}
+
+.cartoon-chip {
+    padding: 10px 20px;
+    border-radius: 30px;
+    background: var(--white);
+    color: var(--plum);
+    font-weight: 700;
+    font-size: .9rem;
+    box-shadow: 0 4px 12px rgba(69, 59, 82, .1);
+    border: 2px solid transparent;
+}
+
+.cartoon-chip:hover {
+    border-color: var(--coral);
+}
+
+.cartoon-chip.active {
+    background: var(--coral);
+    color: #fff;
+}
