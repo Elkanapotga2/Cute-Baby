@@ -433,25 +433,60 @@
     //   type : 'file'    → vidéo hébergée avec ton site (ex. assets/tv/episode1.mp4)
     //          'youtube' → src = identifiant de la vidéo YouTube (miniature automatique)
     const TV = [
-        // {
-        //     title: 'Les Explorateurs · Épisode 1',
-        //     desc: 'La mission secrète',
-        //     duration: '8:40',
-        //     type: 'youtube',
-        //     src: 'ABC123xyz',
-        //     poster: '',            // facultatif : ton image de couverture
-        //     emoji: '🚀',
-        //     color: 'linear-gradient(135deg,#29D3F5,#0B1230)'
-        // }
+        // ---------- Kaeloo ----------
+        { g: 'Kaeloo', title: 'Kaeloo · Si on jouait au prince charmant', desc: 'Saison 1, épisode complet', type: 'youtube', src: 'ghi9of1qdV4' },
+        { g: 'Kaeloo', title: 'Kaeloo · La balle au prisonnier', desc: 'Épisode entier', type: 'youtube', src: 'l8ZGkEUP0Z4' },
+        { g: 'Kaeloo', title: 'Kaeloo · Et si on jouait aux vacances… naufragés', desc: 'Épisode entier', type: 'youtube', src: 'ZwDP7BUNKW4' },
+        { g: 'Kaeloo', title: 'Kaeloo · 10 épisodes complets', desc: 'Compilation de 70 minutes', duration: '70 min', type: 'youtube', src: 'So0wiOLVf0A' },
+
+        // ---------- Angelo la débrouille ----------
+        { g: 'Angelo', title: 'Angelo la débrouille · Télépathie', desc: 'Épisode entier', type: 'youtube', src: 'UfPre3jtyuc' },
+        { g: 'Angelo', title: 'Angelo la débrouille · Karaté Kid', desc: 'Épisode entier', type: 'youtube', src: 'JyFYTig3v2g' },
+        { g: 'Angelo', title: 'Angelo la débrouille · Les coachs', desc: 'Saison 5', type: 'youtube', src: 'n5uuFVfiqTw' },
+        { g: 'Angelo', title: 'Angelo la débrouille · Il lui faut !', desc: 'Compilation de 45 minutes', duration: '45 min', type: 'youtube', src: 'edqU6ZjOBO8' },
+
+        // ---------- Les Mystérieuses Cités d'or ----------
+        { g: 'Cités d\'or', title: 'Les Mystérieuses Cités d\'or · Épisode complet', desc: 'Esteban, Zia, Tao et Mendoza', type: 'youtube', src: 'ib773z0PMqE' },
+        { g: 'Cités d\'or', title: 'Les Mystérieuses Cités d\'or · Saison 1', desc: 'Tous les épisodes de la saison 1', type: 'youtube', src: '00MWpPcEAIQ' },
+
+        // ---------- Sherlock Yack ----------
+        { g: 'Sherlock Yack', title: 'Sherlock Yack · L\'intégrale', desc: 'Tous les épisodes, du premier au dernier', type: 'youtube', src: 'tCmBnv3deZ0' },
+        { g: 'Sherlock Yack', title: 'Sherlock Yack · Qui a détroussé la grue ?', desc: 'Enquête au zoo', type: 'youtube', src: 'Fl-c-BlTJEU' },
+        { g: 'Sherlock Yack', title: 'Sherlock Yack · Qui a fait couler le pélican ?', desc: 'Enquête au zoo', type: 'youtube', src: 'waR4PttGKfA' },
+        { g: 'Sherlock Yack', title: 'Sherlock Yack · Qui a nettoyé le phacochère ?', desc: 'Enquête au zoo', type: 'youtube', src: 'xF_hSIq3WEU' },
+
+        // ---------- Camp Lakebottom (en anglais) ----------
+        { g: 'Camp Lakebottom', title: 'Camp Lakebottom · Épisode', desc: 'Le camp d\'été le plus étrange du monde', type: 'youtube', src: 't88PkWObFUo' },
+        { g: 'Camp Lakebottom', title: 'Camp Lakebottom · Season One Marathon', desc: 'Tous les épisodes de la saison 1 (en anglais)', type: 'youtube', src: 'wFdFpgtZ4JM' },
+
+        // ---------- Zig & Sharko ----------
+        { g: 'Zig & Sharko', title: 'Zig & Sharko · Compilation de 80 minutes', desc: 'Saison 2, épisodes en entier', duration: '80 min', type: 'youtube', src: 'ku3GgTN-Rhk' },
+        { g: 'Zig & Sharko', title: 'Zig & Sharko · Les joies de la gym', desc: 'Épisodes en entier', type: 'youtube', src: 'THlxbtyNQv0' },
+        { g: 'Zig & Sharko', title: 'Zig & Sharko · 2 heures de folie', desc: 'Saison 3, épisodes en entier', duration: '2 h', type: 'youtube', src: '7AW5iSP1Y-M' },
+
+        // ---------- C'est pas sorcier (pour apprendre en s'amusant) ----------
+        { g: 'C\'est pas sorcier', title: 'C\'est pas sorcier · Le système solaire', desc: 'Fred, Sabine et Jamy explorent l\'espace', type: 'youtube', src: 'I7cajVnzm8k' },
+        { g: 'C\'est pas sorcier', title: 'C\'est pas sorcier · La magie des effets spéciaux', desc: 'Les coulisses du cinéma', type: 'youtube', src: 'xo3nJ6geylU' },
+        { g: 'C\'est pas sorcier', title: 'C\'est pas sorcier · Les serpents', desc: 'Comment avancent-ils sans pattes ?', type: 'youtube', src: 'OKNE-h0MWok' },
+        { g: 'C\'est pas sorcier', title: 'C\'est pas sorcier · Le métro', desc: 'Comment fonctionne le métro ?', type: 'youtube', src: 'zHHFQtlHqkc' }
     ];
+    let tvFilter = 'Tous';
     const tvModal = $('#twTvModal'), tvScreen = $('#twTvScreen');
     function renderTV() {
         const grid = $('#twTvGrid');
+        if (TV.length) {
+            let bar = $('#twTvFilters');
+            if (!bar) { bar = document.createElement('div'); bar.id = 'twTvFilters'; bar.className = 'tw-chips'; grid.parentNode.insertBefore(bar, grid); }
+            const groups = ['Tous', ...new Set(TV.map(c => c.g).filter(Boolean))];
+            bar.innerHTML = groups.map(g => `<button type="button" class="${g === tvFilter ? 'on' : ''}" data-g="${g.replace(/"/g, '&quot;')}">${g}</button>`).join('');
+            bar.querySelectorAll('button').forEach(b => b.onclick = () => { tvFilter = b.dataset.g; renderTV(); });
+        }
         if (!TV.length) {
             grid.innerHTML = `<div class="tv-empty"><span>🎬</span><h3>Ta télé arrive bientôt !</h3><p>De nouvelles émissions seront ajoutées ici très vite.</p></div>`;
             return;
         }
         grid.innerHTML = TV.map((c, i) => {
+            if (tvFilter !== 'Tous' && c.g !== tvFilter) return '';
             const poster = c.poster || (c.type === 'youtube' ? `https://i.ytimg.com/vi/${c.src}/hqdefault.jpg` : '');
             const style = poster ? `background-image:url('${poster}')` : `background:${c.color || 'linear-gradient(135deg,#29D3F5,#0B1230)'}`;
             return `<button class="tv-card" data-i="${i}">
