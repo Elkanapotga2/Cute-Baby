@@ -1683,3 +1683,31 @@ textarea.tn-in {
         transition-duration: .01ms !important;
     }
 }
+
+/* ---------- Watch : boutons de filtre par série ---------- */
+.tn-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0 0 24px;
+}
+
+.tn-chips button {
+    padding: 9px 18px;
+    border-radius: 30px;
+    background: var(--card);
+    color: var(--ink);
+    border: 1px solid var(--line);
+    font-weight: 600;
+    font-size: .84rem;
+}
+
+.tn-chips button:hover {
+    border-color: var(--acc);
+}
+
+.tn-chips button.on {
+    background: var(--grad);
+    color: #fff;
+    border-color: transparent;
+}
