@@ -1687,3 +1687,31 @@ html[data-theme="dark"] #tweenApp {
     line-height: 1.6;
     box-shadow: var(--sh);
 }
+
+/* ---------- Télé : boutons de filtre par série ---------- */
+.tw-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0 0 24px;
+}
+
+.tw-chips button {
+    padding: 9px 18px;
+    border-radius: 30px;
+    background: var(--bg2);
+    color: var(--ink);
+    font-weight: 700;
+    font-size: .85rem;
+    border: 2px solid var(--line);
+}
+
+.tw-chips button:hover {
+    border-color: var(--acc);
+}
+
+.tw-chips button.on {
+    background: var(--acc);
+    color: var(--acc-ink);
+    border-color: var(--acc);
+}
