@@ -394,23 +394,68 @@
     /* =========== WATCH =========== */
     // ➕ POUR AJOUTER UNE VIDÉO : copie un bloc et modifie-le.
     //   type : 'file' (vidéo de ton site, ex. assets/watch/ep1.mp4) ou 'youtube' (src = identifiant de la vidéo)
+    // type : 'youtube' (src = identifiant de la vidéo), 'file' (src = chemin d'un .mp4 de ton site)
+    //        ou 'link' (src = adresse d'un site officiel : s'ouvre dans un nouvel onglet)
+    // g    : la série (sert aux boutons de filtre)
     const TV = [
-        // { title: 'Épisode 1', desc: 'Titre ou résumé', duration: '12:40', type: 'youtube', src: 'ABC123xyz',
-        //   poster: '', emoji: '🎬', color: 'linear-gradient(135deg,#8B5CF6,#FF3D81)' }
+        // ---------- Dragon Ball (Z, GT, Super) : épisodes sous licence → site officiel ----------
+        { g: 'Dragon Ball', type: 'link', src: 'https://dragon-ball-official.com/', title: 'Dragon Ball Z · GT · Super', desc: 'Site officiel : actualités et où regarder légalement', emoji: '🐉', color: 'linear-gradient(135deg,#FF8B1F,#E11D48)' },
+
+        // ---------- Naruto Shippuden ----------
+        { g: 'Naruto', type: 'youtube', src: '3lt_ERh7K4Q', title: 'Naruto Shippuden · Épisode 1 (VF)', desc: 'Retour au pays' },
+        { g: 'Naruto', type: 'link', src: 'https://animationdigitalnetwork.com/video/265-naruto-shippuden', title: 'Naruto Shippuden en streaming', desc: 'La série complète sur ADN (VO et VF)', emoji: '🍥', color: 'linear-gradient(135deg,#FF8B1F,#1E3A8A)' },
+        { g: 'Naruto', type: 'link', src: 'https://www.youtube.com/channel/UCpPXbC-7OPfkIBTXRwMnSQw', title: 'Chaîne officielle Naruto Shippuden', desc: 'Les extraits et épisodes publiés par l\'éditeur', emoji: '🥷', color: 'linear-gradient(135deg,#1E3A8A,#8B5CF6)' },
+
+        // ---------- Conan l'Aventurier ----------
+        { g: 'Conan l\'Aventurier', type: 'youtube', src: '5zC1Oc8ImjY', title: 'Conan l\'Aventurier · La nuit des larmes brûlantes', desc: 'Épisode 1' },
+
+        // ---------- Barbie ----------
+        { g: 'Barbie', type: 'youtube', src: 'BPsewn1WkOM', title: 'Barbie Dreamhouse Adventures · Bienvenue dans notre nouvelle maison', desc: 'La famille Roberts emménage' },
+        { g: 'Barbie', type: 'youtube', src: 'HdWxF9bAVUE', title: 'Barbie Dreamhouse Adventures · Célébrité virtuelle', desc: 'Une quête de popularité sur Internet' },
+        { g: 'Barbie', type: 'youtube', src: 'Cjv4DE_7Qy0', title: 'Barbie Dreamhouse Adventures · Duchesse', desc: 'Barbie veut sauver une jument' },
+        { g: 'Barbie', type: 'youtube', src: '3FhIP5QO3xw', title: 'Barbie Dreamhouse Adventures · Résumé', desc: 'Revois les précédents épisodes' },
+
+        // ---------- My Little Pony ----------
+        { g: 'My Little Pony', type: 'youtube', src: 'E2trU6P9dUs', title: 'My Little Pony · La magie de l\'amitié (partie 1)', desc: 'Chaîne officielle My Little Pony' },
+        { g: 'My Little Pony', type: 'youtube', src: 'RUdUlmyF0JE', title: 'My Little Pony · La magie de l\'amitié (partie 2)', desc: 'Chaîne officielle My Little Pony' },
+        { g: 'My Little Pony', type: 'youtube', src: 'f-xeAwzESJs', title: 'My Little Pony · Bienvenue au Royaume de Cristal', desc: 'Chaîne officielle My Little Pony' },
+        { g: 'My Little Pony', type: 'youtube', src: 'jemh2Va1Plg', title: 'My Little Pony · Une chouette fin', desc: 'Chaîne officielle My Little Pony' },
+
+        // ---------- Elena d'Avalor ----------
+        { g: 'Elena d\'Avalor', type: 'youtube', src: 'PjdbdI1CHZM', title: 'Elena d\'Avalor · La vie secrète des sirènes', desc: 'Épisode 1' },
+        { g: 'Elena d\'Avalor', type: 'youtube', src: 'NrbM-ZpWa1U', title: 'Elena d\'Avalor · Nouveaux pouvoirs', desc: 'Épisode 1' },
+        { g: 'Elena d\'Avalor', type: 'youtube', src: 's9b5WUFk-6E', title: 'Elena d\'Avalor · Le chant des sirènes', desc: 'Épisode spécial' },
+
+        // ---------- Cuisine (pour apprendre à cuisiner) ----------
+        { g: 'Cuisine', type: 'youtube', src: 'Nfb1dn3zqqo', title: 'Les pâtes pour les débutants', desc: 'YouCook · le b.a.-ba de la cuisson', duration: '5 min' },
+        { g: 'Cuisine', type: 'youtube', src: 'Vjdvmjijows', title: 'Comment réussir la cuisson du riz blanc', desc: 'Une base indispensable' },
+        { g: 'Cuisine', type: 'youtube', src: 'bg1-unWMU8U', title: 'Sauce bolognaise maison', desc: 'Une recette facile et classique' },
+        { g: 'Cuisine', type: 'youtube', src: 'bOrGRzUwDHw', title: 'Cuisiner avec un budget limité (30 €)', desc: 'YouCook · manger bien sans se ruiner' },
+        { g: 'Cuisine', type: 'youtube', src: 'rFX1Eb_1wWw', title: 'Cuisiner avec un budget limité (50 €)', desc: 'YouCook · idées et organisation' }
     ];
+    let tvFilter = 'Tous';
     const tvModal = $('#tnTvModal'), tvScreen = $('#tnTvScreen');
     function renderTV() {
         const g = $('#tnTvGrid');
+        if (TV.length) {
+            let bar = $('#tnTvFilters');
+            if (!bar) { bar = document.createElement('div'); bar.id = 'tnTvFilters'; bar.className = 'tn-chips'; g.parentNode.insertBefore(bar, g); }
+            const groups = ['Tous', ...new Set(TV.map(c => c.g).filter(Boolean))];
+            bar.innerHTML = groups.map(x => `<button type="button" class="${x === tvFilter ? 'on' : ''}" data-g="${esc(x)}">${esc(x)}</button>`).join('');
+            bar.querySelectorAll('button').forEach(b => b.onclick = () => { tvFilter = b.dataset.g; renderTV(); });
+        }
         if (!TV.length) { g.innerHTML = '<div class="tv-empty"><span>🎬</span><h3>Ta chaîne arrive bientôt</h3><p>Les premières vidéos seront ajoutées ici.</p></div>'; return; }
         g.innerHTML = TV.map((c, i) => {
+            if (tvFilter !== 'Tous' && c.g !== tvFilter) return '';
             const p = c.poster || (c.type === 'youtube' ? `https://i.ytimg.com/vi/${c.src}/hqdefault.jpg` : '');
             const st = p ? `background-image:url('${p}')` : `background:${c.color || 'linear-gradient(135deg,#8B5CF6,#FF3D81)'}`;
-            return `<button class="tv-card" data-i="${i}"><span class="tv-thumb" style="${st}">${p ? '' : `<span class="e">${c.emoji || '🎬'}</span>`}<span class="tv-play">▶</span>${c.duration ? `<span class="tv-dur">${c.duration}</span>` : ''}</span><span class="tv-info"><strong>${esc(c.title)}</strong><small>${esc(c.desc || '')}</small></span></button>`;
+            return `<button class="tv-card" data-i="${i}"><span class="tv-thumb" style="${st}">${p ? '' : `<span class="e">${c.emoji || '🎬'}</span>`}<span class="tv-play">${c.type === 'link' ? '↗' : '▶'}</span>${c.duration ? `<span class="tv-dur">${c.duration}</span>` : ''}</span><span class="tv-info"><strong>${esc(c.title)}</strong><small>${esc(c.desc || '')}</small></span></button>`;
         }).join('');
         $$('.tv-card', g).forEach(b => b.addEventListener('click', () => openTV(+b.dataset.i)));
     }
     function openTV(i) {
         const c = TV[i]; if (!c) return;
+        if (c.type === 'link') { window.open(c.src, '_blank', 'noopener'); return; }
         stopNoise(); if (window.speechSynthesis) speechSynthesis.cancel();
         if (c.type === 'youtube') tvScreen.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${encodeURIComponent(c.src)}?autoplay=1&rel=0&modestbranding=1" title="${esc(c.title)}" allow="autoplay; fullscreen; picture-in-picture; encrypted-media" allowfullscreen></iframe>`;
         else {
